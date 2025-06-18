@@ -432,6 +432,26 @@
             'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
+        // Função para criar data local sem problemas de fuso horário
+        function createLocalDate(dateString) {
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        // Função para formatar data no padrão YYYY-MM-DD
+        function formatDateString(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Função para obter data de hoje sem hora
+        function getTodayDate() {
+            const today = new Date();
+            return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        }
+
         // Carregar dados salvos
         function loadData() {
             const saved = localStorage.getItem('agendaEvents');
@@ -475,6 +495,8 @@
             const startDate = new Date(firstDay);
             startDate.setDate(startDate.getDate() - firstDay.getDay());
             
+            const today = getTodayDate();
+            
             for (let i = 0; i < 42; i++) {
                 const date = new Date(startDate);
                 date.setDate(startDate.getDate() + i);
@@ -490,11 +512,11 @@
                     dayEl.classList.add('other-month');
                 }
                 
-                if (date.toDateString() === new Date().toDateString()) {
+                if (date.getTime() === today.getTime()) {
                     dayEl.classList.add('today');
                 }
                 
-                const dateStr = date.toISOString().split('T')[0];
+                const dateStr = formatDateString(date);
                 const dayEvents = events.filter(e => e.date === dateStr);
                 
                 if (dayEvents.length > 0) {
@@ -529,12 +551,11 @@
                 return;
             }
             
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const today = getTodayDate();
             
             const sorted = [...events].sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
+                const dateA = createLocalDate(a.date);
+                const dateB = createLocalDate(b.date);
                 const aFuture = dateA >= today;
                 const bFuture = dateB >= today;
                 
@@ -546,8 +567,8 @@
             list.innerHTML = '';
             
             sorted.forEach((event, index) => {
-                const eventDate = new Date(event.date);
-                const isToday = eventDate.toDateString() === new Date().toDateString();
+                const eventDate = createLocalDate(event.date);
+                const isToday = eventDate.getTime() === today.getTime();
                 const isPast = eventDate < today;
                 
                 const formattedDate = eventDate.toLocaleDateString('pt-BR', {
@@ -610,7 +631,7 @@
             saveData();
             
             document.getElementById('eventForm').reset();
-            document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('eventDate').value = formatDateString(new Date());
             
             renderCalendar();
             renderEvents();
@@ -636,7 +657,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `agenda_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `agenda_${formatDateString(new Date())}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -683,7 +704,7 @@
 
         // Inicializar
         document.getElementById('eventForm').addEventListener('submit', addEvent);
-        document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('eventDate').value = formatDateString(new Date());
         
         loadData();
         renderCalendar();
@@ -691,3 +712,8 @@
     </script>
 </body>
 </html>
+
+Fix: Corrigir problema de fuso horário nas datas
+
+- Adicionar funções para lidar com datas locais
+- Corrigir exibição de eventos com data incorreta
