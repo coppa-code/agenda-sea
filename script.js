@@ -1,7 +1,6 @@
-
 // Firebase SDK imports
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'; 
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'; 
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';  
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';  
 
 // Firebase configuration
 const firebaseConfig = {
@@ -166,7 +165,6 @@ function renderCalendar() {
   const month = currentDate.getMonth();
   monthYear.textContent = `${months[month]} ${year}`;
   calendar.innerHTML = '';
-  
   // Add weekday headers
   weekdays.forEach(day => {
     const div = document.createElement('div');
@@ -174,34 +172,28 @@ function renderCalendar() {
     div.textContent = day;
     calendar.appendChild(div);
   });
-  
   // Calculate first day of month and start date
   const firstDay = new Date(year, month, 1);
   const startDate = new Date(firstDay);
   startDate.setDate(startDate.getDate() - firstDay.getDay());
   const today = getTodayDate();
-  
   // Generate calendar days
   for (let i = 0; i < 42; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
     const dayEl = document.createElement('div');
     dayEl.className = 'day';
-    
     const dayNum = document.createElement('div');
     dayNum.textContent = date.getDate();
     dayEl.appendChild(dayNum);
-    
     // Style different month days
     if (date.getMonth() !== month) {
       dayEl.classList.add('other-month');
     }
-    
     // Mark today
     if (date.getTime() === today.getTime()) {
       dayEl.classList.add('today');
     }
-    
     // Add event indicators
     const dateStr = formatDateString(date);
     const dayEvents = events.filter(e => e.date === dateStr);
@@ -216,14 +208,12 @@ function renderCalendar() {
       });
       dayEl.appendChild(dots);
     }
-    
     // Add click event
     dayEl.addEventListener('click', () => {
       document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
       dayEl.classList.add('selected');
       document.getElementById('eventDate').value = dateStr;
     });
-    
     calendar.appendChild(dayEl);
   }
 }
@@ -234,7 +224,6 @@ function renderEvents() {
     list.innerHTML = '<div class="no-events">✨ Nenhum evento cadastrado</div>';
     return;
   }
-  
   const today = getTodayDate();
   const sorted = [...events].sort((a, b) => {
     const dateA = createLocalDate(a.date);
@@ -245,7 +234,6 @@ function renderEvents() {
     if (!aFuture && bFuture) return 1;
     return aFuture ? dateA - dateB : dateB - dateA;
   });
-  
   list.innerHTML = '';
   sorted.forEach((event, sortedIndex) => {
     const eventDate = createLocalDate(event.date);
@@ -255,7 +243,6 @@ function renderEvents() {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
     const diffDays = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
-    
     let statusText = '';
     let statusClass = '';
     if (isToday) {
@@ -271,25 +258,22 @@ function renderEvents() {
       statusText = `📜 Há ${Math.abs(diffDays)} dias`;
       statusClass = 'status-past';
     }
-    
     const originalIndex = events.findIndex(e => e === event);
     const eventEl = document.createElement('div');
     eventEl.className = `event-item ${isToday ? 'event-today' : ''} ${isPast ? 'event-past' : ''}`;
     eventEl.innerHTML = `
-  <div class="event-header">
-    <div style="font-size: 14px; font-weight: 700; color: #4facfe; text-transform: uppercase;">${formattedDate}</div>
-    <span class="event-status ${statusClass}">${statusText}</span>
-  </div>
-  <div style="font-size: 20px; font-weight: 700; color: #2d3748; margin-bottom: 10px;">${event.title}</div>
-  ${event.time ? `<div style="font-size: 16px; color: #4a5568; margin-bottom: 10px;">⏰ ${event.time}</div>` : ''}
-  ${event.description ? `<div style="font-size: 14px; color: #718096; line-height: 1.6;">${event.description}</div>` : ''}
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-    <div>
-      <button class="btn-secondary edit-btn" onclick="editarEvento(${originalIndex})">✏️ Editar</button>
-    </div>
-    <button class="delete-btn" onclick="deleteEvent(${originalIndex})">×</button>
-  </div>
-`;
+      <div class="event-header">
+        <div style="font-size: 14px; font-weight: 700; color: #4facfe; text-transform: uppercase;">${formattedDate}</div>
+        <span class="event-status ${statusClass}">${statusText}</span>
+      </div>
+      <div style="font-size: 20px; font-weight: 700; color: #2d3748; margin-bottom: 10px;">${event.title}</div>
+      ${event.time ? `<div style="font-size: 16px; color: #4a5568; margin-bottom: 10px;">⏰ ${event.time}</div>` : ''}
+      ${event.description ? `<div style="font-size: 14px; color: #718096; line-height: 1.6;">${event.description}</div>` : ''}
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+        <button class="btn-secondary edit-btn" onclick="editarEvento(${originalIndex})">✏️ Editar</button>
+        <button class="delete-btn" onclick="deleteEvent(${originalIndex})">×</button>
+      </div>
+    `;
     list.appendChild(eventEl);
   });
 }
@@ -297,31 +281,72 @@ function renderEvents() {
 // Event handlers
 window.addEvent = async function addEvent(e) {
   e.preventDefault();
+  const form = document.getElementById('eventForm');
+  const editingIndex = form.dataset.editingIndex;
+
   const date = document.getElementById('eventDate').value;
   const title = document.getElementById('eventTitle').value;
   const time = document.getElementById('eventTime').value;
   const description = document.getElementById('eventDescription').value;
-  
+
   if (!date || !title) {
     alert('Preencha pelo menos a data e o título!');
     return;
   }
-  
-  const eventData = {date, title, time, description};
+
+  const eventData = { date, title, time, description };
+
   try {
-    await saveEventToFirebase(eventData);
+    if (editingIndex !== undefined) {
+      // Editar evento existente
+      const oldEvent = events[editingIndex];
+      if (oldEvent.id) {
+        // Se veio do Firebase
+        await saveEventToFirebase(eventData);
+        events.splice(editingIndex, 1);
+        delete form.dataset.editingIndex;
+      } else {
+        events[editingIndex] = eventData;
+      }
+      alert("✅ Evento atualizado!");
+    } else {
+      // Cadastrar novo evento
+      await saveEventToFirebase(eventData);
+      alert("🚀 Evento criado!");
+    }
+
     document.getElementById('eventForm').reset();
     document.getElementById('eventDate').value = formatDateString(new Date());
     renderCalendar();
     renderEvents();
-    
+
     const btn = document.querySelector('.btn-primary');
     const orig = btn.textContent;
     btn.textContent = '✅ Salvo!';
     setTimeout(() => btn.textContent = orig, 2000);
+
   } catch (error) {
     alert('Erro ao salvar evento. Dados salvos localmente.');
+    saveToLocalStorage();
   }
+};
+
+window.editarEvento = function editarEvento(index) {
+  const event = events[index];
+
+  if (!event) return alert("Evento não encontrado.");
+
+  // Preencher campos do formulário
+  document.getElementById('eventDate').value = event.date;
+  document.getElementById('eventTitle').value = event.title;
+  document.getElementById('eventTime').value = event.time || '';
+  document.getElementById('eventDescription').value = event.description || '';
+
+  // Armazenar índice do evento sendo editado
+  document.getElementById('eventForm').dataset.editingIndex = index;
+
+  // Rolar até o formulário
+  document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth' });
 };
 
 window.deleteEvent = async function deleteEvent(index) {
@@ -355,7 +380,6 @@ window.importEvents = function importEvents() {
   input.onchange = async function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    
     const reader = new FileReader();
     reader.onload = async function(e) {
       try {
@@ -405,18 +429,14 @@ window.nextMonth = function nextMonth() {
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('eventForm').addEventListener('submit', addEvent);
   document.getElementById('eventDate').value = formatDateString(new Date());
-  
   loadEventsFromFirebase().catch(() => {
     console.log('Firebase não disponível, usando localStorage');
     loadFromLocalStorage();
   });
-  
   setupRealtimeListener();
-  
   window.addEventListener('online', () => {
     updateStatus(true);
     syncData();
   });
-  
   window.addEventListener('offline', () => updateStatus(false));
 });
