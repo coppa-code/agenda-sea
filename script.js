@@ -1,6 +1,15 @@
 // Firebase SDK imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'; 
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'; 
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  doc, 
+  deleteDoc, 
+  onSnapshot,
+  updateDoc
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'; 
 
 // Firebase configuration
 const firebaseConfig = {
@@ -93,6 +102,19 @@ async function saveEventToFirebase(eventData) {
     console.error("Erro ao salvar evento:", error);
     updateStatus(false);
     events.push(eventData);
+    saveToLocalStorage();
+    throw error;
+  }
+}
+
+async function updateEventInFirebase(eventId, eventData) {
+  try {
+    showLoading('🔄 Atualizando evento...');
+    await updateDoc(doc(db, "events", eventId), eventData);
+    updateStatus(true);
+  } catch (error) {
+    console.error("Erro ao atualizar evento:", error);
+    updateStatus(false);
     saveToLocalStorage();
     throw error;
   }
@@ -282,13 +304,30 @@ function renderEvents() {
       <div style="font-size: 20px; font-weight: 700; color: #2d3748; margin-bottom: 10px;">${event.title}</div>
       ${event.time ? `<div style="font-size: 16px; color: #4a5568; margin-bottom: 10px;">⏰ ${event.time}</div>` : ''}
       ${event.description ? `<div style="font-size: 14px; color: #718096; line-height: 1.6;">${event.description}</div>` : ''}
-      <button class="delete-btn" onclick="deleteEvent(${originalIndex})">×</button>
+      <div class="event-actions">
+        <button class="edit-btn" onclick="editEvent(${originalIndex})">✏️ Editar</button>
+        <button class="delete-btn" onclick="deleteEvent(${originalIndex})">🗑️ Excluir</button>
+      </div>
     `;
     list.appendChild(eventEl);
   });
 }
 
 // Event handlers
+window.editEvent = function editEvent(index) {
+  const event = events[index];
+  document.getElementById('eventDate').value = event.date;
+  document.getElementById('eventTitle').value = event.title;
+  document.getElementById('eventTime').value = event.time || '';
+  document.getElementById('eventDescription').value = event.description || '';
+  
+  document.querySelector('.form-title').scrollIntoView({ behavior: 'smooth' });
+  
+  const submitBtn = document.querySelector('.btn-primary');
+  submitBtn.textContent = '🔄 Atualizar Evento';
+  submitBtn.dataset.editingIndex = index;
+};
+
 window.addEvent = async function addEvent(e) {
   e.preventDefault();
   const date = document.getElementById('eventDate').value;
@@ -301,20 +340,30 @@ window.addEvent = async function addEvent(e) {
     return;
   }
   
-  const eventData = {date, title, time, description};
+  const eventData = { date, title, time, description };
+  const submitBtn = document.querySelector('.btn-primary');
+  const isEditing = submitBtn.dataset.editingIndex !== undefined;
+  
   try {
-    await saveEventToFirebase(eventData);
+    if (isEditing) {
+      const index = submitBtn.dataset.editingIndex;
+      await updateEventInFirebase(events[index].id, eventData);
+      events[index] = { ...eventData, id: events[index].id };
+      showLoading('✅ Evento atualizado!');
+    } else {
+      await saveEventToFirebase(eventData);
+      showLoading('✅ Evento criado!');
+    }
+    
     document.getElementById('eventForm').reset();
     document.getElementById('eventDate').value = formatDateString(new Date());
+    submitBtn.textContent = '🚀 Criar Evento';
+    delete submitBtn.dataset.editingIndex;
+    
     renderCalendar();
     renderEvents();
-    
-    const btn = document.querySelector('.btn-primary');
-    const orig = btn.textContent;
-    btn.textContent = '✅ Salvo!';
-    setTimeout(() => btn.textContent = orig, 2000);
   } catch (error) {
-    alert('Erro ao salvar evento. Dados salvos localmente.');
+    alert('Erro ao salvar evento: ' + error.message);
   }
 };
 
