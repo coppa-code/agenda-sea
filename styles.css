@@ -386,50 +386,40 @@ body {
   .main-content {
     grid-template-columns: 1fr;
   }
-
   .calendar-grid {
     grid-template-columns: repeat(7, 1fr);
   }
-
   .day {
     min-height: 50px;
     padding: 8px;
     font-size: 12px;
   }
-
   .form-input {
     font-size: 14px;
     padding: 12px;
   }
-
   .glass-card {
     padding: 25px;
   }
-
   .event-item {
     padding: 20px;
   }
-
   .delete-btn {
     width: 32px;
     height: 32px;
     font-size: 16px;
   }
-
   .event-header > div {
     font-size: 12px;
   }
-
   .event-header > span {
     font-size: 10px;
     padding: 4px 8px;
   }
-
   .btn-primary {
     font-size: 14px;
     padding: 14px;
   }
-
   .btn-secondary {
     font-size: 12px;
     padding: 10px 18px;
