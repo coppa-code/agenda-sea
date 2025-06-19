@@ -451,6 +451,8 @@ body::before {
   position: relative;
   overflow: hidden;
   animation: slideIn 0.5s ease-out;
+  display: flex;
+  flex-direction: column;
 }
 
 .event-item::before {
@@ -522,12 +524,15 @@ body::before {
   cursor: pointer;
   font-size: 18px;
   transition: all 0.3s ease;
-  align-self: flex-end;
-  margin-top: 10px;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
 }
 
 .delete-btn:hover {
   transform: scale(1.2);
+  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
 }
 
 .no-events {
@@ -600,12 +605,15 @@ body::before {
   
   .event-item {
     padding: 25px;
+    padding-bottom: 60px; /* Espaço extra para o botão delete */
   }
   
   .delete-btn {
     width: 40px;
     height: 40px;
     font-size: 18px;
+    bottom: 15px;
+    right: 15px;
   }
   
   .btn-primary {
