@@ -513,24 +513,21 @@ body::before {
 }
 
 .delete-btn {
-  background: var(--danger);
+  background: var(--accent);
   color: white;
   border: none;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 20px;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+  font-size: 18px;
+  transition: all 0.3s ease;
+  align-self: flex-end;
+  margin-top: 10px;
 }
 
 .delete-btn:hover {
-  transform: scale(1.2) rotate(90deg);
-  box-shadow: 0 8px 25px rgba(255, 65, 108, 0.5);
+  transform: scale(1.2);
 }
 
 .no-events {
