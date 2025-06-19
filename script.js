@@ -276,15 +276,20 @@ function renderEvents() {
     const eventEl = document.createElement('div');
     eventEl.className = `event-item ${isToday ? 'event-today' : ''} ${isPast ? 'event-past' : ''}`;
     eventEl.innerHTML = `
-      <div class="event-header">
-        <div style="font-size: 14px; font-weight: 700; color: #4facfe; text-transform: uppercase;">${formattedDate}</div>
-        <span class="event-status ${statusClass}">${statusText}</span>
-      </div>
-      <div style="font-size: 20px; font-weight: 700; color: #2d3748; margin-bottom: 10px;">${event.title}</div>
-      ${event.time ? `<div style="font-size: 16px; color: #4a5568; margin-bottom: 10px;">⏰ ${event.time}</div>` : ''}
-      ${event.description ? `<div style="font-size: 14px; color: #718096; line-height: 1.6;">${event.description}</div>` : ''}
-      <button class="delete-btn" onclick="deleteEvent(${originalIndex})">×</button>
-    `;
+  <div class="event-header">
+    <div style="font-size: 14px; font-weight: 700; color: #4facfe; text-transform: uppercase;">${formattedDate}</div>
+    <span class="event-status ${statusClass}">${statusText}</span>
+  </div>
+  <div style="font-size: 20px; font-weight: 700; color: #2d3748; margin-bottom: 10px;">${event.title}</div>
+  ${event.time ? `<div style="font-size: 16px; color: #4a5568; margin-bottom: 10px;">⏰ ${event.time}</div>` : ''}
+  ${event.description ? `<div style="font-size: 14px; color: #718096; line-height: 1.6;">${event.description}</div>` : ''}
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+    <div>
+      <button class="btn-secondary edit-btn" onclick="editarEvento(${originalIndex})">✏️ Editar</button>
+    </div>
+    <button class="delete-btn" onclick="deleteEvent(${originalIndex})">×</button>
+  </div>
+`;
     list.appendChild(eventEl);
   });
 }
