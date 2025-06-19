@@ -69,7 +69,7 @@
 
         .loading {
             position: fixed;
-            top: 80px;
+            top: 20px;
             right: 20px;
             background: var(--primary);
             color: white;
@@ -324,11 +324,12 @@
         }
 
         .event-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;  /* Alinha no topo */
+    flex-direction: column;   /* Coloca um embaixo do outro */
+    margin-bottom: 15px;
+}
 
         .event-status {
             font-size: 12px;
@@ -479,11 +480,11 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCFQCgGzitreC4TP7gXnEOcxD6UcY3j3jo",
             authDomain: "agenda-sea-c53f6.firebaseapp.com",
-            projectId: "agenda-sea-c53f6",
-            storageBucket: "agenda-sea-c53f6.firebasestorage.app",
-            messagingSenderId: "205972566423",
-            appId: "1:205972566423:web:4e7e90216137a3efe354d2",
-            measurementId: "G-X824L5R790"
+          projectId: "agenda-sea-c53f6",
+          storageBucket: "agenda-sea-c53f6.firebasestorage.app",
+          messagingSenderId: "205972566423",
+          appId: "1:205972566423:web:4e7e90216137a3efe354d2",
+          measurementId: "G-X824L5R790"
         };
 
         // Initialize Firebase
