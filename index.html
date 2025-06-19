@@ -1,3 +1,11 @@
+index.html
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,38 +17,6 @@
 <body>
   <div class="loading" id="loading">💾 Salvando...</div>
   <div class="status-indicator status-offline" id="statusIndicator">🔴 Offline</div>
-  
-  <!-- Modal de Edição -->
-  <div class="modal-overlay" id="editModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>✏️ Editar Evento</h2>
-        <button class="modal-close" onclick="closeEditModal()">×</button>
-      </div>
-      <form id="editEventForm">
-        <div class="form-group">
-          <label class="form-label">📅 Data</label>
-          <input type="date" class="form-input" id="editEventDate" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">🎪 Título</label>
-          <input type="text" class="form-input" id="editEventTitle" placeholder="Digite o título..." required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">⏰ Horário</label>
-          <input type="text" class="form-input" id="editEventTime" placeholder="Ex: 09h às 12h">
-        </div>
-        <div class="form-group">
-          <label class="form-label">📝 Descrição</label>
-          <textarea class="form-input form-textarea" id="editEventDescription" placeholder="Detalhes..."></textarea>
-        </div>
-        <div class="modal-buttons">
-          <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancelar</button>
-          <button type="submit" class="btn-primary">💾 Salvar Alterações</button>
-        </div>
-      </form>
-    </div>
-  </div>
   
   <div class="container">
     <div class="header">
