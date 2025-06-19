@@ -1,8 +1,8 @@
-// Importação do Firebase
+// Firebase SDK imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'; 
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'; 
 
-// Configuração do Firebase
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCFQCgGzitreC4TP7gXnEOcxD6UcY3j3jo",
   authDomain: "agenda-sea-c53f6.firebaseapp.com",
@@ -13,17 +13,17 @@ const firebaseConfig = {
   measurementId: "G-X824L5R790"
 };
 
-// Inicialização do Firebase
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Variáveis globais
+// Global variables
 let currentDate = new Date();
 let events = [];
 const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const weekdays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
-// Funções utilitárias para datas
+// Utility functions
 function createLocalDate(dateString) {
   const [year, month, day] = dateString.split('-').map(Number);
   return new Date(year, month - 1, day);
@@ -41,7 +41,6 @@ function getTodayDate() {
   return new Date(today.getFullYear(), today.getMonth(), today.getDate());
 }
 
-// Funções de interface
 function showLoading(message = '💾 Salvando...') {
   const loading = document.getElementById('loading');
   loading.textContent = message;
@@ -60,7 +59,7 @@ function updateStatus(online) {
   }
 }
 
-// Funções do Firebase
+// Firebase functions
 async function loadEventsFromFirebase() {
   try {
     showLoading('📥 Carregando dados...');
@@ -116,28 +115,6 @@ async function deleteEventFromFirebase(eventId, index) {
   }
 }
 
-// Funções de armazenamento local
-function loadFromLocalStorage() {
-  const saved = localStorage.getItem('agendaEvents');
-  if (saved) {
-    events = JSON.parse(saved);
-  } else {
-    events = [
-      {date: '2025-07-08', title: 'Visita à COPPA', time: '09h', description: 'Projeto Adolecer +'},
-      {date: '2025-07-09', title: 'Escola Maringuela', time: '08h às 12h', description: ''},
-      {date: '2025-07-22', title: 'Educação ambiental para surdos', time: '', description: 'Manter contato com CB PM Teles - 71988941109'}
-    ];
-    saveToLocalStorage();
-  }
-  renderCalendar();
-  renderEvents();
-}
-
-function saveToLocalStorage() {
-  localStorage.setItem('agendaEvents', JSON.stringify(events));
-}
-
-// Configuração de listener em tempo real
 function setupRealtimeListener() {
   try {
     const unsubscribe = onSnapshot(collection(db, "events"), (snapshot) => {
@@ -159,17 +136,37 @@ function setupRealtimeListener() {
   }
 }
 
-// Renderização do calendário
+// Local storage functions
+function loadFromLocalStorage() {
+  const saved = localStorage.getItem('agendaEvents');
+  if (saved) {
+    events = JSON.parse(saved);
+  } else {
+    events = [
+      {date: '2025-07-08', title: 'Visita à COPPA', time: '09h', description: 'Projeto Adolecer +'},
+      {date: '2025-07-09', title: 'Escola Maringuela', time: '08h às 12h', description: ''},
+      {date: '2025-07-22', title: 'Educação ambiental para surdos', time: '', description: 'Manter contato com CB PM Teles - 71988941109'}
+    ];
+    saveToLocalStorage();
+  }
+  renderCalendar();
+  renderEvents();
+}
+
+function saveToLocalStorage() {
+  localStorage.setItem('agendaEvents', JSON.stringify(events));
+}
+
+// Render functions
 function renderCalendar() {
   const calendar = document.getElementById('calendar');
   const monthYear = document.getElementById('monthYear');
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
-  
   monthYear.textContent = `${months[month]} ${year}`;
   calendar.innerHTML = '';
   
-  // Adicionar cabeçalhos dos dias da semana
+  // Add weekday headers
   weekdays.forEach(day => {
     const div = document.createElement('div');
     div.className = 'weekday';
@@ -177,18 +174,16 @@ function renderCalendar() {
     calendar.appendChild(div);
   });
   
-  // Calcular primeiro dia do calendário
+  // Calculate first day of month and start date
   const firstDay = new Date(year, month, 1);
   const startDate = new Date(firstDay);
   startDate.setDate(startDate.getDate() - firstDay.getDay());
-  
   const today = getTodayDate();
   
-  // Gerar 42 dias (6 semanas)
+  // Generate calendar days
   for (let i = 0; i < 42; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
-    
     const dayEl = document.createElement('div');
     dayEl.className = 'day';
     
@@ -196,35 +191,32 @@ function renderCalendar() {
     dayNum.textContent = date.getDate();
     dayEl.appendChild(dayNum);
     
-    // Marcar dias de outros meses
+    // Style different month days
     if (date.getMonth() !== month) {
       dayEl.classList.add('other-month');
     }
     
-    // Marcar dia atual
+    // Mark today
     if (date.getTime() === today.getTime()) {
       dayEl.classList.add('today');
     }
     
-    // Verificar se há eventos neste dia
+    // Add event indicators
     const dateStr = formatDateString(date);
     const dayEvents = events.filter(e => e.date === dateStr);
     if (dayEvents.length > 0) {
       dayEl.classList.add('has-event');
-      
       const dots = document.createElement('div');
       dots.className = 'event-dots';
-      
       dayEvents.forEach(() => {
         const dot = document.createElement('div');
         dot.className = 'dot';
         dots.appendChild(dot);
       });
-      
       dayEl.appendChild(dots);
     }
     
-    // Adicionar evento de clique
+    // Add click event
     dayEl.addEventListener('click', () => {
       document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
       dayEl.classList.add('selected');
@@ -235,18 +227,14 @@ function renderCalendar() {
   }
 }
 
-// Renderização da lista de eventos
 function renderEvents() {
   const list = document.getElementById('eventsList');
-  
   if (events.length === 0) {
     list.innerHTML = '<div class="no-events">✨ Nenhum evento cadastrado</div>';
     return;
   }
   
   const today = getTodayDate();
-  
-  // Ordenar eventos
   const sorted = [...events].sort((a, b) => {
     const dateA = createLocalDate(a.date);
     const dateB = createLocalDate(b.date);
@@ -258,21 +246,17 @@ function renderEvents() {
   });
   
   list.innerHTML = '';
-  
   sorted.forEach((event, sortedIndex) => {
     const eventDate = createLocalDate(event.date);
     const isToday = eventDate.getTime() === today.getTime();
     const isPast = eventDate < today;
-    
     const formattedDate = eventDate.toLocaleDateString('pt-BR', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
-    
     const diffDays = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
     
     let statusText = '';
     let statusClass = '';
-    
     if (isToday) {
       statusText = '🔥 HOJE';
       statusClass = 'status-today';
@@ -288,7 +272,6 @@ function renderEvents() {
     }
     
     const originalIndex = events.findIndex(e => e === event);
-    
     const eventEl = document.createElement('div');
     eventEl.className = `event-item ${isToday ? 'event-today' : ''} ${isPast ? 'event-past' : ''}`;
     eventEl.innerHTML = `
@@ -301,15 +284,13 @@ function renderEvents() {
       ${event.description ? `<div style="font-size: 14px; color: #718096; line-height: 1.6;">${event.description}</div>` : ''}
       <button class="delete-btn" onclick="deleteEvent(${originalIndex})">×</button>
     `;
-    
     list.appendChild(eventEl);
   });
 }
 
-// Funções de manipulação de eventos
+// Event handlers
 window.addEvent = async function addEvent(e) {
   e.preventDefault();
-  
   const date = document.getElementById('eventDate').value;
   const title = document.getElementById('eventTitle').value;
   const time = document.getElementById('eventTime').value;
@@ -321,7 +302,6 @@ window.addEvent = async function addEvent(e) {
   }
   
   const eventData = {date, title, time, description};
-  
   try {
     await saveEventToFirebase(eventData);
     document.getElementById('eventForm').reset();
@@ -331,4 +311,106 @@ window.addEvent = async function addEvent(e) {
     
     const btn = document.querySelector('.btn-primary');
     const orig = btn.textContent;
-    btn.textContent =
+    btn.textContent = '✅ Salvo!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  } catch (error) {
+    alert('Erro ao salvar evento. Dados salvos localmente.');
+  }
+};
+
+window.deleteEvent = async function deleteEvent(index) {
+  if (confirm('Excluir este evento?')) {
+    const event = events[index];
+    try {
+      await deleteEventFromFirebase(event.id, index);
+    } catch (error) {
+      alert('Erro ao excluir evento. Removido localmente.');
+    }
+    renderCalendar();
+    renderEvents();
+  }
+};
+
+window.exportEvents = function exportEvents() {
+  const data = JSON.stringify(events, null, 2);
+  const blob = new Blob([data], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `agenda_${formatDateString(new Date())}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+window.importEvents = function importEvents() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = async function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      try {
+        const loaded = JSON.parse(e.target.result);
+        if (Array.isArray(loaded)) {
+          showLoading('📤 Importando eventos...');
+          for (const event of loaded) {
+            try {
+              await saveEventToFirebase(event);
+            } catch (err) {
+              console.error('Erro ao importar:', err);
+            }
+          }
+          alert(`✅ ${loaded.length} eventos importados!`);
+        } else {
+          alert('❌ Formato inválido!');
+        }
+      } catch (error) {
+        alert('❌ Erro: ' + error.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+};
+
+window.syncData = async function syncData() {
+  try {
+    await loadEventsFromFirebase();
+    showLoading('🔄 Dados sincronizados!');
+  } catch (error) {
+    alert('Erro ao sincronizar dados');
+  }
+};
+
+window.prevMonth = function prevMonth() {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderCalendar();
+};
+
+window.nextMonth = function nextMonth() {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar();
+};
+
+// Initialize application
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('eventForm').addEventListener('submit', addEvent);
+  document.getElementById('eventDate').value = formatDateString(new Date());
+  
+  loadEventsFromFirebase().catch(() => {
+    console.log('Firebase não disponível, usando localStorage');
+    loadFromLocalStorage();
+  });
+  
+  setupRealtimeListener();
+  
+  window.addEventListener('online', () => {
+    updateStatus(true);
+    syncData();
+  });
+  
+  window.addEventListener('offline', () => updateStatus(false));
+});
