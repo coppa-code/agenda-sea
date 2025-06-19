@@ -9,11 +9,13 @@
 <body>
   <div class="loading" id="loading">💾 Salvando...</div>
   <div class="status-indicator status-offline" id="statusIndicator">🔴 Offline</div>
+  
   <div class="container">
     <div class="header">
       <h1>✨ AGENDA SEA</h1>
       <p>Eventos</p>
     </div>
+    
     <div class="main-content">
       <div class="glass-card">
         <div class="calendar-nav">
@@ -23,6 +25,7 @@
         </div>
         <div class="calendar-grid" id="calendar"></div>
       </div>
+      
       <div class="glass-card">
         <h2 class="form-title">🎯 Criar Evento</h2>
         <form id="eventForm">
@@ -42,14 +45,11 @@
             <label class="form-label">📝 Descrição</label>
             <textarea class="form-input form-textarea" id="eventDescription" placeholder="Detalhes..."></textarea>
           </div>
-          <div class="form-group">
-            <label class="form-label">📎 Anexar Arquivo</label>
-            <input type="file" class="form-input" id="eventImage" accept="image/*,.pdf,.doc,.docx,.txt">
-          </div>
           <button type="submit" class="btn-primary">🚀 Criar Evento</button>
         </form>
       </div>
     </div>
+    
     <div class="glass-card">
       <h2 class="events-title">🎉 Próximos Eventos</h2>
       <div style="text-align: center; margin-bottom: 30px;">
@@ -60,6 +60,7 @@
       <div id="eventsList"></div>
     </div>
   </div>
+
   <script type="module" src="script.js"></script>
 </body>
 </html>
