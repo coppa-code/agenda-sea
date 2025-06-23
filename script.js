@@ -1,7 +1,7 @@
 // Firebase SDK imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';  
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';  
-
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCFQCgGzitreC4TP7gXnEOcxD6UcY3j3jo",
@@ -302,13 +302,14 @@ window.addEvent = async function addEvent(e) {
       const oldEvent = events[editingIndex];
       
       if (oldEvent.id) {
-        // Se o evento veio do Firebase, deletar o antigo e criar novo
-        await deleteEventFromFirebase(oldEvent.id, editingIndex);
-        await saveEventToFirebase(eventData);
+        // Se o evento veio do Firebase, editar
+        await updateEventInFirebase(oldEvent.id, eventData);
+        // Atualizar o evento local também (sem adicionar ao array events)
+        events[editingIndex] = { ...oldEvent, ...eventData };
       } else {
-        // Se é evento local, apenas substituir
-        events[editingIndex] = eventData;
-        saveToLocalStorage();
+         // Se é evento local, apenas substituir
+    events[editingIndex] = eventData;
+    saveToLocalStorage();
       }
       
       delete form.dataset.editingIndex;
@@ -319,6 +320,23 @@ window.addEvent = async function addEvent(e) {
       alert("🚀 Evento criado!");
     }
 
+
+    async function updateEventInFirebase(eventId, eventData) {
+  try {
+    showLoading('✏️ Atualizando evento...');
+    const eventRef = doc(db, "events", eventId);
+    await updateDoc(eventRef, eventData);
+    updateStatus(true);
+    return eventId;
+  } catch (error) {
+    console.error("Erro ao atualizar evento:", error);
+    updateStatus(false);
+    throw error;
+  }
+}
+
+
+    
     document.getElementById('eventForm').reset();
     document.getElementById('eventDate').value = formatDateString(new Date());
     renderCalendar();
