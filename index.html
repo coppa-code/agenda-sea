@@ -53,10 +53,12 @@
     <div class="glass-card">
       <h2 class="events-title">🎉 Próximos Eventos</h2>
       <div style="text-align: center; margin-bottom: 30px;">
-        <button class="btn-secondary" onclick="exportEvents()">💾 Exportar</button>
-        <button class="btn-secondary" onclick="importEvents()">📂 Importar</button>
-        <button class="btn-secondary" onclick="syncData()">🔄 Sincronizar</button>
-      </div>
+  <button class="btn-secondary" onclick="exportEvents()">💾 Exportar</button>
+  <button class="btn-secondary" onclick="importEvents()">📂 Importar</button>
+  <button class="btn-secondary" onclick="syncData()">🔄 Sincronizar</button>
+  <!-- NOVO BOTÃO AQUI -->
+  <button class="btn-secondary" onclick="window.open('calendario-ambiental.html', '_blank')">🌍 Calendário Ambiental</button>
+</div>
       <div id="eventsList"></div>
     </div>
   </div>
