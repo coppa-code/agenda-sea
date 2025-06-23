@@ -1,7 +1,7 @@
 // Firebase SDK imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';  
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';  
-
+import { ..., updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'; 
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCFQCgGzitreC4TP7gXnEOcxD6UcY3j3jo",
@@ -302,9 +302,16 @@ window.addEvent = async function addEvent(e) {
       const oldEvent = events[editingIndex];
       if (oldEvent.id) {
         // Se veio do Firebase
-        await saveEventToFirebase(eventData);
-        events.splice(editingIndex, 1);
+        const oldEvent = events[editingIndex];
+        if (oldEvent.id) {
+        const eventRef = doc(db, "events", oldEvent.id);
+        await updateDoc(eventRef, eventData);
+        events[editingIndex] = eventData; // Atualiza localmente
         delete form.dataset.editingIndex;
+  alert("✅ Evento atualizado no Firebase!");
+} else {
+  // Continua como antes
+}
       } else {
         events[editingIndex] = eventData;
       }
@@ -333,7 +340,6 @@ window.addEvent = async function addEvent(e) {
 
 window.editarEvento = function editarEvento(index) {
   const event = events[index];
-
   if (!event) return alert("Evento não encontrado.");
 
   // Preencher campos do formulário
@@ -342,8 +348,14 @@ window.editarEvento = function editarEvento(index) {
   document.getElementById('eventTime').value = event.time || '';
   document.getElementById('eventDescription').value = event.description || '';
 
+  // Indicar modo edição
+  document.getElementById('formTitle').innerHTML = '✏️ Editando Evento';
+
   // Armazenar índice do evento sendo editado
   document.getElementById('eventForm').dataset.editingIndex = index;
+
+  // Remover seleção visual no calendário
+  document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
 
   // Rolar até o formulário
   document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth' });
