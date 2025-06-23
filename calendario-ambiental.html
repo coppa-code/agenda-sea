@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calendário Ambiental - Agenda SEA</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: linear-gradient(135deg, #16a085, #27ae60);
+      --secondary: linear-gradient(135deg, #2c3e50, #34495e);
+      --accent: #e74c3c;
+      --glass: rgba(255, 255, 255, 0.85);
+      --glass-border: rgba(200, 200, 200, 0.4);
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --text-color: #1e293b;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #a8e6cf, #dcedc8);
+      min-height: 100vh;
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #16a085, #27ae60);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: #2c3e50;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(22, 160, 133, 0.3);
+    }
+
+    .nav-btn.back-btn {
+      background: var(--secondary);
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--glass);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px solid #16a085;
+      color: #16a085;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+    }
+
+    .month-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+    }
+
+    .month-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: white;
+      text-align: center;
+      background: var(--primary);
+      padding: 10px;
+      border-radius: 15px;
+    }
+
+    .event-item {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+    }
+
+    .event-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .event-item.mundial { border-left-color: #3498db; }
+    .event-item.brasil { border-left-color: #27ae60; }
+    .event-item.agua { border-left-color: #3498db; }
+    .event-item.biodiversidade { border-left-color: #e74c3c; }
+    .event-item.clima { border-left-color: #f39c12; }
+    .event-item.floresta { border-left-color: #27ae60; }
+
+    .event-date {
+      font-weight: 700;
+      color: #2c3e50;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .event-title {
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .event-description {
+      font-size: 13px;
+      color: #718096;
+      line-height: 1.4;
+    }
+
+    .event-tags {
+      display: flex;
+      gap: 5px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: var(--primary);
+      color: white;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .loading {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 50px;
+      font-weight: 600;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+    }
+
+    .loading.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .calendar-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .filter-container {
+        gap: 8px;
+      }
+      
+      .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stats-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">📅 Carregando...</div>
+
+  <div class="container">
+    <div class="header">
+      <h1>🌍 CALENDÁRIO AMBIENTAL</h1>
+      <p>Datas Importantes para o Meio Ambiente - Brasil e Mundo</p>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn back-btn" onclick="window.close(); window.history.back();">📅 Voltar à Agenda</button>
+      <button class="nav-btn" onclick="exportCalendar()">📥 Exportar Calendário</button>
+      <button class="nav-btn" onclick="addToMyAgenda()">➕ Adicionar à Minha Agenda</button>
+    </div>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-number" id="totalEvents">0</div>
+        <div class="stat-label">Total de Datas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="brasilEvents">0</div>
+        <div class="stat-label">Datas Nacionais</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="mundialEvents">0</div>
+        <div class="stat-label">Datas Mundiais</div>
+      </div>
+    </div>
+
+    <div class="filter-container">
+      <button class="filter-btn active" onclick="filterEvents('todos')">🌍 Todos</button>
+      <button class="filter-btn" onclick="filterEvents('mundial')">🌎 Mundial</button>
+      <button class="filter-btn" onclick="filterEvents('brasil')">🇧🇷 Brasil</button>
+      <button class="filter-btn" onclick="filterEvents('agua')">💧 Água</button>
+      <button class="filter-btn" onclick="filterEvents('biodiversidade')">🦋 Biodiversidade</button>
+      <button class="filter-btn" onclick="filterEvents('clima')">🌡️ Clima</button>
+      <button class="filter-btn" onclick="filterEvents('floresta')">🌳 Florestas</button>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid">
+      <!-- Conteúdo será gerado pelo JavaScript -->
+    </div>
+  </div>
+
+  <script>
+    const environmentalDates = {
+      'Janeiro': [
+        {
+          date: '2025-01-11',
+          title: 'Dia do Controle da Poluição por Agrotóxicos',
+          description: 'Data para conscientização sobre o uso responsável de agrotóxicos',
+          category: 'brasil',
+          tags: ['Agricultura', 'Poluição']
+        }
+      ],
+      'Fevereiro': [
+        {
+          date: '2025-02-02',
+          title: 'Dia Mundial das Zonas Úmidas',
+          description: 'Proteção de pântanos, brejos e outros ecossistemas aquáticos',
+          category: 'mundial',
+          tags: ['Biodiversidade', 'Água']
+        },
+        {
+          date: '2025-02-06',
+          title: 'Dia do Pantanal',
+          description: 'Celebração da maior planície alagável do mundo',
+          category: 'brasil',
+          tags: ['Pantanal', 'Biodiversidade']
+        }
+      ],
+      'Março': [
+        {
+          date: '2025-03-21',
+          title: 'Dia Mundial das Florestas',
+          description: 'Conscientização sobre a importância das florestas para o planeta',
+          category: 'mundial',
+          tags: ['Florestas', 'Biodiversidade']
+        },
+        {
+          date: '2025-03-22',
+          title: 'Dia Mundial da Água',
+          description: 'Sensibilização para a conservação dos recursos hídricos',
+          category: 'mundial',
+          tags: ['Água', 'Conservação']
+        },
+        {
+          date: '2025-03-23',
+          title: 'Dia Mundial da Meteorologia',
+          description: 'Importância da meteorologia para o meio ambiente',
+          category: 'mundial',
+          tags: ['Clima', 'Meteorologia']
+        }
+      ],
+      'Abril': [
+        {
+          date: '2025-04-07',
+          title: 'Dia Mundial da Saúde',
+          description: 'Relação entre saúde humana e meio ambiente',
+          category: 'mundial',
+          tags: ['Saúde', 'Meio Ambiente']
+        },
+        {
+          date: '2025-04-15',
+          title: 'Dia Nacional da Conservação do Solo',
+          description: 'Preservação e manejo sustentável do solo brasileiro',
+          category: 'brasil',
+          tags: ['Solo', 'Agricultura']
+        },
+        {
+          date: '2025-04-19',
+          title: 'Dia do Índio',
+          description: 'Reconhecimento dos povos indígenas e sua relação com a natureza',
+          category: 'brasil',
+          tags: ['Povos Indígenas', 'Cultura']
+        },
+        {
+          date: '2025-04-22',
+          title: 'Dia Mundial da Terra',
+          description: 'Maior evento ambiental do mundo, celebrado globalmente',
+          category: 'mundial',
+          tags: ['Terra', 'Sustentabilidade']
+        }
+      ],
+      'Maio': [
+        {
+          date: '2025-05-03',
+          title: 'Dia do Sol',
+          description: 'Importância da energia solar e fontes renováveis',
+          category: 'mundial',
+          tags: ['Energia Solar', 'Renovável']
+        },
+        {
+          date: '2025-05-15',
+          title: 'Dia do Gari',
+          description: 'Valorização dos profissionais de limpeza urbana',
+          category: 'brasil',
+          tags: ['Limpeza', 'Urbano']
+        },
+        {
+          date: '2025-05-22',
+          title: 'Dia Internacional da Biodiversidade',
+          description: 'Conservação da diversidade biológica mundial',
+          category: 'mundial',
+          tags: ['Biodiversidade', 'Conservação']
+        },
+        {
+          date: '2025-05-27',
+          title: 'Dia da Mata Atlântica',
+          description: 'Proteção do bioma mais ameaçado do Brasil',
+          category: 'brasil',
+          tags: ['Mata Atlântica', 'Bioma']
+        }
+      ],
+      'Junho': [
+        {
+          date: '2025-06-05',
+          title: 'Dia Mundial do Meio Ambiente',
+          description: 'Principal data do calendário ambiental mundial',
+          category: 'mundial',
+          tags: ['Meio Ambiente', 'Sustentabilidade']
+        },
+        {
+          date: '2025-06-08',
+          title: 'Dia Mundial dos Oceanos',
+          description: 'Preservação dos ecossistemas marinhos',
+          category: 'mundial',
+          tags: ['Oceanos', 'Vida Marinha']
+        },
+        {
+          date: '2025-06-17',
+          title: 'Dia Mundial de Combate à Desertificação',
+          description: 'Prevenção da degradação do solo',
+          category: 'mundial',
+          tags: ['Desertificação', 'Solo']
+        }
+      ],
+      'Julho': [
+        {
+          date: '2025-07-11',
+          title: 'Dia Mundial da População',
+          description: 'Relação entre crescimento populacional e recursos naturais',
+          category: 'mundial',
+          tags: ['População', 'Recursos']
+        },
+        {
+          date: '2025-07-17',
+          title: 'Dia de Proteção às Florestas',
+          description: 'Conservação das florestas brasileiras',
+          category: 'brasil',
+          tags: ['Florestas', 'Proteção']
+        }
+      ],
+      'Agosto': [
+        {
+          date: '2025-08-09',
+          title: 'Dia Internacional dos Povos Indígenas',
+          description: 'Reconhecimento dos guardiões ancestrais da natureza',
+          category: 'mundial',
+          tags: ['Povos Indígenas', 'Tradição']
+        },
+        {
+          date: '2025-08-24',
+          title: 'Dia da Infância',
+          description: 'Educação ambiental para as futuras gerações',
+          category: 'brasil',
+          tags: ['Educação', 'Infância']
+        }
+      ],
+      'Setembro': [
+        {
+          date: '2025-09-05',
+          title: 'Dia da Amazônia',
+          description: 'Maior floresta tropical do mundo',
+          category: 'brasil',
+          tags: ['Amazônia', 'Floresta Tropical']
+        },
+        {
+          date: '2025-09-16',
+          title: 'Dia Internacional para Preservação da Camada de Ozônio',
+          description: 'Proteção da camada de ozônio',
+          category: 'mundial',
+          tags: ['Ozônio', 'Atmosfera']
+        },
+        {
+          date: '2025-09-21',
+          title: 'Dia da Árvore',
+          description: 'Importância das árvores para o meio ambiente',
+          category: 'brasil',
+          tags: ['Árvores', 'Reflorestamento']
+        },
+        {
+          date: '2025-09-22',
+          title: 'Dia Mundial Sem Carros',
+          description: 'Redução da poluição do ar e incentivo ao transporte sustentável',
+          category: 'mundial',
+          tags: ['Transporte', 'Poluição do Ar']
+        }
+      ],
+      'Outubro': [
+        {
+          date: '2025-10-04',
+          title: 'Dia Mundial dos Animais',
+          description: 'Proteção e bem-estar animal',
+          category: 'mundial',
+          tags: ['Animais', 'Bem-estar']
+        },
+        {
+          date: '2025-10-12',
+          title: 'Dia do Mar',
+          description: 'Preservação dos ecossistemas marinhos brasileiros',
+          category: 'brasil',
+          tags: ['Mar', 'Ecossistemas Marinhos']
+        },
+        {
+          date: '2025-10-15',
+          title: 'Dia do Professor',
+          description: 'Educadores ambientais e sua importância',
+          category: 'brasil',
+          tags: ['Educação', 'Professores']
+        }
+      ],
+      'Novembro': [
+        {
+          date: '2025-11-14',
+          title: 'Dia Nacional da Alfabetização Ecológica',
+          description: 'Educação ambiental e consciência ecológica',
+          category: 'brasil',
+          tags: ['Educação Ambiental', 'Alfabetização']
+        },
+        {
+          date: '2025-11-30',
+          title: 'Dia Nacional de Luta contra o Uso de Agrotóxicos',
+          description: 'Agricultura sustentável e segura',
+          category: 'brasil',
+          tags: ['Agrotóxicos', 'Agricultura Sustentável']
+        }
+      ],
+      'Dezembro': [
+        {
+          date: '2025-12-05',
+          title: 'Dia Mundial do Solo',
+          description: 'Importância do solo para a vida no planeta',
+          category: 'mundial',
+          tags: ['Solo', 'Agricultura']
+        },
+        {
+          date: '2025-12-11',
+          title: 'Dia Internacional das Montanhas',
+          description: 'Preservação dos ecossistemas montanhosos',
+          category: 'mundial',
+          tags: ['Montanhas', 'Ecossistemas']
+        }
+      ]
+    };
+
+    let currentFilter = 'todos';
+
+    function showLoading(message = '📅 Carregando...') {
+      const loading = document.getElementById('loading');
+      loading.textContent = message;
+      loading.classList.add('show');
+      setTimeout(() => loading.classList.remove('show'), 2000);
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+
+      Object.keys(environmentalDates).forEach(month => {
+        const monthCard = document.createElement('div');
+        monthCard.className = 'month-card';
+        
+        const monthTitle = document.createElement('div');
+        monthTitle.className = 'month-title';
+        monthTitle.textContent = month;
+        monthCard.appendChild(monthTitle);
+
+        const events = environmentalDates[month].filter(event => {
+          if (currentFilter === 'todos') return true;
+          return event.category === currentFilter || event.tags.some(tag => 
+            tag.toLowerCase().includes(currentFilter.toLowerCase())
+          );
+        });
+
+        if (events.length === 0) {
+          monthCard.style.display = 'none';
+          grid.appendChild(monthCard);
+          return;
+        }
+
+        events.forEach(event => {
+          const eventEl = document.createElement('div');
+          eventEl.className = `event-item ${event.category}`;
+          
+          const eventDate = new Date(event.date);
+          const displayDate = eventDate.toLocaleDateString('pt-BR', {
+            day: '2-digit', month: '2-digit'
+          });
+          
+          eventEl.innerHTML = `
+            <div class="event-date">${displayDate}</div>
+            <div class="event-title">${event.title}</div>
+            <div class="event-description">${event.description}</div>
+            <div class="event-tags">
+              ${event.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+          `;
+          
+          // Adicionar evento de clique para adicionar à agenda
+          eventEl.addEventListener('click', () => {
+            addEventToMyAgenda(event);
+          });
+          
+          monthCard.appendChild(eventEl);
+        });
+
+        grid.appendChild(monthCard);
+      });
+
+      updateStats();
+    }
+
+    function filterEvents(category) {
+      currentFilter = category;
+      
+      // Update filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      renderCalendar();
+    }
+
+    function updateStats() {
+      let totalEvents = 0;
+      let brasilEvents = 0;
+      let mundialEvents = 0;
+
+      Object.values(environmentalDates).forEach(monthEvents => {
+        monthEvents.forEach(event => {
+          totalEvents++;
+          if (event.category === 'brasil') brasilEvents++;
+          if (event.category === 'mundial') mundialEvents++;
+        });
+      });
+
+      document.getElementById('totalEvents').textContent = totalEvents;
+      document.getElementById('brasilEvents').textContent = brasilEvents;
+      document.getElementById('mundialEvents').textContent = mundialEvents;
+    }
+
+    function exportCalendar() {
+      showLoading('📥 Exportando...');
+      const data = {
+        title: 'Calendário Ambiental 2025',
+        events: environmentalDates,
+        exportDate: new Date().toISOString()
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'calendario_ambiental_2025.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function addEventToMyAgenda(event) {
+      showLoading('➕ Adicionando evento...');
+      
+      // Tentar comunicar com a janela pai (sua agenda principal)
+      if (window.opener) {
+        const eventData = {
+          date: event.date,
+          title: `🌍 ${event.title}`,
+          time: '',
+          description: `${event.description}\n\nTags: ${event.tags.join(', ')}`
+        };
+        
+        // Enviar evento para a agenda principal
+        window.opener.postMessage({
+          type: 'ADD_ENVIRONMENTAL_EVENT',
+          event: eventData
+        }, '*');
+        
+        alert(`✅ "${event.title}" foi adicionado à sua agenda!`);
+      } else {
+        // Fallback: salvar no localStorage para ser importado depois
+        const savedEvents = JSON.parse(localStorage.getItem('environmentalEventsToImport') || '[]');
+        savedEvents.push({
+          date: event.date,
+          title: `🌍 ${event.title}`,
+          time: '',
+          description: `${event.description}\n\nTags: ${event.tags.join(', ')}`
+        });
+        localStorage.setItem('environmentalEventsToImport', JSON.stringify(savedEvents));
+        alert(`📅 "${event.title}" foi salvo! Será importado quando você voltar à agenda principal.`);
+      }
+    }
+
+    function addToMyAgenda() {
+      showLoading('📅 Preparando eventos...');
+      
+      // Criar lista de todos os eventos para importar
+      const allEvents = [];
+      Object.values(environmentalDates).forEach(monthEvents => {
+        monthEvents.forEach(event => {
+          allEvents.push({
+            date: event.date,
+            title: `🌍 ${event.title}`,
+            time: '',
+            description: `${event.description}\n\nTags: ${event.tags.join(', ')}`
+          });
+        });
+      });
+      
+      // Salvar no localStorage
+      localStorage.setItem('environmentalEventsToImport', JSON.stringify(allEvents));
+      alert(`✅ ${allEvents.length} eventos do calendário ambiental foram preparados para importação!\n\nVolte à sua agenda principal para importá-los.`);
+    }
+
+    // Initialize calendar
+    document.addEventListener('DOMContentLoaded', function() {
+      showLoading('🌍 Carregando calendário...');
+      setTimeout(() => {
+        renderCalendar();
+      }, 500);
+    });
+
+    // Make functions available globally
+    window.filterEvents = filterEvents;
+    window.exportCalendar = exportCalendar;
+    window.addToMyAgenda = addToMyAgenda;
+  </script>
+</body>
+</html>
