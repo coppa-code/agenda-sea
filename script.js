@@ -300,14 +300,18 @@ window.addEvent = async function addEvent(e) {
     if (editingIndex !== undefined) {
       // Editar evento existente
       const oldEvent = events[editingIndex];
+      
       if (oldEvent.id) {
-        // Se veio do Firebase
+        // Se o evento veio do Firebase, deletar o antigo e criar novo
+        await deleteEventFromFirebase(oldEvent.id, editingIndex);
         await saveEventToFirebase(eventData);
-        events.splice(editingIndex, 1);
-        delete form.dataset.editingIndex;
       } else {
+        // Se é evento local, apenas substituir
         events[editingIndex] = eventData;
+        saveToLocalStorage();
       }
+      
+      delete form.dataset.editingIndex;
       alert("✅ Evento atualizado!");
     } else {
       // Cadastrar novo evento
@@ -330,7 +334,6 @@ window.addEvent = async function addEvent(e) {
     saveToLocalStorage();
   }
 };
-
 window.editarEvento = function editarEvento(index) {
   const event = events[index];
 
