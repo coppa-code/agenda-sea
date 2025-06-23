@@ -333,7 +333,6 @@ window.addEvent = async function addEvent(e) {
 
 window.editarEvento = function editarEvento(index) {
   const event = events[index];
-
   if (!event) return alert("Evento não encontrado.");
 
   // Preencher campos do formulário
@@ -342,8 +341,14 @@ window.editarEvento = function editarEvento(index) {
   document.getElementById('eventTime').value = event.time || '';
   document.getElementById('eventDescription').value = event.description || '';
 
+  // Alterar título do formulário
+  document.querySelector('.form-title').textContent = "✏️ Editando Evento";
+
   // Armazenar índice do evento sendo editado
   document.getElementById('eventForm').dataset.editingIndex = index;
+
+  // Remover seleção visual no calendário
+  document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
 
   // Rolar até o formulário
   document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth' });
