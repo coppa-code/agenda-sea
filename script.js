@@ -1,7 +1,7 @@
 // Firebase SDK imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';  
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';  
-
+import { ..., updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'; 
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCFQCgGzitreC4TP7gXnEOcxD6UcY3j3jo",
