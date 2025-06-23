@@ -440,3 +440,401 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   window.addEventListener('offline', () => updateStatus(false));
 });
+
+
+
+
+
+
+
+
+
+
+
+
+// Adicione este código no final do seu script.js
+// Função para importar eventos ambientais
+window.importEnvironmentalEvents = async function importEnvironmentalEvents() {
+  const savedEvents = JSON.parse(localStorage.getItem('environmentalEventsToImport') || '[]');
+  
+  if (savedEvents.length === 0) {
+    alert('Nenhum evento ambiental para importar.');
+    return;
+  }
+  
+  if (!confirm(`Importar ${savedEvents.length} eventos do calendário ambiental?`)) {
+    return;
+  }
+  
+  showLoading('🌍 Importando eventos ambientais...');
+  
+  let imported = 0;
+  let errors = 0;
+  
+  for (const eventData of savedEvents) {
+    try {
+      await saveEventToFirebase(eventData);
+      imported++;
+    } catch (error) {
+      console.error('Erro ao importar evento:', error);
+      errors++;
+    }
+  }
+  
+  hideLoading();
+  
+  if (errors === 0) {
+    alert(`✅ ${imported} eventos ambientais importados com sucesso!`);
+  } else {
+    alert(`⚠️ ${imported} eventos importados, ${errors} com erro.`);
+  }
+  
+  // Limpar eventos salvos após importação
+  localStorage.removeItem('environmentalEventsToImport');
+  
+  // Recarregar calendário
+  if (typeof loadEvents === 'function') {
+    loadEvents();
+  }
+};
+
+// Função para preparar eventos ambientais para importação
+window.prepareEnvironmentalEvents = function prepareEnvironmentalEvents() {
+  // Dados dos eventos ambientais (do calendário ambiental)
+  const environmentalDates = {
+    'Janeiro': [
+      {
+        date: '11/01',
+        title: 'Dia do Controle da Poluição por Agrotóxicos',
+        description: 'Data para conscientização sobre o uso responsável de agrotóxicos',
+        category: 'brasil',
+        tags: ['Agricultura', 'Poluição']
+      }
+    ],
+    'Fevereiro': [
+      {
+        date: '02/02',
+        title: 'Dia Mundial das Zonas Úmidas',
+        description: 'Proteção de pântanos, brejos e outros ecossistemas aquáticos',
+        category: 'mundial',
+        tags: ['Biodiversidade', 'Água']
+      },
+      {
+        date: '06/02',
+        title: 'Dia do Pantanal',
+        description: 'Celebração da maior planície alagável do mundo',
+        category: 'brasil',
+        tags: ['Pantanal', 'Biodiversidade']
+      }
+    ],
+    'Março': [
+      {
+        date: '21/03',
+        title: 'Dia Mundial das Florestas',
+        description: 'Conscientização sobre a importância das florestas para o planeta',
+        category: 'mundial',
+        tags: ['Florestas', 'Biodiversidade']
+      },
+      {
+        date: '22/03',
+        title: 'Dia Mundial da Água',
+        description: 'Sensibilização para a conservação dos recursos hídricos',
+        category: 'mundial',
+        tags: ['Água', 'Conservação']
+      },
+      {
+        date: '23/03',
+        title: 'Dia Mundial da Meteorologia',
+        description: 'Importância da meteorologia para o meio ambiente',
+        category: 'mundial',
+        tags: ['Clima', 'Meteorologia']
+      }
+    ],
+    'Abril': [
+      {
+        date: '07/04',
+        title: 'Dia Mundial da Saúde',
+        description: 'Relação entre saúde humana e meio ambiente',
+        category: 'mundial',
+        tags: ['Saúde', 'Meio Ambiente']
+      },
+      {
+        date: '15/04',
+        title: 'Dia Nacional da Conservação do Solo',
+        description: 'Preservação e manejo sustentável do solo brasileiro',
+        category: 'brasil',
+        tags: ['Solo', 'Agricultura']
+      },
+      {
+        date: '19/04',
+        title: 'Dia do Índio',
+        description: 'Reconhecimento dos povos indígenas e sua relação com a natureza',
+        category: 'brasil',
+        tags: ['Povos Indígenas', 'Cultura']
+      },
+      {
+        date: '22/04',
+        title: 'Dia Mundial da Terra',
+        description: 'Maior evento ambiental do mundo, celebrado globalmente',
+        category: 'mundial',
+        tags: ['Terra', 'Sustentabilidade']
+      }
+    ],
+    'Maio': [
+      {
+        date: '03/05',
+        title: 'Dia do Sol',
+        description: 'Importância da energia solar e fontes renováveis',
+        category: 'mundial',
+        tags: ['Energia Solar', 'Renovável']
+      },
+      {
+        date: '15/05',
+        title: 'Dia do Gari',
+        description: 'Valorização dos profissionais de limpeza urbana',
+        category: 'brasil',
+        tags: ['Limpeza', 'Urbano']
+      },
+      {
+        date: '22/05',
+        title: 'Dia Internacional da Biodiversidade',
+        description: 'Conservação da diversidade biológica mundial',
+        category: 'mundial',
+        tags: ['Biodiversidade', 'Conservação']
+      },
+      {
+        date: '27/05',
+        title: 'Dia da Mata Atlântica',
+        description: 'Proteção do bioma mais ameaçado do Brasil',
+        category: 'brasil',
+        tags: ['Mata Atlântica', 'Bioma']
+      }
+    ],
+    'Junho': [
+      {
+        date: '05/06',
+        title: 'Dia Mundial do Meio Ambiente',
+        description: 'Principal data do calendário ambiental mundial',
+        category: 'mundial',
+        tags: ['Meio Ambiente', 'Sustentabilidade']
+      },
+      {
+        date: '08/06',
+        title: 'Dia Mundial dos Oceanos',
+        description: 'Preservação dos ecossistemas marinhos',
+        category: 'mundial',
+        tags: ['Oceanos', 'Vida Marinha']
+      },
+      {
+        date: '17/06',
+        title: 'Dia Mundial de Combate à Desertificação',
+        description: 'Prevenção da degradação do solo',
+        category: 'mundial',
+        tags: ['Desertificação', 'Solo']
+      }
+    ],
+    'Julho': [
+      {
+        date: '11/07',
+        title: 'Dia Mundial da População',
+        description: 'Relação entre crescimento populacional e recursos naturais',
+        category: 'mundial',
+        tags: ['População', 'Recursos']
+      },
+      {
+        date: '17/07',
+        title: 'Dia de Proteção às Florestas',
+        description: 'Conservação das florestas brasileiras',
+        category: 'brasil',
+        tags: ['Florestas', 'Proteção']
+      }
+    ],
+    'Agosto': [
+      {
+        date: '09/08',
+        title: 'Dia Internacional dos Povos Indígenas',
+        description: 'Reconhecimento dos guardiões ancestrais da natureza',
+        category: 'mundial',
+        tags: ['Povos Indígenas', 'Tradição']
+      },
+      {
+        date: '24/08',
+        title: 'Dia da Infância',
+        description: 'Educação ambiental para as futuras gerações',
+        category: 'brasil',
+        tags: ['Educação', 'Infância']
+      }
+    ],
+    'Setembro': [
+      {
+        date: '05/09',
+        title: 'Dia da Amazônia',
+        description: 'Maior floresta tropical do mundo',
+        category: 'brasil',
+        tags: ['Amazônia', 'Floresta Tropical']
+      },
+      {
+        date: '16/09',
+        title: 'Dia Internacional para Preservação da Camada de Ozônio',
+        description: 'Proteção da camada de ozônio',
+        category: 'mundial',
+        tags: ['Ozônio', 'Atmosfera']
+      },
+      {
+        date: '21/09',
+        title: 'Dia da Árvore',
+        description: 'Importância das árvores para o meio ambiente',
+        category: 'brasil',
+        tags: ['Árvores', 'Reflorestamento']
+      },
+      {
+        date: '22/09',
+        title: 'Dia Mundial Sem Carros',
+        description: 'Redução da poluição do ar e incentivo ao transporte sustentável',
+        category: 'mundial',
+        tags: ['Transporte', 'Poluição do Ar']
+      }
+    ],
+    'Outubro': [
+      {
+        date: '04/10',
+        title: 'Dia Mundial dos Animais',
+        description: 'Proteção e bem-estar animal',
+        category: 'mundial',
+        tags: ['Animais', 'Bem-estar']
+      },
+      {
+        date: '12/10',
+        title: 'Dia do Mar',
+        description: 'Preservação dos ecossistemas marinhos brasileiros',
+        category: 'brasil',
+        tags: ['Mar', 'Ecossistemas Marinhos']
+      },
+      {
+        date: '15/10',
+        title: 'Dia do Professor',
+        description: 'Educadores ambientais e sua importância',
+        category: 'brasil',
+        tags: ['Educação', 'Professores']
+      },
+      {
+        date: '31/10',
+        title: 'Dia das Bruxas Ecológico',
+        description: 'Celebração sustentável do Halloween',
+        category: 'mundial',
+        tags: ['Sustentabilidade', 'Cultura']
+      }
+    ],
+    'Novembro': [
+      {
+        date: '14/11',
+        title: 'Dia Nacional da Alfabetização Ecológica',
+        description: 'Educação ambiental e consciência ecológica',
+        category: 'brasil',
+        tags: ['Educação Ambiental', 'Alfabetização']
+      },
+      {
+        date: '30/11',
+        title: 'Dia Nacional de Luta contra o Uso de Agrotóxicos',
+        description: 'Agricultura sustentável e segura',
+        category: 'brasil',
+        tags: ['Agrotóxicos', 'Agricultura Sustentável']
+      }
+    ],
+    'Dezembro': [
+      {
+        date: '03/12',
+        title: 'Dia Internacional da Pessoa com Deficiência',
+        description: 'Acessibilidade ambiental e inclusão',
+        category: 'mundial',
+        tags: ['Inclusão', 'Acessibilidade']
+      },
+      {
+        date: '05/12',
+        title: 'Dia Mundial do Solo',
+        description: 'Importância do solo para a vida no planeta',
+        category: 'mundial',
+        tags: ['Solo', 'Agricultura']
+      },
+      {
+        date: '11/12',
+        title: 'Dia Internacional das Montanhas',
+        description: 'Preservação dos ecossistemas montanhosos',
+        category: 'mundial',
+        tags: ['Montanhas', 'Ecossistemas']
+      }
+    ]
+  };
+
+  // Converter para formato da agenda
+  const eventsToImport = [];
+  const currentYear = new Date().getFullYear();
+  
+  Object.values(environmentalDates).forEach(monthEvents => {
+    monthEvents.forEach(event => {
+      const [day, month] = event.date.split('/');
+      const eventDate = new Date(currentYear, parseInt(month) - 1, parseInt(day));
+      
+      eventsToImport.push({
+        id: `env_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        title: event.title,
+        description: event.description,
+        date: eventDate.toISOString().split('T')[0],
+        time: '09:00',
+        endTime: '17:00',
+        category: 'ambiental',
+        priority: 'normal',
+        tags: event.tags.join(', '),
+        recurring: 'yearly',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    });
+  });
+  
+  // Salvar eventos para importação
+  localStorage.setItem('environmentalEventsToImport', JSON.stringify(eventsToImport));
+  
+  return eventsToImport.length;
+};
+
+// Função para adicionar botão de importação (chame onde for apropriado)
+window.addEnvironmentalImportButton = function addEnvironmentalImportButton(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  const button = document.createElement('button');
+  button.className = 'btn btn-success me-2 mb-2';
+  button.innerHTML = '🌍 Importar Calendário Ambiental';
+  button.onclick = async function() {
+    const count = prepareEnvironmentalEvents();
+    if (count > 0) {
+      await importEnvironmentalEvents();
+    }
+  };
+  
+  container.appendChild(button);
+};
+
+// Auto-executar se estiver na página principal da agenda
+document.addEventListener('DOMContentLoaded', function() {
+  // Adicionar botão se existir um container apropriado
+  const buttonContainer = document.querySelector('.d-flex.gap-2.mb-3') || 
+                          document.querySelector('.btn-group') ||
+                          document.querySelector('.header-buttons');
+  
+  if (buttonContainer) {
+    const button = document.createElement('button');
+    button.className = 'btn btn-outline-success';
+    button.innerHTML = '🌍 Calendário Ambiental';
+    button.onclick = async function() {
+      const count = prepareEnvironmentalEvents();
+      if (count > 0) {
+        await importEnvironmentalEvents();
+      }
+    };
+    buttonContainer.appendChild(button);
+  }
+});
+
+console.log('✅ Módulo de importação de eventos ambientais carregado!');
