@@ -302,9 +302,15 @@ window.addEvent = async function addEvent(e) {
       const oldEvent = events[editingIndex];
       if (oldEvent.id) {
         // Se veio do Firebase
-        await saveEventToFirebase(eventData);
-        events.splice(editingIndex, 1);
-        delete form.dataset.editingIndex;
+        // Atualizar evento existente no Firebase
+  const eventRef = doc(db, "events", oldEvent.id);
+  await updateDoc(eventRef, eventData);
+  events[editingIndex] = eventData; // Atualiza localmente
+  delete form.dataset.editingIndex;
+  alert("✅ Evento atualizado no Firebase!");
+} else {
+  events[editingIndex] = eventData;
+}
       } else {
         events[editingIndex] = eventData;
       }
