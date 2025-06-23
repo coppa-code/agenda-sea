@@ -502,269 +502,353 @@ window.importEnvironmentalEvents = async function importEnvironmentalEvents() {
 window.prepareEnvironmentalEvents = function prepareEnvironmentalEvents() {
   // Dados dos eventos ambientais (do calendário ambiental)
   const environmentalDates = {
-    'Janeiro': [
-      {
-        date: '11/01',
-        title: 'Dia do Controle da Poluição por Agrotóxicos',
-        description: 'Data para conscientização sobre o uso responsável de agrotóxicos',
-        category: 'brasil',
-        tags: ['Agricultura', 'Poluição']
-      }
-    ],
-    'Fevereiro': [
-      {
-        date: '02/02',
-        title: 'Dia Mundial das Zonas Úmidas',
-        description: 'Proteção de pântanos, brejos e outros ecossistemas aquáticos',
-        category: 'mundial',
-        tags: ['Biodiversidade', 'Água']
-      },
-      {
-        date: '06/02',
-        title: 'Dia do Pantanal',
-        description: 'Celebração da maior planície alagável do mundo',
-        category: 'brasil',
-        tags: ['Pantanal', 'Biodiversidade']
-      }
-    ],
-    'Março': [
-      {
-        date: '21/03',
-        title: 'Dia Mundial das Florestas',
-        description: 'Conscientização sobre a importância das florestas para o planeta',
-        category: 'mundial',
-        tags: ['Florestas', 'Biodiversidade']
-      },
-      {
-        date: '22/03',
-        title: 'Dia Mundial da Água',
-        description: 'Sensibilização para a conservação dos recursos hídricos',
-        category: 'mundial',
-        tags: ['Água', 'Conservação']
-      },
-      {
-        date: '23/03',
-        title: 'Dia Mundial da Meteorologia',
-        description: 'Importância da meteorologia para o meio ambiente',
-        category: 'mundial',
-        tags: ['Clima', 'Meteorologia']
-      }
-    ],
-    'Abril': [
-      {
-        date: '07/04',
-        title: 'Dia Mundial da Saúde',
-        description: 'Relação entre saúde humana e meio ambiente',
-        category: 'mundial',
-        tags: ['Saúde', 'Meio Ambiente']
-      },
-      {
-        date: '15/04',
-        title: 'Dia Nacional da Conservação do Solo',
-        description: 'Preservação e manejo sustentável do solo brasileiro',
-        category: 'brasil',
-        tags: ['Solo', 'Agricultura']
-      },
-      {
-        date: '19/04',
-        title: 'Dia do Índio',
-        description: 'Reconhecimento dos povos indígenas e sua relação com a natureza',
-        category: 'brasil',
-        tags: ['Povos Indígenas', 'Cultura']
-      },
-      {
-        date: '22/04',
-        title: 'Dia Mundial da Terra',
-        description: 'Maior evento ambiental do mundo, celebrado globalmente',
-        category: 'mundial',
-        tags: ['Terra', 'Sustentabilidade']
-      }
-    ],
-    'Maio': [
-      {
-        date: '03/05',
-        title: 'Dia do Sol',
-        description: 'Importância da energia solar e fontes renováveis',
-        category: 'mundial',
-        tags: ['Energia Solar', 'Renovável']
-      },
-      {
-        date: '15/05',
-        title: 'Dia do Gari',
-        description: 'Valorização dos profissionais de limpeza urbana',
-        category: 'brasil',
-        tags: ['Limpeza', 'Urbano']
-      },
-      {
-        date: '22/05',
-        title: 'Dia Internacional da Biodiversidade',
-        description: 'Conservação da diversidade biológica mundial',
-        category: 'mundial',
-        tags: ['Biodiversidade', 'Conservação']
-      },
-      {
-        date: '27/05',
-        title: 'Dia da Mata Atlântica',
-        description: 'Proteção do bioma mais ameaçado do Brasil',
-        category: 'brasil',
-        tags: ['Mata Atlântica', 'Bioma']
-      }
-    ],
-    'Junho': [
-      {
-        date: '05/06',
-        title: 'Dia Mundial do Meio Ambiente',
-        description: 'Principal data do calendário ambiental mundial',
-        category: 'mundial',
-        tags: ['Meio Ambiente', 'Sustentabilidade']
-      },
-      {
-        date: '08/06',
-        title: 'Dia Mundial dos Oceanos',
-        description: 'Preservação dos ecossistemas marinhos',
-        category: 'mundial',
-        tags: ['Oceanos', 'Vida Marinha']
-      },
-      {
-        date: '17/06',
-        title: 'Dia Mundial de Combate à Desertificação',
-        description: 'Prevenção da degradação do solo',
-        category: 'mundial',
-        tags: ['Desertificação', 'Solo']
-      }
-    ],
-    'Julho': [
-      {
-        date: '11/07',
-        title: 'Dia Mundial da População',
-        description: 'Relação entre crescimento populacional e recursos naturais',
-        category: 'mundial',
-        tags: ['População', 'Recursos']
-      },
-      {
-        date: '17/07',
-        title: 'Dia de Proteção às Florestas',
-        description: 'Conservação das florestas brasileiras',
-        category: 'brasil',
-        tags: ['Florestas', 'Proteção']
-      }
-    ],
-    'Agosto': [
-      {
-        date: '09/08',
-        title: 'Dia Internacional dos Povos Indígenas',
-        description: 'Reconhecimento dos guardiões ancestrais da natureza',
-        category: 'mundial',
-        tags: ['Povos Indígenas', 'Tradição']
-      },
-      {
-        date: '24/08',
-        title: 'Dia da Infância',
-        description: 'Educação ambiental para as futuras gerações',
-        category: 'brasil',
-        tags: ['Educação', 'Infância']
-      }
-    ],
-    'Setembro': [
-      {
-        date: '05/09',
-        title: 'Dia da Amazônia',
-        description: 'Maior floresta tropical do mundo',
-        category: 'brasil',
-        tags: ['Amazônia', 'Floresta Tropical']
-      },
-      {
-        date: '16/09',
-        title: 'Dia Internacional para Preservação da Camada de Ozônio',
-        description: 'Proteção da camada de ozônio',
-        category: 'mundial',
-        tags: ['Ozônio', 'Atmosfera']
-      },
-      {
-        date: '21/09',
-        title: 'Dia da Árvore',
-        description: 'Importância das árvores para o meio ambiente',
-        category: 'brasil',
-        tags: ['Árvores', 'Reflorestamento']
-      },
-      {
-        date: '22/09',
-        title: 'Dia Mundial Sem Carros',
-        description: 'Redução da poluição do ar e incentivo ao transporte sustentável',
-        category: 'mundial',
-        tags: ['Transporte', 'Poluição do Ar']
-      }
-    ],
-    'Outubro': [
-      {
-        date: '04/10',
-        title: 'Dia Mundial dos Animais',
-        description: 'Proteção e bem-estar animal',
-        category: 'mundial',
-        tags: ['Animais', 'Bem-estar']
-      },
-      {
-        date: '12/10',
-        title: 'Dia do Mar',
-        description: 'Preservação dos ecossistemas marinhos brasileiros',
-        category: 'brasil',
-        tags: ['Mar', 'Ecossistemas Marinhos']
-      },
-      {
-        date: '15/10',
-        title: 'Dia do Professor',
-        description: 'Educadores ambientais e sua importância',
-        category: 'brasil',
-        tags: ['Educação', 'Professores']
-      },
-      {
-        date: '31/10',
-        title: 'Dia das Bruxas Ecológico',
-        description: 'Celebração sustentável do Halloween',
-        category: 'mundial',
-        tags: ['Sustentabilidade', 'Cultura']
-      }
-    ],
-    'Novembro': [
-      {
-        date: '14/11',
-        title: 'Dia Nacional da Alfabetização Ecológica',
-        description: 'Educação ambiental e consciência ecológica',
-        category: 'brasil',
-        tags: ['Educação Ambiental', 'Alfabetização']
-      },
-      {
-        date: '30/11',
-        title: 'Dia Nacional de Luta contra o Uso de Agrotóxicos',
-        description: 'Agricultura sustentável e segura',
-        category: 'brasil',
-        tags: ['Agrotóxicos', 'Agricultura Sustentável']
-      }
-    ],
-    'Dezembro': [
-      {
-        date: '03/12',
-        title: 'Dia Internacional da Pessoa com Deficiência',
-        description: 'Acessibilidade ambiental e inclusão',
-        category: 'mundial',
-        tags: ['Inclusão', 'Acessibilidade']
-      },
-      {
-        date: '05/12',
-        title: 'Dia Mundial do Solo',
-        description: 'Importância do solo para a vida no planeta',
-        category: 'mundial',
-        tags: ['Solo', 'Agricultura']
-      },
-      {
-        date: '11/12',
-        title: 'Dia Internacional das Montanhas',
-        description: 'Preservação dos ecossistemas montanhosos',
-        category: 'mundial',
-        tags: ['Montanhas', 'Ecossistemas']
-      }
-    ]
-  };
+  'Janeiro': [
+    {
+      date: '2025-01-11',
+      title: 'Dia do Controle da Poluição por Agrotóxicos',
+      description: 'Data para conscientização sobre o uso responsável de agrotóxicos',
+      category: 'brasil',
+      tags: ['Agricultura', 'Poluição']
+    },
+    {
+      date: '2025-01-31',
+      title: 'Dia do Engenheiro Ambiental',
+      description: 'Valorização dos profissionais que trabalham com soluções ambientais',
+      category: 'brasil',
+      tags: ['Profissões', 'Engenharia Ambiental']
+    }
+  ],
+  'Fevereiro': [
+    {
+      date: '2025-02-02',
+      title: 'Dia Mundial das Zonas Úmidas',
+      description: 'Proteção de pântanos, brejos e outros ecossistemas aquáticos',
+      category: 'mundial',
+      tags: ['Biodiversidade', 'Água']
+    },
+    {
+      date: '2025-02-06',
+      title: 'Dia do Pantanal',
+      description: 'Celebração da maior planície alagável do mundo',
+      category: 'brasil',
+      tags: ['Pantanal', 'Biodiversidade']
+    }
+  ],
+  'Março': [
+    {
+      date: '2025-03-01',
+      title: 'Dia do Turismo Ecológico',
+      description: 'Promoção do turismo sustentável e consciente',
+      category: 'brasil',
+      tags: ['Turismo', 'Sustentabilidade']
+    },
+    {
+      date: '2025-03-14',
+      title: 'Dia Mundial de Luta dos Atingidos por Barragens',
+      description: 'Conscientização sobre impactos socioambientais de grandes barragens',
+      category: 'mundial',
+      tags: ['Recursos Hídricos', 'Direitos Humanos']
+    },
+    {
+      date: '2025-03-21',
+      title: 'Dia Mundial das Florestas',
+      description: 'Conscientização sobre a importância das florestas para o planeta',
+      category: 'mundial',
+      tags: ['Florestas', 'Biodiversidade']
+    },
+    {
+      date: '2025-03-22',
+      title: 'Dia Mundial da Água',
+      description: 'Sensibilização para a conservação dos recursos hídricos',
+      category: 'mundial',
+      tags: ['Água', 'Conservação']
+    },
+    {
+      date: '2025-03-23',
+      title: 'Dia Mundial da Meteorologia',
+      description: 'Importância da meteorologia para o meio ambiente',
+      category: 'mundial',
+      tags: ['Clima', 'Meteorologia']
+    }
+  ],
+  'Abril': [
+    {
+      date: '2025-04-07',
+      title: 'Dia Mundial da Saúde',
+      description: 'Relação entre saúde humana e meio ambiente',
+      category: 'mundial',
+      tags: ['Saúde', 'Meio Ambiente']
+    },
+    {
+      date: '2025-04-15',
+      title: 'Dia Nacional da Conservação do Solo',
+      description: 'Preservação e manejo sustentável do solo brasileiro',
+      category: 'brasil',
+      tags: ['Solo', 'Agricultura']
+    },
+    {
+      date: '2025-04-19',
+      title: 'Dia do Índio',
+      description: 'Reconhecimento dos povos indígenas e sua relação com a natureza',
+      category: 'brasil',
+      tags: ['Povos Indígenas', 'Cultura']
+    },
+    {
+      date: '2025-04-22',
+      title: 'Dia Mundial da Terra',
+      description: 'Maior evento ambiental do mundo, celebrado globalmente',
+      category: 'mundial',
+      tags: ['Terra', 'Sustentabilidade']
+    }
+  ],
+  'Maio': [
+    {
+      date: '2025-05-03',
+      title: 'Dia do Sol',
+      description: 'Importância da energia solar e fontes renováveis',
+      category: 'mundial',
+      tags: ['Energia Solar', 'Renovável']
+    },
+    {
+      date: '2025-05-15',
+      title: 'Dia do Gari',
+      description: 'Valorização dos profissionais de limpeza urbana',
+      category: 'brasil',
+      tags: ['Limpeza', 'Urbano']
+    },
+    {
+      date: '2025-05-22',
+      title: 'Dia Internacional da Biodiversidade',
+      description: 'Conservação da diversidade biológica mundial',
+      category: 'mundial',
+      tags: ['Biodiversidade', 'Conservação']
+    },
+    {
+      date: '2025-05-27',
+      title: 'Dia da Mata Atlântica',
+      description: 'Proteção do bioma mais ameaçado do Brasil',
+      category: 'brasil',
+      tags: ['Mata Atlântica', 'Bioma']
+    }
+  ],
+  'Junho': [
+    {
+      date: '2025-06-03',
+      title: 'Dia Nacional da Educação Ambiental',
+      description: 'Promoção da consciência ecológica através da educação',
+      category: 'brasil',
+      tags: ['Educação Ambiental', 'Consciência Ecológica']
+    },
+    {
+      date: '2025-06-05',
+      title: 'Dia Mundial do Meio Ambiente',
+      description: 'Principal data do calendário ambiental mundial',
+      category: 'mundial',
+      tags: ['Meio Ambiente', 'Sustentabilidade']
+    },
+    {
+      date: '2025-06-07',
+      title: 'Dia Nacional do Catador(a) de Material Reciclável',
+      description: 'Valorização dos profissionais da reciclagem e economia circular',
+      category: 'brasil',
+      tags: ['Reciclagem', 'Economia Circular']
+    },
+    {
+      date: '2025-06-08',
+      title: 'Dia Mundial dos Oceanos',
+      description: 'Preservação dos ecossistemas marinhos',
+      category: 'mundial',
+      tags: ['Oceanos', 'Vida Marinha']
+    },
+    {
+      date: '2025-06-16',
+      title: 'Dia Mundial da Tartaruga Marinha',
+      description: 'Conservação das tartarugas marinhas e seus habitats',
+      category: 'mundial',
+      tags: ['Tartarugas', 'Vida Marinha', 'Conservação']
+    },
+    {
+      date: '2025-06-17',
+      title: 'Dia Mundial de Combate à Desertificação',
+      description: 'Prevenção da degradação do solo',
+      category: 'mundial',
+      tags: ['Desertificação', 'Solo']
+    },
+    {
+      date: '2025-06-17',
+      title: 'Dia do Gestor Ambiental',
+      description: 'Reconhecimento dos profissionais de gestão ambiental',
+      category: 'brasil',
+      tags: ['Gestão Ambiental', 'Profissões']
+    }
+  ],
+  'Julho': [
+    {
+      date: '2025-07-11',
+      title: 'Dia Mundial da População',
+      description: 'Relação entre crescimento populacional e recursos naturais',
+      category: 'mundial',
+      tags: ['População', 'Recursos']
+    },
+    {
+      date: '2025-07-17',
+      title: 'Dia de Proteção às Florestas',
+      description: 'Conservação das florestas brasileiras',
+      category: 'brasil',
+      tags: ['Florestas', 'Proteção']
+    },
+    {
+      date: '2025-07-23',
+      title: 'Dia da Criação do IBAMA',
+      description: 'Reconhecimento do papel do IBAMA na proteção ambiental',
+      category: 'brasil',
+      tags: ['IBAMA', 'Fiscalização Ambiental']
+    }
+  ],
+  'Agosto': [
+    {
+      date: '2025-08-09',
+      title: 'Dia Internacional dos Povos Indígenas',
+      description: 'Reconhecimento dos guardiões ancestrais da natureza',
+      category: 'mundial',
+      tags: ['Povos Indígenas', 'Tradição']
+    },
+    {
+      date: '2025-08-24',
+      title: 'Dia da Infância',
+      description: 'Educação ambiental para as futuras gerações',
+      category: 'brasil',
+      tags: ['Educação', 'Infância']
+    }
+  ],
+  'Setembro': [
+    {
+      date: '2025-09-05',
+      title: 'Dia da Amazônia',
+      description: 'Maior floresta tropical do mundo',
+      category: 'brasil',
+      tags: ['Amazônia', 'Floresta Tropical']
+    },
+    {
+      date: '2025-09-16',
+      title: 'Dia Internacional para Preservação da Camada de Ozônio',
+      description: 'Proteção da camada de ozônio',
+      category: 'mundial',
+      tags: ['Ozônio', 'Atmosfera']
+    },
+    {
+      date: '2025-09-21',
+      title: 'Dia da Árvore',
+      description: 'Importância das árvores para o meio ambiente',
+      category: 'brasil',
+      tags: ['Árvores', 'Reflorestamento']
+    },
+    {
+      date: '2025-09-22',
+      title: 'Dia Mundial Sem Carros',
+      description: 'Redução da poluição do ar e incentivo ao transporte sustentável',
+      category: 'mundial',
+      tags: ['Transporte', 'Poluição do Ar']
+    }
+  ],
+  'Outubro': [
+    {
+      date: '2025-10-04',
+      title: 'Dia Mundial dos Animais',
+      description: 'Proteção e bem-estar animal',
+      category: 'mundial',
+      tags: ['Animais', 'Bem-estar']
+    },
+    {
+      date: '2025-10-12',
+      title: 'Dia do Mar',
+      description: 'Preservação dos ecossistemas marinhos brasileiros',
+      category: 'brasil',
+      tags: ['Mar', 'Ecossistemas Marinhos']
+    },
+    {
+      date: '2025-10-15',
+      title: 'Dia do Professor',
+      description: 'Educadores ambientais e sua importância',
+      category: 'brasil',
+      tags: ['Educação', 'Professores']
+    }
+  ],
+  'Novembro': [
+    {
+      date: '2025-11-01',
+      title: 'Dia Nacional da Espeleologia',
+      description: 'Estudo e preservação de cavernas e grutas',
+      category: 'brasil',
+      tags: ['Espeleologia', 'Cavernas']
+    },
+    {
+      date: '2025-11-01',
+      title: 'Dia Mundial do Veganismo',
+      description: 'Conscientização sobre impactos ambientais da alimentação',
+      category: 'mundial',
+      tags: ['Veganismo', 'Sustentabilidade Alimentar']
+    },
+    {
+      date: '2025-11-14',
+      title: 'Dia Nacional da Alfabetização Ecológica',
+      description: 'Educação ambiental e consciência ecológica',
+      category: 'brasil',
+      tags: ['Educação Ambiental', 'Alfabetização']
+    },
+    {
+      date: '2025-11-19',
+      title: 'Dia Nacional de Combate à Dengue',
+      description: 'Prevenção e controle de doenças transmitidas por vetores',
+      category: 'brasil',
+      tags: ['Saúde Pública', 'Dengue']
+    },
+    {
+      date: '2025-11-24',
+      title: 'Dia do Rio',
+      description: 'Preservação dos recursos hídricos e ecossistemas aquáticos',
+      category: 'brasil',
+      tags: ['Rios', 'Recursos Hídricos']
+    },
+    {
+      date: '2025-11-29',
+      title: 'Dia Nacional da Onça-Pintada',
+      description: 'Conservação do maior felino das Américas',
+      category: 'brasil',
+      tags: ['Onça-Pintada', 'Fauna Brasileira']
+    },
+    {
+      date: '2025-11-30',
+      title: 'Dia Nacional de Luta contra o Uso de Agrotóxicos',
+      description: 'Agricultura sustentável e segura',
+      category: 'brasil',
+      tags: ['Agrotóxicos', 'Agricultura Sustentável']
+    }
+  ],
+  'Dezembro': [
+    {
+      date: '2025-12-05',
+      title: 'Dia Mundial do Solo',
+      description: 'Importância do solo para a vida no planeta',
+      category: 'mundial',
+      tags: ['Solo', 'Agricultura']
+    },
+    {
+      date: '2025-12-05',
+      title: 'Dia Internacional do Voluntariado',
+      description: 'Promoção do voluntariado em projetos ambientais',
+      category: 'mundial',
+      tags: ['Voluntariado', 'Participação Social']
+    },
+    {
+      date: '2025-12-11',
+      title: 'Dia Internacional das Montanhas',
+      description: 'Preservação dos ecossistemas montanhosos',
+      category: 'mundial',
+      tags: ['Montanhas', 'Ecossistemas']
+    }
+  ]
+};
 
   // Converter para formato da agenda
   const eventsToImport = [];
