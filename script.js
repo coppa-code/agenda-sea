@@ -1,6 +1,6 @@
 // Firebase SDK imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';  
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';  
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';  
 
 // Firebase configuration
 const firebaseConfig = {
@@ -98,6 +98,19 @@ async function saveEventToFirebase(eventData) {
   }
 }
 
+async function updateEventInFirebase(eventId, eventData) {
+  try {
+    showLoading('✏️ Atualizando evento...');
+    await updateDoc(doc(db, "events", eventId), eventData);
+    updateStatus(true);
+    return true;
+  } catch (error) {
+    console.error("Erro ao atualizar evento:", error);
+    updateStatus(false);
+    throw error;
+  }
+}
+
 async function deleteEventFromFirebase(eventId, index) {
   try {
     showLoading('🗑️ Excluindo evento...');
@@ -111,20 +124,6 @@ async function deleteEventFromFirebase(eventId, index) {
     updateStatus(false);
     events.splice(index, 1);
     saveToLocalStorage();
-    throw error;
-  }
-}
-
-// Função para atualizar evento no Firebase
-async function updateEventInFirebase(eventId, eventData) {
-  try {
-    showLoading('✏️ Atualizando evento...');
-    await updateDoc(doc(db, "events", eventId), eventData);
-    updateStatus(true);
-    return true;
-  } catch (error) {
-    console.error("Erro ao atualizar evento:", error);
-    updateStatus(false);
     throw error;
   }
 }
@@ -292,7 +291,7 @@ function renderEvents() {
   });
 }
 
-// Função addEvent corrigida
+// Event handlers
 window.addEvent = async function addEvent(e) {
   e.preventDefault();
   const form = document.getElementById('eventForm');
@@ -368,21 +367,6 @@ window.addEvent = async function addEvent(e) {
     
     renderCalendar();
     renderEvents();
-  }
-};
-    document.getElementById('eventForm').reset();
-    document.getElementById('eventDate').value = formatDateString(new Date());
-    renderCalendar();
-    renderEvents();
-
-    const btn = document.querySelector('.btn-primary');
-    const orig = btn.textContent;
-    btn.textContent = '✅ Salvo!';
-    setTimeout(() => btn.textContent = orig, 2000);
-
-  } catch (error) {
-    alert('Erro ao salvar evento. Dados salvos localmente.');
-    saveToLocalStorage();
   }
 };
 
@@ -496,18 +480,6 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('offline', () => updateStatus(false));
 });
 
-
-
-
-
-
-
-
-
-
-
-
-// Adicione este código no final do seu script.js
 // Função para importar eventos ambientais
 window.importEnvironmentalEvents = async function importEnvironmentalEvents() {
   const savedEvents = JSON.parse(localStorage.getItem('environmentalEventsToImport') || '[]');
@@ -536,8 +508,6 @@ window.importEnvironmentalEvents = async function importEnvironmentalEvents() {
     }
   }
   
-  hideLoading();
-  
   if (errors === 0) {
     alert(`✅ ${imported} eventos ambientais importados com sucesso!`);
   } else {
@@ -548,9 +518,8 @@ window.importEnvironmentalEvents = async function importEnvironmentalEvents() {
   localStorage.removeItem('environmentalEventsToImport');
   
   // Recarregar calendário
-  if (typeof loadEvents === 'function') {
-    loadEvents();
-  }
+  renderCalendar();
+  renderEvents();
 };
 
 // Função para preparar eventos ambientais para importação
@@ -806,6 +775,7 @@ window.prepareEnvironmentalEvents = function prepareEnvironmentalEvents() {
       tags: ['Transporte', 'Poluição do Ar']
     }
   ],
+    
   'Outubro': [
     {
       date: '2025-10-04',
