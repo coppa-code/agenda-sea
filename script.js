@@ -115,6 +115,20 @@ async function deleteEventFromFirebase(eventId, index) {
   }
 }
 
+// Função para atualizar evento no Firebase
+async function updateEventInFirebase(eventId, eventData) {
+  try {
+    showLoading('✏️ Atualizando evento...');
+    await updateDoc(doc(db, "events", eventId), eventData);
+    updateStatus(true);
+    return true;
+  } catch (error) {
+    console.error("Erro ao atualizar evento:", error);
+    updateStatus(false);
+    throw error;
+  }
+}
+
 function setupRealtimeListener() {
   try {
     const unsubscribe = onSnapshot(collection(db, "events"), (snapshot) => {
@@ -278,7 +292,7 @@ function renderEvents() {
   });
 }
 
-// Event handlers
+// Função addEvent corrigida
 window.addEvent = async function addEvent(e) {
   e.preventDefault();
   const form = document.getElementById('eventForm');
@@ -300,21 +314,62 @@ window.addEvent = async function addEvent(e) {
     if (editingIndex !== undefined) {
       // Editar evento existente
       const oldEvent = events[editingIndex];
+      
       if (oldEvent.id) {
-        // Se veio do Firebase
-        await saveEventToFirebase(eventData);
-        events.splice(editingIndex, 1);
-        delete form.dataset.editingIndex;
+        // Se o evento tem ID (veio do Firebase), atualizar no Firebase
+        await updateEventInFirebase(oldEvent.id, eventData);
+        // Atualizar no array local
+        events[editingIndex] = { ...oldEvent, ...eventData };
       } else {
+        // Se não tem ID (evento local), apenas atualizar no array
         events[editingIndex] = eventData;
+        saveToLocalStorage();
       }
+      
+      // Limpar o estado de edição
+      delete form.dataset.editingIndex;
       alert("✅ Evento atualizado!");
+      
     } else {
       // Cadastrar novo evento
       await saveEventToFirebase(eventData);
       alert("🚀 Evento criado!");
     }
 
+    // Limpar formulário
+    document.getElementById('eventForm').reset();
+    document.getElementById('eventDate').value = formatDateString(new Date());
+    
+    // Atualizar interface
+    renderCalendar();
+    renderEvents();
+
+    // Feedback visual no botão
+    const btn = document.querySelector('.btn-primary');
+    const orig = btn.textContent;
+    btn.textContent = editingIndex !== undefined ? '✅ Atualizado!' : '✅ Salvo!';
+    setTimeout(() => btn.textContent = orig, 2000);
+
+  } catch (error) {
+    console.error('Erro ao processar evento:', error);
+    
+    if (editingIndex !== undefined) {
+      // Se foi uma edição que falhou, tentar salvar localmente
+      const oldEvent = events[editingIndex];
+      events[editingIndex] = { ...oldEvent, ...eventData };
+      saveToLocalStorage();
+      alert('Evento atualizado localmente. Sincronize quando estiver online.');
+    } else {
+      // Se foi uma criação que falhou
+      events.push(eventData);
+      saveToLocalStorage();
+      alert('Erro ao salvar no servidor. Evento salvo localmente.');
+    }
+    
+    renderCalendar();
+    renderEvents();
+  }
+};
     document.getElementById('eventForm').reset();
     document.getElementById('eventDate').value = formatDateString(new Date());
     renderCalendar();
