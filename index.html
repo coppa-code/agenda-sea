@@ -384,6 +384,104 @@
       box-shadow: var(--shadow);
     }
 
+    /* ESTATÍSTICAS MENSAIS */
+    .monthly-stats {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .monthly-stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+      z-index: 0;
+    }
+
+    .monthly-stats > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .monthly-stats h3 {
+      color: var(--text-white);
+      margin-bottom: 15px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stats-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px 15px;
+      border-radius: 12px;
+      border-left: 4px solid #16a34a;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border-left-color: #059669;
+    }
+
+    .stat-month {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 4px;
+    }
+
+    .stat-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-people {
+      font-size: 18px;
+      font-weight: 800;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stat-events {
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    .current-month {
+      border-left-color: #f59e0b !important;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+    }
+
+    .current-month .stat-people {
+      color: #f59e0b;
+    }
+
+    .no-stats {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+      padding: 20px;
+      font-size: 14px;
+    }
+
     /* MINI CALENDÁRIO */
     .mini-calendar {
       text-align: center;
@@ -1265,6 +1363,14 @@
     <div class="main-content">
       <!-- SIDEBAR -->
       <div class="sidebar">
+        <!-- ESTATÍSTICAS MENSAIS -->
+        <div class="glass-card monthly-stats">
+          <h3>📊 Estatísticas Mensais</h3>
+          <div class="stats-grid" id="monthlyStats">
+            <div class="no-stats">📈 Carregando estatísticas...</div>
+          </div>
+        </div>
+
         <!-- MINI CALENDÁRIO -->
         <div class="glass-card mini-calendar">
           <div class="mini-calendar-nav">
@@ -1450,6 +1556,95 @@
       }
     }
 
+    // NOVA FUNÇÃO: Calcular estatísticas mensais
+    function calculateMonthlyStats() {
+      const stats = {};
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      
+      events.forEach(event => {
+        if (!event.date) return;
+        
+        const eventDate = createLocalDate(event.date);
+        const monthKey = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}`;
+        const monthName = `${months[eventDate.getMonth()]} ${eventDate.getFullYear()}`;
+        
+        if (!stats[monthKey]) {
+          stats[monthKey] = {
+            name: monthName,
+            events: 0,
+            people: 0,
+            isCurrentMonth: eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear
+          };
+        }
+        
+        stats[monthKey].events++;
+        stats[monthKey].people += event.publico || 0;
+      });
+      
+      return stats;
+    }
+
+    // NOVA FUNÇÃO: Renderizar estatísticas mensais
+    function renderMonthlyStats() {
+      const container = document.getElementById('monthlyStats');
+      const stats = calculateMonthlyStats();
+      
+      if (Object.keys(stats).length === 0) {
+        container.innerHTML = '<div class="no-stats">📊 Sem dados para estatísticas</div>';
+        return;
+      }
+      
+      // Ordenar por data (mais recente primeiro)
+      const sortedStats = Object.entries(stats)
+        .sort(([a], [b]) => b.localeCompare(a))
+        .slice(0, 6); // Mostrar apenas os últimos 6 meses
+      
+      container.innerHTML = sortedStats.map(([key, stat]) => `
+        <div class="stat-item ${stat.isCurrentMonth ? 'current-month' : ''}" onclick="filterByMonth('${key}')">
+          <div class="stat-month">${stat.name}</div>
+          <div class="stat-details">
+            <div class="stat-people">
+              <span>👥</span>
+              <span>${stat.people.toLocaleString()}</span>
+            </div>
+            <div class="stat-events">${stat.events} evento${stat.events > 1 ? 's' : ''}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // NOVA FUNÇÃO: Filtrar eventos por mês
+    window.filterByMonth = function(monthKey) {
+      const [year, month] = monthKey.split('-');
+      const startDate = new Date(parseInt(year), parseInt(month) - 1, 1);
+      const endDate = new Date(parseInt(year), parseInt(month), 0);
+      
+      // Limpar outros filtros
+      document.getElementById('searchInput').value = '';
+      document.getElementById('categoryFilter').value = '';
+      document.getElementById('priorityFilter').value = '';
+      selectedDate = null;
+      
+      // Limpar seleção de categorias
+      document.querySelectorAll('.category-tag').forEach(tag => {
+        tag.classList.remove('active');
+      });
+      document.querySelector('.category-tag').classList.add('active');
+      
+      // Filtrar eventos do mês
+      filteredEvents = events.filter(event => {
+        const eventDate = createLocalDate(event.date);
+        return eventDate >= startDate && eventDate <= endDate;
+      });
+      
+      // Atualizar interface
+      renderEvents();
+      
+      // Mostrar feedback
+      showLoading(`📊 Filtrado por ${months[parseInt(month) - 1]} ${year}`);
+    };
+
     // Firebase functions
     async function loadEventsFromFirebase() {
       try {
@@ -1465,6 +1660,7 @@
         updateStatus(true);
         applyFilters();
         renderMiniCalendar();
+        renderMonthlyStats(); // Renderizar estatísticas
       } catch (error) {
         console.error("Erro ao carregar eventos:", error);
         updateStatus(false);
@@ -1531,6 +1727,7 @@
           });
           applyFilters();
           renderMiniCalendar();
+          renderMonthlyStats(); // Atualizar estatísticas em tempo real
           
           // Se estivermos na visualização de calendário, atualizar também
           if (document.querySelector('.calendar-view')) {
@@ -1560,6 +1757,7 @@
       }
       applyFilters();
       renderMiniCalendar();
+      renderMonthlyStats(); // Renderizar estatísticas
     }
 
     function saveToLocalStorage() {
@@ -1808,6 +2006,7 @@
         // Atualizar interface
         applyFilters();
         renderMiniCalendar();
+        renderMonthlyStats(); // Atualizar estatísticas
         
         // Se estivermos na visualização de calendário, atualizar também
         if (document.querySelector('.calendar-view')) {
@@ -1836,6 +2035,7 @@
         
         applyFilters();
         renderMiniCalendar();
+        renderMonthlyStats(); // Atualizar estatísticas
       }
     }
 
@@ -1906,6 +2106,7 @@
         }
         applyFilters();
         renderMiniCalendar();
+        renderMonthlyStats(); // Atualizar estatísticas
         
         // Se estivermos na visualização de calendário, atualizar também
         if (document.querySelector('.calendar-view')) {
