@@ -732,6 +732,7 @@
     .event-categoria-igreja { border-left-color: #dc2626; }
     .event-categoria-prefeitura { border-left-color: #0891b2; }
     .event-categoria-visita-coppa { border-left-color: #ea580c; }
+    .event-categoria-ong { border-left-color: #10b981; }
     .event-categoria-default { border-left-color: #64748b; }
 
     .event-header {
@@ -879,6 +880,36 @@
       border-color: #16a34a;
       box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
       background: white;
+    }
+
+    .category-input-container {
+      position: relative;
+    }
+
+    .category-input-container input {
+      display: none;
+    }
+
+    .category-input-container.custom-mode input {
+      display: block;
+      margin-top: 8px;
+    }
+
+    .category-input-container.custom-mode select {
+      display: none;
+    }
+
+    .toggle-custom-category {
+      font-size: 12px;
+      color: #16a34a;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .toggle-custom-category:hover {
+      color: #059669;
     }
 
     .form-textarea {
@@ -1373,6 +1404,16 @@
       border-radius: 8px;
       display: inline-block;
     }
+
+    .event-category-display {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 600;
+      background: #f3f4f6;
+      padding: 4px 8px;
+      border-radius: 8px;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
@@ -1404,6 +1445,7 @@
           <option value="igreja">Igreja</option>
           <option value="prefeitura">Prefeitura</option>
           <option value="visita-coppa">Visita à COPPA</option>
+          <option value="ong">ONG</option>
         </select>
         
         <select class="filter-select" id="priorityFilter">
@@ -1457,6 +1499,9 @@
       <div class="category-tag" onclick="filterByCategory('visita-coppa')">
         <span>🚗 Visita à COPPA</span>
       </div>
+      <div class="category-tag" onclick="filterByCategory('ong')">
+        <span>🤝 ONG</span>
+      </div>
     </div>
 
     <div class="main-content">
@@ -1507,17 +1552,22 @@
             
             <div class="form-group">
               <label class="form-label">🏷️ Categoria</label>
-              <select class="form-select" id="eventCategory">
-                <option value="">Selecione...</option>
-                <option value="empresa">🏢 Empresa</option>
-                <option value="escola-publica">🏫 Escola Pública</option>
-                <option value="escola-particular">🎓 Escola Particular</option>
-                <option value="orgaos-publicos">🏛️ Órgãos Públicos</option>
-                <option value="condominio">🏠 Condomínio</option>
-                <option value="igreja">⛪ Igreja</option>
-                <option value="prefeitura">🏛️ Prefeitura</option>
-                <option value="visita-coppa">🚗 Visita à COPPA</option>
-              </select>
+              <div class="category-input-container" id="categoryContainer">
+                <select class="form-select" id="eventCategory">
+                  <option value="">Selecione...</option>
+                  <option value="empresa">🏢 Empresa</option>
+                  <option value="escola-publica">🏫 Escola Pública</option>
+                  <option value="escola-particular">🎓 Escola Particular</option>
+                  <option value="orgaos-publicos">🏛️ Órgãos Públicos</option>
+                  <option value="condominio">🏠 Condomínio</option>
+                  <option value="igreja">⛪ Igreja</option>
+                  <option value="prefeitura">🏛️ Prefeitura</option>
+                  <option value="visita-coppa">🚗 Visita à COPPA</option>
+                  <option value="ong">🤝 ONG</option>
+                </select>
+                <input type="text" class="form-input" id="eventCategoryCustom" placeholder="Digite uma categoria personalizada...">
+                <span class="toggle-custom-category" onclick="toggleCustomCategory()" id="toggleCustomText">✏️ Categoria personalizada</span>
+              </div>
             </div>
 
             <div class="form-group">
@@ -1810,6 +1860,147 @@
       showLoading(`📊 Filtrado por ${months[parseInt(month) - 1]} ${year}`);
     };
 
+    // Função para alternar entre categoria padrão e personalizada
+    window.toggleCustomCategory = function() {
+      const container = document.getElementById('categoryContainer');
+      const toggleText = document.getElementById('toggleCustomText');
+      const select = document.getElementById('eventCategory');
+      const input = document.getElementById('eventCategoryCustom');
+      
+      if (container.classList.contains('custom-mode')) {
+        // Voltar para seleção padrão
+        container.classList.remove('custom-mode');
+        toggleText.textContent = '✏️ Categoria personalizada';
+        select.value = '';
+        input.value = '';
+      } else {
+        // Ativar modo personalizado
+        container.classList.add('custom-mode');
+        toggleText.textContent = '📋 Voltar para categorias padrão';
+        select.value = '';
+        input.focus();
+      }
+    };
+
+    // Função para obter a categoria atual (padrão ou personalizada)
+    function getCurrentCategory() {
+      const container = document.getElementById('categoryContainer');
+      const select = document.getElementById('eventCategory');
+      const input = document.getElementById('eventCategoryCustom');
+      
+      if (container.classList.contains('custom-mode')) {
+        return input.value.trim() || '';
+      } else {
+        return select.value;
+      }
+    }
+
+    // Função para definir a categoria no formulário
+    function setFormCategory(category) {
+      const container = document.getElementById('categoryContainer');
+      const select = document.getElementById('eventCategory');
+      const input = document.getElementById('eventCategoryCustom');
+      
+      // Verificar se é uma categoria padrão
+      const standardCategories = ['empresa', 'escola-publica', 'escola-particular', 'orgaos-publicos', 'condominio', 'igreja', 'prefeitura', 'visita-coppa', 'ong'];
+      
+      if (standardCategories.includes(category)) {
+        // Categoria padrão
+        container.classList.remove('custom-mode');
+        document.getElementById('toggleCustomText').textContent = '✏️ Categoria personalizada';
+        select.value = category;
+        input.value = '';
+      } else if (category) {
+        // Categoria personalizada
+        container.classList.add('custom-mode');
+        document.getElementById('toggleCustomText').textContent = '📋 Voltar para categorias padrão';
+        select.value = '';
+        input.value = category;
+      } else {
+        // Nenhuma categoria
+        container.classList.remove('custom-mode');
+        document.getElementById('toggleCustomText').textContent = '✏️ Categoria personalizada';
+        select.value = '';
+        input.value = '';
+      }
+    }
+
+    // Função para normalizar nome de categoria para classe CSS
+    function getCategoryClass(category) {
+      if (!category) return 'default';
+      
+      // Normalizar para usar como classe CSS
+      return category.toLowerCase()
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/--+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    // Função para atualizar filtro de categoria com categorias personalizadas
+    function updateCategoryFilter() {
+      const categoryFilter = document.getElementById('categoryFilter');
+      const standardCategories = [
+        { value: 'empresa', label: 'Empresa' },
+        { value: 'escola-publica', label: 'Escola Pública' },
+        { value: 'escola-particular', label: 'Escola Particular' },
+        { value: 'orgaos-publicos', label: 'Órgãos Públicos' },
+        { value: 'condominio', label: 'Condomínio' },
+        { value: 'igreja', label: 'Igreja' },
+        { value: 'prefeitura', label: 'Prefeitura' },
+        { value: 'visita-coppa', label: 'Visita à COPPA' },
+        { value: 'ong', label: 'ONG' }
+      ];
+
+      // Obter categorias personalizadas dos eventos
+      const customCategories = [...new Set(events
+        .map(event => event.category)
+        .filter(cat => cat && !standardCategories.find(std => std.value === cat))
+      )];
+
+      // Reconstruir o select
+      categoryFilter.innerHTML = '<option value="">Todas Categorias</option>';
+      
+      // Adicionar categorias padrão
+      standardCategories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.value;
+        option.textContent = cat.label;
+        categoryFilter.appendChild(option);
+      });
+
+      // Adicionar categorias personalizadas
+      if (customCategories.length > 0) {
+        const separator = document.createElement('option');
+        separator.disabled = true;
+        separator.textContent = '── Categorias Personalizadas ──';
+        categoryFilter.appendChild(separator);
+
+        customCategories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = `${getCategoryEmoji(cat)} ${cat}`;
+          categoryFilter.appendChild(option);
+        });
+      }
+    }
+
+    // Função para obter emoji da categoria
+    function getCategoryEmoji(category) {
+      const emojiMap = {
+        'empresa': '🏢',
+        'escola-publica': '🏫',
+        'escola-particular': '🎓',
+        'orgaos-publicos': '🏛️',
+        'condominio': '🏠',
+        'igreja': '⛪',
+        'prefeitura': '🏛️',
+        'visita-coppa': '🚗',
+        'ong': '🤝'
+      };
+      
+      return emojiMap[category] || '📋';
+    }
+
     // Firebase functions
     async function loadEventsFromFirebase() {
       try {
@@ -1823,6 +2014,7 @@
           });
         });
         updateStatus(true);
+        updateCategoryFilter();
         applyFilters();
         renderMiniCalendar();
         renderMonthlyStats(); // Renderizar estatísticas
@@ -1890,6 +2082,7 @@
               ...doc.data()
             });
           });
+          updateCategoryFilter();
           applyFilters();
           renderMiniCalendar();
           renderMonthlyStats(); // Atualizar estatísticas em tempo real
@@ -1916,10 +2109,12 @@
         events = [
           {date: '2025-07-08', title: 'Visita à COPPA', time: '09h', description: 'Projeto Adolecer +', category: 'visita-coppa', service: 'palestra-coppa', priority: 'alta', publico: 25},
           {date: '2025-07-09', title: 'Escola Maringuela', time: '08h às 12h', description: '', category: 'escola-publica', service: 'stand-palestra-coppa', priority: 'alta', publico: 120},
-          {date: '2025-07-22', title: 'Educação ambiental para surdos', time: '', description: 'Manter contato com CB PM Teles - 71988941109', category: 'escola-publica', service: 'palestra-coppa', priority: 'media', publico: 30}
+          {date: '2025-07-22', title: 'Educação ambiental para surdos', time: '', description: 'Manter contato com CB PM Teles - 71988941109', category: 'escola-publica', service: 'palestra-coppa', priority: 'media', publico: 30},
+          {date: '2025-07-25', title: 'Ação da ONG Verde Vida', time: '14h às 17h', description: 'Plantio de mudas na praça central', category: 'ong', service: 'stand-coppa', priority: 'media', publico: 40}
         ];
         saveToLocalStorage();
       }
+      updateCategoryFilter();
       applyFilters();
       renderMiniCalendar();
       renderMonthlyStats(); // Renderizar estatísticas
@@ -1945,7 +2140,8 @@
       filteredEvents = events.filter(event => {
         const matchesSearch = !searchTerm || 
           event.title.toLowerCase().includes(searchTerm) ||
-          (event.description && event.description.toLowerCase().includes(searchTerm));
+          (event.description && event.description.toLowerCase().includes(searchTerm)) ||
+          (event.category && event.category.toLowerCase().includes(searchTerm));
         
         const matchesCategory = !categoryFilter || event.category === categoryFilter;
         const matchesPriority = !priorityFilter || event.priority === priorityFilter;
@@ -2039,13 +2235,14 @@
         }
 
         const originalIndex = events.findIndex(e => e === event);
-        const category = event.category || 'default';
+        const categoryClass = getCategoryClass(event.category);
         const priority = event.priority || 'media';
         const service = event.service || '';
         const publico = event.publico || '';
+        const fotos = event.fotos || '';
 
         return `
-          <div class="event-item event-categoria-${category} fade-in ${isToday ? 'event-today' : ''} ${isPast ? 'event-past' : ''}">
+          <div class="event-item event-categoria-${categoryClass} fade-in ${isToday ? 'event-today' : ''} ${isPast ? 'event-past' : ''}">
             <div class="event-header">
               <div>
                 <div class="event-date">${formattedDate}</div>
@@ -2058,8 +2255,10 @@
             <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
               ${service ? `<div class="event-service">${serviceLabels[service] || service}</div>` : ''}
               ${publico ? `<div class="event-publico">👥 ${publico} pessoas</div>` : ''}
+              ${event.category ? `<div class="event-category-display" style="font-size: 12px; color: #6b7280; font-weight: 600; background: #f3f4f6; padding: 4px 8px; border-radius: 8px; display: inline-block;">${getCategoryEmoji(event.category)} ${event.category}</div>` : ''}
             </div>
             ${event.description ? `<div class="event-description">${event.description}</div>` : ''}
+            ${fotos ? `<div style="margin-bottom: 8px;"><a href="${fotos}" target="_blank" class="event-fotos">📸 Ver Fotos</a></div>` : ''}
             <div class="event-actions">
               <button class="btn-small btn-edit" onclick="editarEvento(${originalIndex}); event.stopPropagation();">✏️ Editar</button>
               <button class="btn-small btn-delete" onclick="deleteEvent(${originalIndex}); event.stopPropagation();">🗑️ Excluir</button>
@@ -2120,10 +2319,11 @@
       const title = document.getElementById('eventTitle').value;
       const time = document.getElementById('eventTime').value;
       const description = document.getElementById('eventDescription').value;
-      const category = document.getElementById('eventCategory').value;
+      const category = getCurrentCategory();
       const service = document.getElementById('eventService').value;
       const priority = document.getElementById('eventPriority').value;
       const publico = document.getElementById('eventPublico').value;
+      const fotos = document.getElementById('eventFotos').value;
 
       if (!date || !title) {
         alert('Preencha pelo menos a data e o título!');
@@ -2138,7 +2338,8 @@
         category, 
         service, 
         priority,
-        publico: publico ? parseInt(publico) : null
+        publico: publico ? parseInt(publico) : null,
+        fotos: fotos || null
       };
 
       try {
@@ -2167,8 +2368,13 @@
         form.reset();
         document.getElementById('eventDate').value = formatDateString(new Date());
         document.getElementById('eventPriority').value = 'media';
+        document.getElementById('eventFotos').value = '';
+        
+        // Resetar categoria para modo padrão
+        setFormCategory('');
         
         // Atualizar interface
+        updateCategoryFilter();
         applyFilters();
         renderMiniCalendar();
         renderMonthlyStats(); // Atualizar estatísticas
@@ -2198,6 +2404,7 @@
           alert('Erro ao salvar no servidor. Evento salvo localmente.');
         }
         
+        updateCategoryFilter();
         applyFilters();
         renderMiniCalendar();
         renderMonthlyStats(); // Atualizar estatísticas
@@ -2216,6 +2423,10 @@
       
       // Atualizar filtro
       document.getElementById('categoryFilter').value = category;
+      
+      // Limpar busca para melhor experiência
+      document.getElementById('searchInput').value = '';
+      
       applyFilters();
     };
 
@@ -2249,10 +2460,11 @@
       document.getElementById('eventTitle').value = event.title;
       document.getElementById('eventTime').value = event.time || '';
       document.getElementById('eventDescription').value = event.description || '';
-      document.getElementById('eventCategory').value = event.category || '';
+      setFormCategory(event.category || '');
       document.getElementById('eventService').value = event.service || '';
       document.getElementById('eventPriority').value = event.priority || 'media';
       document.getElementById('eventPublico').value = event.publico || '';
+      document.getElementById('eventFotos').value = event.fotos || '';
 
       // Armazenar índice do evento sendo editado
       editingIndex = index;
@@ -2269,6 +2481,7 @@
         } catch (error) {
           alert('Erro ao excluir evento. Removido localmente.');
         }
+        updateCategoryFilter();
         applyFilters();
         renderMiniCalendar();
         renderMonthlyStats(); // Atualizar estatísticas
@@ -2432,9 +2645,9 @@
         if (dayEvents.length > 0) dayClass += ' has-events';
         
         const eventsHTML = dayEvents.slice(0, 3).map(event => {
-          const category = event.category || 'default';
+          const categoryClass = getCategoryClass(event.category);
           const priorityClass = `priority-${event.priority || 'media'}`;
-          return `<div class="calendar-event event-categoria-${category} ${priorityClass}" title="${event.title} - ${event.time || 'Sem horário'}">${event.title}</div>`;
+          return `<div class="calendar-event event-categoria-${categoryClass} ${priorityClass}" title="${event.title} - ${event.time || 'Sem horário'}">${event.title}</div>`;
         }).join('');
         
         const moreEvents = dayEvents.length > 3 ? `<div class="calendar-more">+${dayEvents.length - 3} mais</div>` : '';
