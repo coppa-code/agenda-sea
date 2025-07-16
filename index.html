@@ -406,20 +406,105 @@
       z-index: 1;
     }
 
-    .monthly-stats h3 {
-      color: var(--text-white);
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .stats-header:hover {
+      transform: translateY(-1px);
+    }
+
+    .stats-header h3 {
+      color: var(--text-white);
       font-size: 16px;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
+      margin: 0;
+    }
+
+    .stats-toggle {
+      background: none;
+      border: none;
+      color: var(--text-white);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 5px;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stats-toggle:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+
+    .stats-toggle.collapsed {
+      transform: rotate(180deg);
+    }
+
+    .stats-toggle.collapsed:hover {
+      transform: rotate(180deg) scale(1.1);
     }
 
     .stats-grid {
       display: flex;
       flex-direction: column;
       gap: 12px;
+      max-height: 400px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .stats-grid.collapsed {
+      max-height: 0;
+      opacity: 0;
+      gap: 0;
+    }
+
+    .stats-summary {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 12px 15px;
+      border-radius: 12px;
+      border-left: 4px solid #16a34a;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .stats-summary.show {
+      display: block;
+    }
+
+    .stats-summary-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stats-summary-total {
+      font-size: 18px;
+      font-weight: 800;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stats-summary-events {
+      font-size: 12px;
+      color: var(--text-light);
+      font-weight: 600;
     }
 
     .stat-item {
@@ -976,6 +1061,20 @@
       .header h1 {
         font-size: 2rem;
       }
+      
+      .stats-header h3 {
+        font-size: 14px;
+      }
+      
+      .stats-toggle {
+        font-size: 16px;
+        width: 26px;
+        height: 26px;
+      }
+      
+      .stats-summary-total {
+        font-size: 16px;
+      }
     }
 
     @media (max-width: 400px) {
@@ -1365,7 +1464,21 @@
       <div class="sidebar">
         <!-- ESTATÍSTICAS MENSAIS -->
         <div class="glass-card monthly-stats">
-          <h3>📊 Estatísticas Mensais</h3>
+          <div class="stats-header" onclick="toggleStats()">
+            <h3>📊 Estatísticas Mensais</h3>
+            <button class="stats-toggle" id="statsToggle">▼</button>
+          </div>
+          
+          <div class="stats-summary" id="statsSummary">
+            <div class="stats-summary-content">
+              <div class="stats-summary-total">
+                <span>👥</span>
+                <span id="totalPeople">0</span>
+              </div>
+              <div class="stats-summary-events" id="totalEvents">0 eventos</div>
+            </div>
+          </div>
+          
           <div class="stats-grid" id="monthlyStats">
             <div class="no-stats">📈 Carregando estatísticas...</div>
           </div>
@@ -1585,10 +1698,50 @@
       return stats;
     }
 
-    // NOVA FUNÇÃO: Renderizar estatísticas mensais
+    // NOVA FUNÇÃO: Toggle das estatísticas
+    function toggleStats() {
+      const statsGrid = document.getElementById('monthlyStats');
+      const statsToggle = document.getElementById('statsToggle');
+      const statsSummary = document.getElementById('statsSummary');
+      
+      const isCollapsed = statsGrid.classList.contains('collapsed');
+      
+      if (isCollapsed) {
+        // Expandir
+        statsGrid.classList.remove('collapsed');
+        statsToggle.classList.remove('collapsed');
+        statsToggle.textContent = '▼';
+        statsSummary.classList.remove('show');
+        localStorage.setItem('statsCollapsed', 'false');
+      } else {
+        // Retrair
+        statsGrid.classList.add('collapsed');
+        statsToggle.classList.add('collapsed');
+        statsToggle.textContent = '▲';
+        statsSummary.classList.add('show');
+        localStorage.setItem('statsCollapsed', 'true');
+      }
+    }
+
+    // FUNÇÃO ATUALIZADA: Renderizar estatísticas mensais
     function renderMonthlyStats() {
       const container = document.getElementById('monthlyStats');
+      const totalPeopleEl = document.getElementById('totalPeople');
+      const totalEventsEl = document.getElementById('totalEvents');
       const stats = calculateMonthlyStats();
+      
+      // Calcular totais gerais
+      let totalPeople = 0;
+      let totalEvents = 0;
+      
+      Object.values(stats).forEach(stat => {
+        totalPeople += stat.people;
+        totalEvents += stat.events;
+      });
+      
+      // Atualizar resumo
+      totalPeopleEl.textContent = totalPeople.toLocaleString();
+      totalEventsEl.textContent = `${totalEvents} evento${totalEvents > 1 ? 's' : ''}`;
       
       if (Object.keys(stats).length === 0) {
         container.innerHTML = '<div class="no-stats">📊 Sem dados para estatísticas</div>';
@@ -1612,7 +1765,19 @@
           </div>
         </div>
       `).join('');
+      
+      // Restaurar estado colapsado
+      const isCollapsed = localStorage.getItem('statsCollapsed') === 'true';
+      if (isCollapsed) {
+        document.getElementById('monthlyStats').classList.add('collapsed');
+        document.getElementById('statsToggle').classList.add('collapsed');
+        document.getElementById('statsToggle').textContent = '▲';
+        document.getElementById('statsSummary').classList.add('show');
+      }
     }
+
+    // Função global para ser chamada do HTML
+    window.toggleStats = toggleStats;
 
     // NOVA FUNÇÃO: Filtrar eventos por mês
     window.filterByMonth = function(monthKey) {
@@ -2323,6 +2488,15 @@
     document.addEventListener('DOMContentLoaded', function() {
       setupEventListeners();
       document.getElementById('eventDate').value = formatDateString(new Date());
+      
+      // Inicializar estado das estatísticas
+      const isCollapsed = localStorage.getItem('statsCollapsed') === 'true';
+      if (isCollapsed) {
+        document.getElementById('monthlyStats').classList.add('collapsed');
+        document.getElementById('statsToggle').classList.add('collapsed');
+        document.getElementById('statsToggle').textContent = '▲';
+        document.getElementById('statsSummary').classList.add('show');
+      }
       
       loadEventsFromFirebase().catch(() => {
         console.log('Firebase não disponível, usando localStorage');
