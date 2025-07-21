@@ -1,847 +1,1977 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calendário Ambiental - Agenda SEA</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --primary: linear-gradient(135deg, #16a085, #27ae60);
-      --secondary: linear-gradient(135deg, #2c3e50, #34495e);
-      --accent: #e74c3c;
-      --glass: rgba(255, 255, 255, 0.85);
-      --glass-border: rgba(200, 200, 200, 0.4);
-      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      --text-color: #1e293b;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #a8e6cf, #dcedc8);
-      min-height: 100vh;
-      color: var(--text-color);
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .header h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, #16a085, #27ae60);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 15px;
-    }
-
-    .header p {
-      font-size: 1.2rem;
-      color: #2c3e50;
-    }
-
-    .nav-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-
-    .nav-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 25px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 14px;
-    }
-
-    .nav-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(22, 160, 133, 0.3);
-    }
-
-    .nav-btn.back-btn {
-      background: var(--secondary);
-    }
-
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .stat-card {
-      background: var(--glass);
-      border-radius: 15px;
-      padding: 20px;
-      text-align: center;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow);
-    }
-
-    .stat-number {
-      font-size: 2rem;
-      font-weight: 800;
-      background: var(--primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .stat-label {
-      font-size: 14px;
-      color: #2c3e50;
-      font-weight: 600;
-    }
-
-    .filter-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      background: rgba(255, 255, 255, 0.7);
-      border: 2px solid #16a085;
-      color: #16a085;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      font-size: 12px;
-    }
-
-    .filter-btn.active {
-      background: var(--primary);
-      color: white;
-    }
-
-    .filter-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 25px;
-    }
-
-    .month-card {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 25px;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow);
-    }
-
-    .month-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: white;
-      text-align: center;
-      background: var(--primary);
-      padding: 10px;
-      border-radius: 15px;
-    }
-
-    .event-item {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 15px;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-left: 4px solid;
-      transition: all 0.3s ease;
-    }
-
-    .event-item:hover {
-      transform: translateX(5px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .event-item.mundial { border-left-color: #3498db; }
-    .event-item.brasil { border-left-color: #27ae60; }
-    .event-item.agua { border-left-color: #3498db; }
-    .event-item.biodiversidade { border-left-color: #e74c3c; }
-    .event-item.clima { border-left-color: #f39c12; }
-    .event-item.floresta { border-left-color: #27ae60; }
-
-    .event-date {
-      font-weight: 700;
-      color: #2c3e50;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .event-title {
-      font-weight: 600;
-      color: #1e293b;
-      margin-bottom: 8px;
-      font-size: 16px;
-    }
-
-    .event-description {
-      font-size: 13px;
-      color: #718096;
-      line-height: 1.4;
-    }
-
-    .event-tags {
-      display: flex;
-      gap: 5px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      background: var(--primary);
-      color: white;
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 10px;
-      font-weight: 600;
-    }
-
-    .loading {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: var(--primary);
-      color: white;
-      padding: 15px 25px;
-      border-radius: 50px;
-      font-weight: 600;
-      z-index: 1000;
-      opacity: 0;
-      transform: translateY(-20px);
-      transition: all 0.3s ease;
-    }
-
-    .loading.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 768px) {
-      .calendar-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .filter-container {
-        gap: 8px;
-      }
-      
-      .nav-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .stats-container {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="loading" id="loading">📅 Carregando...</div>
-
-  <div class="container">
-    <div class="header">
-      <h1>🌍 CALENDÁRIO AMBIENTAL</h1>
-      <p>Datas Importantes para o Meio Ambiente - Brasil e Mundo</p>
-    </div>
-
-    <div class="nav-buttons">
-      <button class="nav-btn back-btn" onclick="window.close(); window.history.back();">📅 Voltar à Agenda</button>
-      <button class="nav-btn" onclick="exportCalendar()">📥 Exportar Calendário</button>
-      <button class="nav-btn" onclick="addToMyAgenda()">➕ Adicionar à Minha Agenda</button>
-    </div>
-
-    <div class="stats-container">
-      <div class="stat-card">
-        <div class="stat-number" id="totalEvents">0</div>
-        <div class="stat-label">Total de Datas</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="brasilEvents">0</div>
-        <div class="stat-label">Datas Nacionais</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="mundialEvents">0</div>
-        <div class="stat-label">Datas Mundiais</div>
-      </div>
-    </div>
-
-    <div class="filter-container">
-      <button class="filter-btn active" onclick="filterEvents('todos')">🌍 Todos</button>
-      <button class="filter-btn" onclick="filterEvents('mundial')">🌎 Mundial</button>
-      <button class="filter-btn" onclick="filterEvents('brasil')">🇧🇷 Brasil</button>
-      <button class="filter-btn" onclick="filterEvents('agua')">💧 Água</button>
-      <button class="filter-btn" onclick="filterEvents('biodiversidade')">🦋 Biodiversidade</button>
-      <button class="filter-btn" onclick="filterEvents('clima')">🌡️ Clima</button>
-      <button class="filter-btn" onclick="filterEvents('floresta')">🌳 Florestas</button>
-    </div>
-
-    <div class="calendar-grid" id="calendarGrid">
-      <!-- Conteúdo será gerado pelo JavaScript -->
-    </div>
-  </div>
-
-  <script>
-   const environmentalDates = {
-  'Janeiro': [
-    {
-      date: '2025-01-11',
-      title: 'Dia do Controle da Poluição por Agrotóxicos',
-      description: 'Data para conscientização sobre o uso responsável de agrotóxicos',
-      category: 'brasil',
-      tags: ['Agricultura', 'Poluição']
-    },
-    {
-      date: '2025-01-31',
-      title: 'Dia do Engenheiro Ambiental',
-      description: 'Valorização dos profissionais que trabalham com soluções ambientais',
-      category: 'brasil',
-      tags: ['Profissões', 'Engenharia Ambiental']
-    }
-  ],
-  'Fevereiro': [
-    {
-      date: '2025-02-02',
-      title: 'Dia Mundial das Zonas Úmidas',
-      description: 'Proteção de pântanos, brejos e outros ecossistemas aquáticos',
-      category: 'mundial',
-      tags: ['Biodiversidade', 'Água']
-    },
-    {
-      date: '2025-02-06',
-      title: 'Dia do Pantanal',
-      description: 'Celebração da maior planície alagável do mundo',
-      category: 'brasil',
-      tags: ['Pantanal', 'Biodiversidade']
-    }
-  ],
-  'Março': [
-    {
-      date: '2025-03-01',
-      title: 'Dia do Turismo Ecológico',
-      description: 'Promoção do turismo sustentável e consciente',
-      category: 'brasil',
-      tags: ['Turismo', 'Sustentabilidade']
-    },
-    {
-      date: '2025-03-14',
-      title: 'Dia Mundial de Luta dos Atingidos por Barragens',
-      description: 'Conscientização sobre impactos socioambientais de grandes barragens',
-      category: 'mundial',
-      tags: ['Recursos Hídricos', 'Direitos Humanos']
-    },
-    {
-      date: '2025-03-21',
-      title: 'Dia Mundial das Florestas',
-      description: 'Conscientização sobre a importância das florestas para o planeta',
-      category: 'mundial',
-      tags: ['Florestas', 'Biodiversidade']
-    },
-    {
-      date: '2025-03-22',
-      title: 'Dia Mundial da Água',
-      description: 'Sensibilização para a conservação dos recursos hídricos',
-      category: 'mundial',
-      tags: ['Água', 'Conservação']
-    },
-    {
-      date: '2025-03-23',
-      title: 'Dia Mundial da Meteorologia',
-      description: 'Importância da meteorologia para o meio ambiente',
-      category: 'mundial',
-      tags: ['Clima', 'Meteorologia']
-    }
-  ],
-  'Abril': [
-    {
-      date: '2025-04-07',
-      title: 'Dia Mundial da Saúde',
-      description: 'Relação entre saúde humana e meio ambiente',
-      category: 'mundial',
-      tags: ['Saúde', 'Meio Ambiente']
-    },
-    {
-      date: '2025-04-15',
-      title: 'Dia Nacional da Conservação do Solo',
-      description: 'Preservação e manejo sustentável do solo brasileiro',
-      category: 'brasil',
-      tags: ['Solo', 'Agricultura']
-    },
-    {
-      date: '2025-04-19',
-      title: 'Dia do Índio',
-      description: 'Reconhecimento dos povos indígenas e sua relação com a natureza',
-      category: 'brasil',
-      tags: ['Povos Indígenas', 'Cultura']
-    },
-    {
-      date: '2025-04-22',
-      title: 'Dia Mundial da Terra',
-      description: 'Maior evento ambiental do mundo, celebrado globalmente',
-      category: 'mundial',
-      tags: ['Terra', 'Sustentabilidade']
-    }
-  ],
-  'Maio': [
-    {
-      date: '2025-05-03',
-      title: 'Dia do Sol',
-      description: 'Importância da energia solar e fontes renováveis',
-      category: 'mundial',
-      tags: ['Energia Solar', 'Renovável']
-    },
-    {
-      date: '2025-05-15',
-      title: 'Dia do Gari',
-      description: 'Valorização dos profissionais de limpeza urbana',
-      category: 'brasil',
-      tags: ['Limpeza', 'Urbano']
-    },
-    {
-      date: '2025-05-22',
-      title: 'Dia Internacional da Biodiversidade',
-      description: 'Conservação da diversidade biológica mundial',
-      category: 'mundial',
-      tags: ['Biodiversidade', 'Conservação']
-    },
-    {
-      date: '2025-05-27',
-      title: 'Dia da Mata Atlântica',
-      description: 'Proteção do bioma mais ameaçado do Brasil',
-      category: 'brasil',
-      tags: ['Mata Atlântica', 'Bioma']
-    }
-  ],
-  'Junho': [
-    {
-      date: '2025-06-03',
-      title: 'Dia Nacional da Educação Ambiental',
-      description: 'Promoção da consciência ecológica através da educação',
-      category: 'brasil',
-      tags: ['Educação Ambiental', 'Consciência Ecológica']
-    },
-    {
-      date: '2025-06-05',
-      title: 'Dia Mundial do Meio Ambiente',
-      description: 'Principal data do calendário ambiental mundial',
-      category: 'mundial',
-      tags: ['Meio Ambiente', 'Sustentabilidade']
-    },
-    {
-      date: '2025-06-07',
-      title: 'Dia Nacional do Catador(a) de Material Reciclável',
-      description: 'Valorização dos profissionais da reciclagem e economia circular',
-      category: 'brasil',
-      tags: ['Reciclagem', 'Economia Circular']
-    },
-    {
-      date: '2025-06-08',
-      title: 'Dia Mundial dos Oceanos',
-      description: 'Preservação dos ecossistemas marinhos',
-      category: 'mundial',
-      tags: ['Oceanos', 'Vida Marinha']
-    },
-    {
-      date: '2025-06-16',
-      title: 'Dia Mundial da Tartaruga Marinha',
-      description: 'Conservação das tartarugas marinhas e seus habitats',
-      category: 'mundial',
-      tags: ['Tartarugas', 'Vida Marinha', 'Conservação']
-    },
-    {
-      date: '2025-06-17',
-      title: 'Dia Mundial de Combate à Desertificação',
-      description: 'Prevenção da degradação do solo',
-      category: 'mundial',
-      tags: ['Desertificação', 'Solo']
-    },
-    {
-      date: '2025-06-17',
-      title: 'Dia do Gestor Ambiental',
-      description: 'Reconhecimento dos profissionais de gestão ambiental',
-      category: 'brasil',
-      tags: ['Gestão Ambiental', 'Profissões']
-    }
-  ],
-  'Julho': [
-    {
-      date: '2025-07-11',
-      title: 'Dia Mundial da População',
-      description: 'Relação entre crescimento populacional e recursos naturais',
-      category: 'mundial',
-      tags: ['População', 'Recursos']
-    },
-    {
-      date: '2025-07-17',
-      title: 'Dia de Proteção às Florestas',
-      description: 'Conservação das florestas brasileiras',
-      category: 'brasil',
-      tags: ['Florestas', 'Proteção']
-    },
-    {
-      date: '2025-07-23',
-      title: 'Dia da Criação do IBAMA',
-      description: 'Reconhecimento do papel do IBAMA na proteção ambiental',
-      category: 'brasil',
-      tags: ['IBAMA', 'Fiscalização Ambiental']
-    }
-  ],
-  'Agosto': [
-    {
-      date: '2025-08-09',
-      title: 'Dia Internacional dos Povos Indígenas',
-      description: 'Reconhecimento dos guardiões ancestrais da natureza',
-      category: 'mundial',
-      tags: ['Povos Indígenas', 'Tradição']
-    },
-    {
-      date: '2025-08-24',
-      title: 'Dia da Infância',
-      description: 'Educação ambiental para as futuras gerações',
-      category: 'brasil',
-      tags: ['Educação', 'Infância']
-    }
-  ],
-  'Setembro': [
-    {
-      date: '2025-09-05',
-      title: 'Dia da Amazônia',
-      description: 'Maior floresta tropical do mundo',
-      category: 'brasil',
-      tags: ['Amazônia', 'Floresta Tropical']
-    },
-    {
-      date: '2025-09-16',
-      title: 'Dia Internacional para Preservação da Camada de Ozônio',
-      description: 'Proteção da camada de ozônio',
-      category: 'mundial',
-      tags: ['Ozônio', 'Atmosfera']
-    },
-    {
-      date: '2025-09-21',
-      title: 'Dia da Árvore',
-      description: 'Importância das árvores para o meio ambiente',
-      category: 'brasil',
-      tags: ['Árvores', 'Reflorestamento']
-    },
-    {
-      date: '2025-09-22',
-      title: 'Dia Mundial Sem Carros',
-      description: 'Redução da poluição do ar e incentivo ao transporte sustentável',
-      category: 'mundial',
-      tags: ['Transporte', 'Poluição do Ar']
-    }
-  ],
-  'Outubro': [
-    {
-      date: '2025-10-04',
-      title: 'Dia Mundial dos Animais',
-      description: 'Proteção e bem-estar animal',
-      category: 'mundial',
-      tags: ['Animais', 'Bem-estar']
-    },
-    {
-      date: '2025-10-12',
-      title: 'Dia do Mar',
-      description: 'Preservação dos ecossistemas marinhos brasileiros',
-      category: 'brasil',
-      tags: ['Mar', 'Ecossistemas Marinhos']
-    },
-    {
-      date: '2025-10-15',
-      title: 'Dia do Professor',
-      description: 'Educadores ambientais e sua importância',
-      category: 'brasil',
-      tags: ['Educação', 'Professores']
-    }
-  ],
-  'Novembro': [
-    {
-      date: '2025-11-01',
-      title: 'Dia Nacional da Espeleologia',
-      description: 'Estudo e preservação de cavernas e grutas',
-      category: 'brasil',
-      tags: ['Espeleologia', 'Cavernas']
-    },
-    {
-      date: '2025-11-01',
-      title: 'Dia Mundial do Veganismo',
-      description: 'Conscientização sobre impactos ambientais da alimentação',
-      category: 'mundial',
-      tags: ['Veganismo', 'Sustentabilidade Alimentar']
-    },
-    {
-      date: '2025-11-14',
-      title: 'Dia Nacional da Alfabetização Ecológica',
-      description: 'Educação ambiental e consciência ecológica',
-      category: 'brasil',
-      tags: ['Educação Ambiental', 'Alfabetização']
-    },
-    {
-      date: '2025-11-19',
-      title: 'Dia Nacional de Combate à Dengue',
-      description: 'Prevenção e controle de doenças transmitidas por vetores',
-      category: 'brasil',
-      tags: ['Saúde Pública', 'Dengue']
-    },
-    {
-      date: '2025-11-24',
-      title: 'Dia do Rio',
-      description: 'Preservação dos recursos hídricos e ecossistemas aquáticos',
-      category: 'brasil',
-      tags: ['Rios', 'Recursos Hídricos']
-    },
-    {
-      date: '2025-11-29',
-      title: 'Dia Nacional da Onça-Pintada',
-      description: 'Conservação do maior felino das Américas',
-      category: 'brasil',
-      tags: ['Onça-Pintada', 'Fauna Brasileira']
-    },
-    {
-      date: '2025-11-30',
-      title: 'Dia Nacional de Luta contra o Uso de Agrotóxicos',
-      description: 'Agricultura sustentável e segura',
-      category: 'brasil',
-      tags: ['Agrotóxicos', 'Agricultura Sustentável']
-    }
-  ],
-  'Dezembro': [
-    {
-      date: '2025-12-05',
-      title: 'Dia Mundial do Solo',
-      description: 'Importância do solo para a vida no planeta',
-      category: 'mundial',
-      tags: ['Solo', 'Agricultura']
-    },
-    {
-      date: '2025-12-05',
-      title: 'Dia Internacional do Voluntariado',
-      description: 'Promoção do voluntariado em projetos ambientais',
-      category: 'mundial',
-      tags: ['Voluntariado', 'Participação Social']
-    },
-    {
-      date: '2025-12-11',
-      title: 'Dia Internacional das Montanhas',
-      description: 'Preservação dos ecossistemas montanhosos',
-      category: 'mundial',
-      tags: ['Montanhas', 'Ecossistemas']
-    }
-  ]
-};
-    let currentFilter = 'todos';
-
-    function showLoading(message = '📅 Carregando...') {
-      const loading = document.getElementById('loading');
-      loading.textContent = message;
-      loading.classList.add('show');
-      setTimeout(() => loading.classList.remove('show'), 2000);
-    }
-
-    function renderCalendar() {
-      const grid = document.getElementById('calendarGrid');
-      grid.innerHTML = '';
-
-      Object.keys(environmentalDates).forEach(month => {
-        const monthCard = document.createElement('div');
-        monthCard.className = 'month-card';
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Ambiental - Salvador, Bahia</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        const monthTitle = document.createElement('div');
-        monthTitle.className = 'month-title';
-        monthTitle.textContent = month;
-        monthCard.appendChild(monthTitle);
-
-        const events = environmentalDates[month].filter(event => {
-          if (currentFilter === 'todos') return true;
-          return event.category === currentFilter || event.tags.some(tag => 
-            tag.toLowerCase().includes(currentFilter.toLowerCase())
-          );
-        });
-
-        if (events.length === 0) {
-          monthCard.style.display = 'none';
-          grid.appendChild(monthCard);
-          return;
+        :root {
+            --primary: #1B5E20;
+            --primary-light: #4CAF50;
+            --primary-medium: #388E3C;
+            --primary-dark: #0D4D12;
+            --secondary: #66BB6A;
+            --accent: #81C784;
+            --dark: #2d3436;
+            --light: #E8F5E8;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #e17055;
+            --info: #2196F3;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
 
-        events.forEach(event => {
-          const eventEl = document.createElement('div');
-          eventEl.className = `event-item ${event.category}`;
-          
-          const eventDate = new Date(event.date);
-          const displayDate = eventDate.toLocaleDateString('pt-BR', {
-            day: '2-digit', month: '2-digit'
-          });
-          
-          eventEl.innerHTML = `
-            <div class="event-date">${displayDate}</div>
-            <div class="event-title">${event.title}</div>
-            <div class="event-description">${event.description}</div>
-            <div class="event-tags">
-              ${event.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 25%, #388E3C 50%, #4CAF50 75%, #66BB6A 100%);
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(27, 94, 32, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(102, 187, 106, 0.3) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(1deg) scale(1.02); }
+            66% { transform: rotate(-1deg) scale(0.98); }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 10%; left: 10%; font-size: 3rem; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 10%; font-size: 2.5rem; animation-delay: 2s; }
+        .floating-element:nth-child(3) { top: 60%; left: 5%; font-size: 4rem; animation-delay: 4s; }
+        .floating-element:nth-child(4) { bottom: 20%; right: 15%; font-size: 3.5rem; animation-delay: 6s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(-10px) rotate(-3deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--glass), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: headerRotate 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes headerRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #f8f9fa, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav button {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav button:hover::before {
+            left: 100%;
+        }
+
+        .nav button:hover,
+        .nav button.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(27, 94, 32, 0.4);
+            border-color: var(--primary-light);
+        }
+
+        .period-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .period-nav button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .period-nav button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .period-nav button:hover::before {
+            left: 100%;
+        }
+
+        .period-nav button:hover,
+        .period-nav button.active {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .period-nav button.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .today-events {
+            background: linear-gradient(135deg, rgba(255, 248, 225, 0.2), rgba(255, 245, 157, 0.1));
+            backdrop-filter: blur(30px);
+            border: 2px solid #FFD54F;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .today-events::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD54F, #FFEB3B, #FFD54F);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .week-events {
+            background: linear-gradient(135deg, rgba(232, 245, 233, 0.2), rgba(200, 230, 201, 0.1));
+            backdrop-filter: blur(30px);
+            border: 2px solid #81C784;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .week-events::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #81C784, #66BB6A, #81C784);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .week-events h3 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .today-events h3 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, var(--glass), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .stats h3 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1B5E20, #2E7D32);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .search-container {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 60px 20px 25px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            color: #2E7D32;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.4s ease;
+            font-weight: 500;
+        }
+
+        .search-input::placeholder {
+            color: rgba(46, 125, 50, 0.7);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(27, 94, 32, 0.3);
+            transform: scale(1.02);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(46, 125, 50, 0.7);
+            font-size: 1.2rem;
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .month-card {
+            background: linear-gradient(135deg, var(--glass), rgba(255, 255, 255, 0.03));
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .month-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .month-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.25);
+        }
+
+        .month-card:hover::before {
+            opacity: 1;
+        }
+
+        .month-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .month-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .month-card:hover .month-header::before {
+            left: 100%;
+        }
+
+        .events-list {
+            padding: 25px;
+        }
+
+        .event-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .event-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(27, 94, 32, 0.1), transparent);
+            transition: width 0.3s ease;
+        }
+
+        .event-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92));
+        }
+
+        .event-item:hover::before {
+            width: 100%;
+        }
+
+        .event-date {
+            font-weight: 700;
+            color: #1B5E20;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .event-title {
+            font-size: 1.1rem;
+            color: #2E7D32;
+            margin-bottom: 10px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .event-description {
+            color: #424242;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        .event-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .event-type.mundial {
+            background: linear-gradient(135deg, var(--info), #42A5F5);
+            color: white;
+        }
+
+        .event-type.nacional {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .event-type.regional {
+            background: linear-gradient(135deg, var(--warning), #FFB74D);
+            color: var(--dark);
+        }
+
+        .event-item.today {
+            background: linear-gradient(135deg, rgba(255, 248, 225, 0.95), rgba(255, 245, 157, 0.85));
+            border-left: 4px solid #FFD54F;
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .event-item.today::after {
+            content: '● HOJE';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #FFD54F;
+            color: #F57F17;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .event-item.today .event-date {
+            color: #F57F17;
+            font-weight: 800;
+        }
+
+        .event-item.today .event-title {
+            color: #E65100;
+            font-weight: 700;
+        }
+
+        .event-item.today .event-description {
+            color: #BF360C;
+            font-weight: 500;
+        }
+
+        .event-item.this-week {
+            background: linear-gradient(135deg, rgba(232, 245, 233, 0.95), rgba(200, 230, 201, 0.85));
+            border-left: 4px solid #81C784;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.15);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .event-item.this-week::after {
+            content: '● SEMANA';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #81C784;
+            color: #1B5E20;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .event-item.this-week .event-date {
+            color: #1B5E20;
+            font-weight: 700;
+        }
+
+        .event-item.this-week .event-title {
+            color: #2E7D32;
+            font-weight: 650;
+        }
+
+        .event-item.this-week .event-description {
+            color: #424242;
+            font-weight: 500;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, var(--glass), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        .footer p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1B5E20, #2E7D32);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: clamp(1.8rem, 8vw, 2.5rem);
+                margin-bottom: 15px;
+            }
+
+            .header p {
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+            
+            .month-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                padding: 20px 15px;
+            }
+
+            .nav button {
+                width: 100%;
+                max-width: 280px;
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            .period-nav {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                padding: 15px 10px;
+            }
+
+            .period-nav button {
+                width: 100%;
+                max-width: 250px;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+            }
+
+            .stats {
+                padding: 25px 15px;
+                margin-bottom: 25px;
+            }
+
+            .stats h3 {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-item {
+                padding: 20px 15px;
+            }
+
+            .stat-number {
+                font-size: 2.2rem;
+            }
+
+            .stat-label {
+                font-size: 0.85rem;
+            }
+
+            .search-container {
+                margin-bottom: 25px;
+                padding: 0 10px;
+            }
+
+            .search-input {
+                padding: 16px 50px 16px 20px;
+                font-size: 1rem;
+            }
+
+            .search-icon {
+                right: 20px;
+                font-size: 1.1rem;
+            }
+
+            .month-card {
+                margin-bottom: 15px;
+            }
+
+            .month-header {
+                padding: 20px 15px;
+                font-size: 1.3rem;
+            }
+
+            .events-list {
+                padding: 15px;
+            }
+
+            .event-item {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .event-date {
+                font-size: 1rem;
+                margin-bottom: 6px;
+            }
+
+            .event-title {
+                font-size: 1rem;
+                line-height: 1.2;
+                margin-bottom: 8px;
+            }
+
+            .event-description {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            .event-type {
+                font-size: 0.75rem;
+                padding: 3px 10px;
+                margin-top: 8px;
+            }
+
+            .today-events {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+
+            .today-events h3 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+
+            .week-events {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+
+            .week-events h3 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+
+            .event-item.today::after,
+            .event-item.this-week::after {
+                position: static;
+                display: inline-block;
+                margin-top: 8px;
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+
+            .footer {
+                padding: 20px 15px;
+                margin-top: 30px;
+            }
+
+            .footer p {
+                font-size: 0.95rem;
+                line-height: 1.4;
+            }
+
+            .event-item:hover {
+                transform: translateX(5px);
+            }
+
+            .month-card:hover {
+                transform: translateY(-8px) scale(1.01);
+            }
+
+            .nav button:hover,
+            .nav button.active {
+                transform: translateY(-2px) scale(1.02);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: clamp(1.5rem, 10vw, 2rem);
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat-item {
+                padding: 18px 12px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .nav {
+                padding: 15px 10px;
+            }
+
+            .nav button {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+
+            .search-input {
+                padding: 14px 45px 14px 18px;
+                font-size: 0.95rem;
+            }
+
+            .month-header {
+                padding: 18px 12px;
+                font-size: 1.2rem;
+            }
+
+            .events-list {
+                padding: 12px;
+            }
+
+            .event-item {
+                padding: 12px;
+                margin: 12px 0;
+            }
+
+            .event-date {
+                font-size: 0.95rem;
+            }
+
+            .event-title {
+                font-size: 0.95rem;
+            }
+
+            .event-description {
+                font-size: 0.85rem;
+            }
+
+            .floating-element {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+
+            .stat-item {
+                padding: 15px 10px;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (pointer: coarse) {
+            .nav button,
+            .event-item,
+            .search-input {
+                min-height: 44px;
+            }
+            
+            .event-item {
+                padding: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .floating-elements {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="floating-elements">
+        <div class="floating-element">🌱</div>
+        <div class="floating-element">🌍</div>
+        <div class="floating-element">🌿</div>
+        <div class="floating-element">🌊</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-leaf"></i> Calendário Ambiental</h1>
+            <p>Salvador, Bahia - Transformando consciência em ação para o planeta</p>
+        </div>
+
+        <div class="nav">
+            <button class="active" onclick="showAll()">
+                <i class="fas fa-globe"></i> Todas as Datas
+            </button>
+            <button onclick="filterByType('mundial')">
+                <i class="fas fa-earth-americas"></i> Mundiais
+            </button>
+            <button onclick="filterByType('nacional')">
+                <i class="fas fa-flag"></i> Nacionais
+            </button>
+            <button onclick="filterByType('regional')">
+                <i class="fas fa-map-marker-alt"></i> Regionais
+            </button>
+        </div>
+
+        <div class="period-nav">
+            <button onclick="filterByPeriod('today')">
+                <i class="fas fa-calendar-day"></i> Hoje
+            </button>
+            <button onclick="filterByPeriod('week')">
+                <i class="fas fa-calendar-week"></i> Esta Semana
+            </button>
+            <button onclick="filterByPeriod('15days')">
+                <i class="fas fa-calendar-alt"></i> Próximos 15 dias
+            </button>
+            <button onclick="filterByPeriod('month')">
+                <i class="fas fa-calendar"></i> Este Mês
+            </button>
+            <button class="active" onclick="filterByPeriod('all')">
+                <i class="fas fa-calendar-plus"></i> Todos os Períodos
+            </button>
+        </div>
+
+        <div class="content">
+            <div class="today-events" id="todayEvents" style="display: none;">
+                <h3><i class="fas fa-calendar-day"></i> Eventos de Hoje</h3>
+                <div id="todayEventsList"></div>
             </div>
-          `;
-          
-          // Adicionar evento de clique para adicionar à agenda
-          eventEl.addEventListener('click', () => {
-            addEventToMyAgenda(event);
-          });
-          
-          monthCard.appendChild(eventEl);
-        });
 
-        grid.appendChild(monthCard);
-      });
+            <div class="week-events" id="weekEvents" style="display: none;">
+                <h3><i class="fas fa-calendar-week"></i> Eventos desta Semana</h3>
+                <div id="weekEventsList"></div>
+            </div>
 
-      updateStats();
-    }
+            <div class="stats">
+                <h3><i class="fas fa-chart-line"></i> Estatísticas do Calendário</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalEvents">0</div>
+                        <div class="stat-label">Total de Eventos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="worldEvents">0</div>
+                        <div class="stat-label">Eventos Mundiais</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="nationalEvents">0</div>
+                        <div class="stat-label">Eventos Nacionais</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="regionalEvents">0</div>
+                        <div class="stat-label">Eventos Regionais</div>
+                    </div>
+                </div>
+            </div>
 
-    function filterEvents(category) {
-      currentFilter = category;
-      
-      // Update filter buttons
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.classList.add('active');
-      
-      renderCalendar();
-    }
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" placeholder="Buscar por data, evento ou palavra-chave..." 
+                           oninput="searchEvents(this.value)">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
 
-    function updateStats() {
-      let totalEvents = 0;
-      let brasilEvents = 0;
-      let mundialEvents = 0;
+            <div class="month-grid" id="monthGrid"></div>
+        </div>
 
-      Object.values(environmentalDates).forEach(monthEvents => {
-        monthEvents.forEach(event => {
-          totalEvents++;
-          if (event.category === 'brasil') brasilEvents++;
-          if (event.category === 'mundial') mundialEvents++;
-        });
-      });
+        <div class="footer">
+            <p><i class="fas fa-heart" style="color: #4CAF50;"></i> Juntos por um planeta mais verde! <i class="fas fa-seedling" style="color: #66BB6A;"></i></p>
+        </div>
+    </div>
 
-      document.getElementById('totalEvents').textContent = totalEvents;
-      document.getElementById('brasilEvents').textContent = brasilEvents;
-      document.getElementById('mundialEvents').textContent = mundialEvents;
-    }
-
-    function exportCalendar() {
-      showLoading('📥 Exportando...');
-      const data = {
-        title: 'Calendário Ambiental 2025',
-        events: environmentalDates,
-        exportDate: new Date().toISOString()
-      };
-      
-      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'calendario_ambiental_2025.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function addEventToMyAgenda(event) {
-      showLoading('➕ Adicionando evento...');
-      
-      // Tentar comunicar com a janela pai (sua agenda principal)
-      if (window.opener) {
-        const eventData = {
-          date: event.date,
-          title: `🌍 ${event.title}`,
-          time: '',
-          description: `${event.description}\n\nTags: ${event.tags.join(', ')}`
+    <script>
+        const environmentalEvents = {
+            'Janeiro': [
+                {
+                    date: '10/01',
+                    title: 'Dia Mundial da Ligação entre o Ser Humano e a Natureza',
+                    description: 'Celebração da conexão fundamental entre humanidade e natureza',
+                    type: 'mundial'
+                },
+                {
+                    date: '11/01',
+                    title: 'Dia Nacional do Combate ao Trabalho Escravo',
+                    description: 'Conscientização sobre trabalho escravo e sua relação com degradação ambiental',
+                    type: 'nacional'
+                },
+                {
+                    date: '15/01',
+                    title: 'Dia Mundial da Neve',
+                    description: 'Conscientização sobre mudanças climáticas e derretimento das geleiras',
+                    type: 'mundial'
+                },
+                {
+                    date: '26/01',
+                    title: 'Dia Mundial da Educação Ambiental',
+                    description: 'Promoção da educação ambiental em todas as idades',
+                    type: 'mundial'
+                }
+            ],
+            'Fevereiro': [
+                {
+                    date: '02/02',
+                    title: 'Dia Mundial das Zonas Úmidas',
+                    description: 'Proteção de mangues, pântanos e áreas úmidas - importante para Salvador',
+                    type: 'mundial'
+                },
+                {
+                    date: '06/02',
+                    title: 'Dia Nacional do Agente de Saúde e de Endemias',
+                    description: 'Prevenção de doenças relacionadas ao meio ambiente',
+                    type: 'nacional'
+                },
+                {
+                    date: '10/02',
+                    title: 'Dia Mundial das Leguminosas',
+                    description: 'Promoção de alimentos sustentáveis e agricultura ecológica',
+                    type: 'mundial'
+                },
+                {
+                    date: '11/02',
+                    title: 'Dia Internacional das Mulheres e Meninas na Ciência',
+                    description: 'Igualdade de gênero nas ciências ambientais',
+                    type: 'mundial'
+                },
+                {
+                    date: '14/02',
+                    title: 'Dia Internacional de Combate à Poluição por Plástico',
+                    description: 'Redução do uso de plásticos e proteção dos oceanos',
+                    type: 'mundial'
+                },
+                {
+                    date: '19/02',
+                    title: 'Dia Internacional da Baleia',
+                    description: 'Proteção dos mamíferos marinhos',
+                    type: 'mundial'
+                },
+                {
+                    date: '22/02',
+                    title: 'Aniversário do IBAMA',
+                    description: 'Criação do Instituto Brasileiro do Meio Ambiente',
+                    type: 'nacional'
+                }
+            ],
+            'Março': [
+                {
+                    date: '01/03',
+                    title: 'Dia Nacional do Turismo Ecológico',
+                    description: 'Promoção do turismo sustentável e responsável',
+                    type: 'nacional'
+                },
+                {
+                    date: '02/03',
+                    title: 'Dia Internacional da Contaminação por Mercúrio',
+                    description: 'Conscientização sobre os riscos do mercúrio',
+                    type: 'mundial'
+                },
+                {
+                    date: '03/03',
+                    title: 'Dia Mundial da Vida Selvagem',
+                    description: 'Proteção da fauna e flora selvagens',
+                    type: 'mundial'
+                },
+                {
+                    date: '13/03',
+                    title: 'Dia do Conservacionismo',
+                    description: 'Promoção da conservação ambiental',
+                    type: 'nacional'
+                },
+                {
+                    date: '16/03',
+                    title: 'Dia Nacional de Conscientização sobre as Mudanças Climáticas',
+                    description: 'Conscientização sobre aquecimento global',
+                    type: 'nacional'
+                },
+                {
+                    date: '21/03',
+                    title: 'Dia Internacional das Florestas',
+                    description: 'Proteção da Mata Atlântica e outros biomas',
+                    type: 'mundial'
+                },
+                {
+                    date: '22/03',
+                    title: 'Dia Mundial da Água',
+                    description: 'Conscientização sobre recursos hídricos e preservação',
+                    type: 'mundial'
+                },
+                {
+                    date: '23/03',
+                    title: 'Dia Mundial da Meteorologia',
+                    description: 'Importância da meteorologia para meio ambiente',
+                    type: 'mundial'
+                }
+            ],
+            'Abril': [
+                {
+                    date: '04/04',
+                    title: 'Dia Mundial dos Animais de Rua',
+                    description: 'Proteção e cuidado com animais abandonados',
+                    type: 'mundial'
+                },
+                {
+                    date: '07/04',
+                    title: 'Dia Mundial da Saúde',
+                    description: 'Relação entre saúde e qualidade ambiental',
+                    type: 'mundial'
+                },
+                {
+                    date: '10/04',
+                    title: 'Dia Internacional de Combate à Poluição por Plástico nos Oceanos',
+                    description: 'Proteção dos oceanos contra poluição plástica',
+                    type: 'mundial'
+                },
+                {
+                    date: '15/04',
+                    title: 'Dia Nacional de Conservação dos Solos',
+                    description: 'Proteção contra erosão e degradação do solo',
+                    type: 'nacional'
+                },
+                {
+                    date: '17/04',
+                    title: 'Dia Nacional da Botânica',
+                    description: 'Estudo e preservação da flora brasileira',
+                    type: 'nacional'
+                },
+                {
+                    date: '17/04',
+                    title: 'Dia Internacional da Luta dos Trabalhadores do Campo',
+                    description: 'Direitos dos trabalhadores rurais e agricultura sustentável',
+                    type: 'mundial'
+                },
+                {
+                    date: '19/04',
+                    title: 'Dia dos Povos Indígenas',
+                    description: 'Povos indígenas e conhecimento tradicional ambiental',
+                    type: 'nacional'
+                },
+                {
+                    date: '22/04',
+                    title: 'Dia da Terra',
+                    description: 'Maior movimento ambiental mundial',
+                    type: 'mundial'
+                },
+                {
+                    date: '28/04',
+                    title: 'Dia da Caatinga',
+                    description: 'Preservação do bioma exclusivamente brasileiro',
+                    type: 'nacional'
+                }
+            ],
+            'Maio': [
+                {
+                    date: '03/05',
+                    title: 'Dia Nacional do Pau-Brasil',
+                    description: 'Preservação da árvore símbolo do Brasil',
+                    type: 'nacional'
+                },
+                {
+                    date: '13/05',
+                    title: 'Dia Mundial das Aves Migratórias',
+                    description: 'Proteção das rotas migratórias',
+                    type: 'mundial'
+                },
+                {
+                    date: '17/05',
+                    title: 'Dia Mundial da Reciclagem',
+                    description: 'Economia circular e gestão sustentável de resíduos',
+                    type: 'mundial'
+                },
+                {
+                    date: '22/05',
+                    title: 'Dia Internacional da Biodiversidade',
+                    description: 'Preservação da diversidade biológica',
+                    type: 'mundial'
+                },
+                {
+                    date: '25/05',
+                    title: 'Dia do Trabalhador Rural',
+                    description: 'Valorização da agricultura sustentável',
+                    type: 'nacional'
+                },
+                {
+                    date: '27/05',
+                    title: 'Dia Nacional da Mata Atlântica',
+                    description: 'Bioma fundamental para Salvador e região',
+                    type: 'nacional'
+                },
+                {
+                    date: '28/05',
+                    title: 'Dia Mundial da Conservação dos Recursos Naturais',
+                    description: 'Uso sustentável dos recursos naturais',
+                    type: 'mundial'
+                }
+            ],
+            'Junho': [
+                {
+                    date: '03/06',
+                    title: 'Dia Nacional da Educação Ambiental',
+                    description: 'Promoção da educação ambiental no Brasil',
+                    type: 'nacional'
+                },
+                {
+                    date: '05/06',
+                    title: 'Dia Mundial do Meio Ambiente e da Ecologia',
+                    description: 'Principal data ambiental das Nações Unidas',
+                    type: 'mundial'
+                },
+                {
+                    date: '05/06',
+                    title: 'Semana Mundial do Meio Ambiente (5-9/06)',
+                    description: 'Semana de atividades ambientais em todo o mundo',
+                    type: 'mundial'
+                },
+                {
+                    date: '08/06',
+                    title: 'Dia Mundial dos Oceanos',
+                    description: 'Proteção dos oceanos - crucial para Salvador',
+                    type: 'mundial'
+                },
+                {
+                    date: '16/06',
+                    title: 'Dia Mundial das Tartarugas Marinhas',
+                    description: 'Proteção das tartarugas marinhas',
+                    type: 'mundial'
+                },
+                {
+                    date: '17/06',
+                    title: 'Dia Mundial de Combate à Desertificação e à Seca',
+                    description: 'Combate à degradação do solo',
+                    type: 'mundial'
+                },
+                {
+                    date: '24/06',
+                    title: 'Dia Nacional da Araucária',
+                    description: 'Preservação da araucária brasileira',
+                    type: 'nacional'
+                },
+                {
+                    date: '29/06',
+                    title: 'Dia do Pescador',
+                    description: 'Pesca sustentável e proteção marinha',
+                    type: 'nacional'
+                }
+            ],
+            'Julho': [
+                {
+                    date: '11/07',
+                    title: 'Dia Mundial da População',
+                    description: 'Impacto populacional no meio ambiente',
+                    type: 'mundial'
+                },
+                {
+                    date: '12/07',
+                    title: 'Dia do Engenheiro Florestal',
+                    description: 'Profissionais dedicados à conservação e manejo florestal',
+                    type: 'nacional'
+                },
+                ,
+                {
+                    date: '14/07',
+                    title: 'Dia Internacional pela Conservação de Tubarões e Raias',
+                    description: 'Proteção dos predadores marinhos',
+                    type: 'mundial'
+                },
+                ,
+                {
+                    date: '17/07',
+                    title: 'Dia da Proteção às Florestas',
+                    description: 'Proteção florestal e combate ao desmatamento',
+                    type: 'nacional'
+                },
+                {
+                    date: '26/07',
+                    title: 'Dia Internacional de Conservação dos Manguezais',
+                    description: 'Proteção dos manguezais - essencial para Salvador',
+                    type: 'mundial'
+                },
+                {
+                    date: '28/07',
+                    title: 'Dia Mundial de Conservação da Natureza',
+                    description: 'Conservação da natureza em geral',
+                    type: 'mundial'
+                },
+                {
+                    date: '28/07',
+                    title: 'Dia do Agricultor',
+                    description: 'Agricultura sustentável e produção responsável',
+                    type: 'nacional'
+                }
+            ],
+            'Agosto': [
+                {
+                    date: '05/08',
+                    title: 'Dia Nacional da Saúde',
+                    description: 'Relação entre saúde e meio ambiente',
+                    type: 'nacional'
+                },
+                {
+                    date: '09/08',
+                    title: 'Dia Internacional dos Povos Indígenas',
+                    description: 'Guardiões da biodiversidade',
+                    type: 'mundial'
+                },
+                {
+                    date: '12/08',
+                    title: 'Dia Nacional dos Direitos Humanos',
+                    description: 'Direito ao meio ambiente saudável',
+                    type: 'nacional'
+                },
+                {
+                    date: '12/08',
+                    title: 'Dia Interamericano de Qualidade do Ar',
+                    description: 'Combate à poluição atmosférica',
+                    type: 'regional'
+                },
+                {
+                    date: '14/08',
+                    title: 'Dia do Controle à Poluição Industrial',
+                    description: 'Controle e prevenção da poluição industrial',
+                    type: 'nacional'
+                },
+                {
+                    date: '15/08',
+                    title: 'Dia Internacional da Biodiversidade',
+                    description: 'Segunda celebração anual da biodiversidade',
+                    type: 'mundial'
+                },
+                {
+                    date: '17/08',
+                    title: 'Dia Nacional do Patrimônio Histórico e Cultural',
+                    description: 'Preservação do patrimônio cultural e ambiental',
+                    type: 'nacional'
+                },
+                {
+                    date: '28/08',
+                    title: 'Aniversário do ICMBio',
+                    description: 'Instituto Chico Mendes de Conservação da Biodiversidade',
+                    type: 'nacional'
+                }
+            ],
+            'Setembro': [
+                {
+                    date: '05/09',
+                    title: 'Dia da Amazônia',
+                    description: 'Maior floresta tropical do mundo',
+                    type: 'nacional'
+                },
+                {
+                    date: '11/09',
+                    title: 'Dia Nacional do Cerrado',
+                    description: 'Segundo maior bioma do Brasil',
+                    type: 'nacional'
+                },
+                {
+                    date: '16/09',
+                    title: 'Dia Internacional da Preservação da Camada de Ozônio',
+                    description: 'Proteção contra raios ultravioleta',
+                    type: 'mundial'
+                },
+                {
+                    date: '16/09',
+                    title: 'Dia Internacional de Limpeza das Praias e Rios',
+                    description: 'Limpeza e proteção de corpos d\'água',
+                    type: 'mundial'
+                },
+                {
+                    date: '21/09',
+                    title: 'Dia da Árvore',
+                    description: 'Principal data do reflorestamento no Brasil',
+                    type: 'nacional'
+                },
+                {
+                    date: '22/09',
+                    title: 'Dia de Defesa da Fauna',
+                    description: 'Proteção dos animais silvestres',
+                    type: 'nacional'
+                },
+                {
+                    date: '22/09',
+                    title: 'Dia Mundial Sem Carro',
+                    description: 'Mobilidade sustentável e qualidade do ar',
+                    type: 'mundial'
+                }
+            ],
+            'Outubro': [
+                {
+                    date: '01/10',
+                    title: 'Dia Mundial do Vegetarianismo',
+                    description: 'Alimentação sustentável e redução de impacto ambiental',
+                    type: 'mundial'
+                },
+                {
+                    date: '03/10',
+                    title: 'Dia Nacional das Abelhas',
+                    description: 'Proteção dos polinizadores essenciais',
+                    type: 'nacional'
+                },
+                {
+                    date: '04/10',
+                    title: 'Dia Mundial dos Animais',
+                    description: 'Proteção e bem-estar animal',
+                    type: 'mundial'
+                },
+                {
+                    date: '04/10',
+                    title: 'Dia da Natureza',
+                    description: 'Celebração da natureza em geral',
+                    type: 'nacional'
+                },
+                {
+                    date: '05/10',
+                    title: 'Dia das Aves',
+                    description: 'Proteção da avifauna brasileira',
+                    type: 'nacional'
+                },
+                {
+                    date: '12/10',
+                    title: 'Dia Nacional do Mar',
+                    description: 'Proteção dos oceanos e vida marinha',
+                    type: 'nacional'
+                },
+                {
+                    date: '13/10',
+                    title: 'Dia Internacional para Redução de Desastres Naturais',
+                    description: 'Prevenção e preparação para desastres',
+                    type: 'mundial'
+                },
+                {
+                    date: '15/10',
+                    title: 'Dia do Consumo Consciente',
+                    description: 'Consumo responsável e sustentável',
+                    type: 'nacional'
+                },
+                {
+                    date: '15/10',
+                    title: 'Dia do Educador Ambiental',
+                    description: 'Valorização da educação ambiental',
+                    type: 'nacional'
+                },
+                {
+                    date: '16/10',
+                    title: 'Dia Mundial da Alimentação',
+                    description: 'Agricultura sustentável e segurança alimentar',
+                    type: 'mundial'
+                }
+            ],
+            'Novembro': [
+                {
+                    date: '01/11',
+                    title: 'Dia Nacional da Espeleologia',
+                    description: 'Estudo e proteção de cavernas',
+                    type: 'nacional'
+                },
+                {
+                    date: '01/11',
+                    title: 'Dia Mundial do Veganismo',
+                    description: 'Alimentação sustentável e redução de pegada ecológica',
+                    type: 'mundial'
+                },
+                {
+                    date: '19/11',
+                    title: 'Dia Nacional de Combate à Dengue',
+                    description: 'Prevenção de doenças transmitidas por vetores',
+                    type: 'nacional'
+                },
+                {
+                    date: '24/11',
+                    title: 'Dia do Rio',
+                    description: 'Proteção dos recursos hídricos',
+                    type: 'nacional'
+                },
+                {
+                    date: '29/11',
+                    title: 'Dia Nacional da Onça-Pintada',
+                    description: 'Proteção do maior felino das Américas',
+                    type: 'nacional'
+                },
+                {
+                    date: '30/11',
+                    title: 'Dia do Estatuto da Terra',
+                    description: 'Reforma agrária e uso sustentável da terra',
+                    type: 'nacional'
+                }
+            ],
+            'Dezembro': [
+                {
+                    date: '03/12',
+                    title: 'Dia Internacional de Luta pela Deficiência Ambiental',
+                    description: 'Acessibilidade e meio ambiente',
+                    type: 'mundial'
+                },
+                {
+                    date: '05/12',
+                    title: 'Dia Internacional do Voluntariado',
+                    description: 'Voluntariado ambiental',
+                    type: 'mundial'
+                },
+                {
+                    date: '11/12',
+                    title: 'Dia Internacional das Montanhas',
+                    description: 'Proteção de ecossistemas montanhosos',
+                    type: 'mundial'
+                },
+                {
+                    date: '19/12',
+                    title: 'Aniversário da ANA (Agência Nacional de Águas)',
+                    description: 'Gestão dos recursos hídricos no Brasil',
+                    type: 'nacional'
+                }
+            ]
         };
-        
-        // Enviar evento para a agenda principal
-        window.opener.postMessage({
-          type: 'ADD_ENVIRONMENTAL_EVENT',
-          event: eventData
-        }, '*');
-        
-        alert(`✅ "${event.title}" foi adicionado à sua agenda!`);
-      } else {
-        // Fallback: salvar no localStorage para ser importado depois
-        const savedEvents = JSON.parse(localStorage.getItem('environmentalEventsToImport') || '[]');
-        savedEvents.push({
-          date: event.date,
-          title: `🌍 ${event.title}`,
-          time: '',
-          description: `${event.description}\n\nTags: ${event.tags.join(', ')}`
+
+        let currentFilter = 'all';
+        let currentPeriod = 'all';
+        let searchTerm = '';
+
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 1500);
         });
-        localStorage.setItem('environmentalEventsToImport', JSON.stringify(savedEvents));
-        alert(`📅 "${event.title}" foi salvo! Será importado quando você voltar à agenda principal.`);
-      }
-    }
 
-    function addToMyAgenda() {
-      showLoading('📅 Preparando eventos...');
-      
-      // Criar lista de todos os eventos para importar
-      const allEvents = [];
-      Object.values(environmentalDates).forEach(monthEvents => {
-        monthEvents.forEach(event => {
-          allEvents.push({
-            date: event.date,
-            title: `🌍 ${event.title}`,
-            time: '',
-            description: `${event.description}\n\nTags: ${event.tags.join(', ')}`
-          });
-        });
-      });
-      
-      // Salvar no localStorage
-      localStorage.setItem('environmentalEventsToImport', JSON.stringify(allEvents));
-      alert(`✅ ${allEvents.length} eventos do calendário ambiental foram preparados para importação!\n\nVolte à sua agenda principal para importá-los.`);
-    }
+        function initCalendar() {
+            displayMonths();
+            updateStats();
+            checkTodayEvents();
+            checkWeekEvents();
+        }
 
-    // Initialize calendar
-    document.addEventListener('DOMContentLoaded', function() {
-      showLoading('🌍 Carregando calendário...');
-      setTimeout(() => {
-        renderCalendar();
-      }, 500);
-    });
+        function displayMonths() {
+            const monthGrid = document.getElementById('monthGrid');
+            monthGrid.innerHTML = '';
 
-    // Make functions available globally
-    window.filterEvents = filterEvents;
-    window.exportCalendar = exportCalendar;
-    window.addToMyAgenda = addToMyAgenda;
-  </script>
+            Object.keys(environmentalEvents).forEach(month => {
+                const filteredEvents = environmentalEvents[month].filter(event => {
+                    const matchesType = currentFilter === 'all' || event.type === currentFilter;
+                    const matchesSearch = searchTerm === '' || 
+                        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        event.date.includes(searchTerm);
+                    const matchesPeriod = filterByPeriodLogic(event);
+                    return matchesType && matchesSearch && matchesPeriod;
+                });
+
+                if (filteredEvents.length > 0) {
+                    const monthCard = createMonthCard(month, filteredEvents);
+                    monthGrid.appendChild(monthCard);
+                }
+            });
+        }
+
+        function filterByPeriodLogic(event) {
+            if (currentPeriod === 'all') return true;
+            
+            const today = new Date();
+            const eventDate = parseEventDate(event.date);
+            
+            switch (currentPeriod) {
+                case 'today':
+                    return isSameDay(eventDate, today);
+                case 'week':
+                    return isInCurrentWeek(eventDate, today);
+                case '15days':
+                    return isInNext15Days(eventDate, today);
+                case 'month':
+                    return isInCurrentMonth(eventDate, today);
+                default:
+                    return true;
+            }
+        }
+
+        function isInNext15Days(eventDate, today) {
+            const todayStart = new Date(today);
+            todayStart.setHours(0, 0, 0, 0);
+            
+            const fifteenDaysLater = new Date(todayStart);
+            fifteenDaysLater.setDate(todayStart.getDate() + 15);
+            
+            return eventDate >= todayStart && eventDate <= fifteenDaysLater;
+        }
+
+        function isInCurrentMonth(eventDate, today) {
+            return eventDate.getMonth() === today.getMonth() && 
+                   eventDate.getFullYear() === today.getFullYear();
+        }
+
+        function filterByPeriod(period) {
+            currentPeriod = period;
+            updateActivePeriodButton(period);
+            displayMonths();
+            
+            // Hide special sections when filtering by period
+            if (period !== 'all') {
+                document.getElementById('todayEvents').style.display = 'none';
+                document.getElementById('weekEvents').style.display = 'none';
+            } else {
+                checkTodayEvents();
+                checkWeekEvents();
+            }
+        }
+
+        function updateActivePeriodButton(activePeriod) {
+            document.querySelectorAll('.period-nav button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            const buttonMap = {
+                'today': 'Hoje',
+                'week': 'Esta Semana',
+                '15days': 'Próximos 15 dias',
+                'month': 'Este Mês',
+                'all': 'Todos os Períodos'
+            };
+            
+            document.querySelectorAll('.period-nav button').forEach(button => {
+                if (button.textContent.trim().includes(buttonMap[activePeriod])) {
+                    button.classList.add('active');
+                }
+            });
+        }
+
+        function createMonthCard(month, events) {
+            const card = document.createElement('div');
+            card.className = 'month-card';
+            
+            const header = document.createElement('div');
+            header.className = 'month-header';
+            header.innerHTML = `<i class="fas fa-calendar-alt"></i> ${month}`;
+            
+            const eventsList = document.createElement('div');
+            eventsList.className = 'events-list';
+            
+            events.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item';
+                
+                // Check if event is today or this week
+                const today = new Date();
+                const eventDate = parseEventDate(event.date);
+                const isToday = isSameDay(eventDate, today);
+                const isThisWeek = isInCurrentWeek(eventDate, today);
+                
+                if (isToday) {
+                    eventItem.classList.add('today');
+                } else if (isThisWeek) {
+                    eventItem.classList.add('this-week');
+                }
+                
+                eventItem.innerHTML = `
+                    <div class="event-date">
+                        <i class="fas fa-calendar-day"></i> ${event.date}
+                    </div>
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-description">${event.description}</div>
+                    <div class="event-type ${event.type}">${event.type}</div>
+                `;
+                eventsList.appendChild(eventItem);
+            });
+            
+            card.appendChild(header);
+            card.appendChild(eventsList);
+            return card;
+        }
+
+        function parseEventDate(dateString) {
+            const [day, month] = dateString.split('/');
+            const currentYear = new Date().getFullYear();
+            return new Date(currentYear, parseInt(month) - 1, parseInt(day));
+        }
+
+        function isSameDay(date1, date2) {
+            return date1.getDate() === date2.getDate() &&
+                   date1.getMonth() === date2.getMonth() &&
+                   date1.getFullYear() === date2.getFullYear();
+        }
+
+        function isInCurrentWeek(eventDate, today) {
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            startOfWeek.setHours(0, 0, 0, 0);
+            
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            endOfWeek.setHours(23, 59, 59, 999);
+            
+            return eventDate >= startOfWeek && eventDate <= endOfWeek;
+        }
+
+        function updateStats() {
+            let totalEvents = 0;
+            let worldEvents = 0;
+            let nationalEvents = 0;
+            let regionalEvents = 0;
+
+            Object.values(environmentalEvents).forEach(monthEvents => {
+                monthEvents.forEach(event => {
+                    totalEvents++;
+                    if (event.type === 'mundial') worldEvents++;
+                    else if (event.type === 'nacional') nationalEvents++;
+                    else if (event.type === 'regional') regionalEvents++;
+                });
+            });
+
+            // Animate counters
+            animateCounter('totalEvents', totalEvents);
+            animateCounter('worldEvents', worldEvents);
+            animateCounter('nationalEvents', nationalEvents);
+            animateCounter('regionalEvents', regionalEvents);
+        }
+
+        function animateCounter(elementId, target) {
+            const element = document.getElementById(elementId);
+            let current = 0;
+            const increment = target / 30;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.round(current);
+            }, 50);
+        }
+
+        function checkTodayEvents() {
+            const today = new Date();
+            const todayString = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+            
+            let todayEvents = [];
+            Object.values(environmentalEvents).forEach(monthEvents => {
+                monthEvents.forEach(event => {
+                    if (event.date === todayString) {
+                        todayEvents.push(event);
+                    }
+                });
+            });
+
+            const todayEventsList = document.getElementById('todayEventsList');
+            const todayEventsContainer = document.getElementById('todayEvents');
+            
+            if (todayEvents.length > 0) {
+                todayEventsList.innerHTML = todayEvents.map(event => `
+                    <div class="event-item today">
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-description">${event.description}</div>
+                        <div class="event-type ${event.type}">${event.type}</div>
+                    </div>
+                `).join('');
+                todayEventsContainer.style.display = 'block';
+            } else {
+                todayEventsContainer.style.display = 'none';
+            }
+        }
+
+        function checkWeekEvents() {
+            const today = new Date();
+            let weekEvents = [];
+            
+            Object.values(environmentalEvents).forEach(monthEvents => {
+                monthEvents.forEach(event => {
+                    const eventDate = parseEventDate(event.date);
+                    if (isInCurrentWeek(eventDate, today) && !isSameDay(eventDate, today)) {
+                        weekEvents.push({...event, eventDate});
+                    }
+                });
+            });
+
+            // Sort by date
+            weekEvents.sort((a, b) => a.eventDate - b.eventDate);
+
+            const weekEventsList = document.getElementById('weekEventsList');
+            const weekEventsContainer = document.getElementById('weekEvents');
+            
+            if (weekEvents.length > 0) {
+                weekEventsList.innerHTML = weekEvents.map(event => `
+                    <div class="event-item this-week">
+                        <div class="event-date">
+                            <i class="fas fa-calendar-day"></i> ${event.date}
+                        </div>
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-description">${event.description}</div>
+                        <div class="event-type ${event.type}">${event.type}</div>
+                    </div>
+                `).join('');
+                weekEventsContainer.style.display = 'block';
+            } else {
+                weekEventsContainer.style.display = 'none';
+            }
+        }
+
+        function showAll() {
+            currentFilter = 'all';
+            updateActiveButton('Todas as Datas');
+            displayMonths();
+        }
+
+        function filterByType(type) {
+            currentFilter = type;
+            const buttonText = {
+                'mundial': 'Mundiais',
+                'nacional': 'Nacionais',
+                'regional': 'Regionais'
+            };
+            updateActiveButton(buttonText[type]);
+            displayMonths();
+        }
+
+        function updateActiveButton(activeText) {
+            document.querySelectorAll('.nav button').forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent.trim().includes(activeText)) {
+                    button.classList.add('active');
+                }
+            });
+        }
+
+        function searchEvents(term) {
+            searchTerm = term;
+            displayMonths();
+        }
+
+        // Initialize calendar after page load
+        document.addEventListener('DOMContentLoaded', initCalendar);
+    </script>
 </body>
 </html>
