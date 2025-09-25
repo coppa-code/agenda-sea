@@ -724,6 +724,55 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
 
+        /* ESTILOS DE STATUS DE TEMPORALIDADE */
+        .event-today {
+            border-left-color: #f59e0b !important; /* Laranja para HOJE */
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4) !important;
+        }
+
+        .event-future {
+            border-left-color: #22c55e !important; /* Verde para eventos futuros */
+        }
+        
+        .event-past {
+            border-left-color: #6b7280 !important; /* Cinza para eventos passados */
+            opacity: 0.8;
+            filter: grayscale(30%);
+        }
+
+        .status-today {
+            background-image: linear-gradient(to right, #f97316, #ea580c);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(249, 115, 22, 0.4);
+        }
+
+        .status-future {
+            background-image: linear-gradient(to right, #22c55e, #16a34a);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(34, 197, 94, 0.4);
+        }
+        
+        .status-past {
+            background-image: linear-gradient(to right, #a1a1aa, #71717a);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(161, 161, 170, 0.4);
+        }
+
         .event-categoria-empresa { border-left-color: #1e40af; }
         .event-categoria-escola-publica { border-left-color: #16a34a; }
         .event-categoria-escola-particular { border-left-color: #059669; }
