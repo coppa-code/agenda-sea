@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Agenda de Eventos - Dinâmica</title>
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkFnZW5kYSBTRUEiLCAic2hvcnRfbmFtZSI6ICJBZ2VuZGEgU0VBIiwgInN0YXJ0X3VybCI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjJjMjIiLCAidGhlbWVfY29sb3IiOiAiIzE2NjUzNCIsICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdC1wcmltYXJ5IiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owbmFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jbklIWnBaWGRDYjNnOUp6QWdNQ0ExTVRJZ05URXlKejRLUEdSbFpuTStQR3hwYm1WaGNrZHlZV1JwWlc1MElHbGtQU2RuSnlCNE1UMG5PREFuSUhreFBTYzJNQ2NnZURJOUp6UTBNQ2NnZVRJOUp6UTJNQ2MrUEhOMGIzQWdjM1J2Y0MxamIyeHZjajBuSXpSaFpHVTRNQ2N2UGp4emRHOXdJRzltWm5ObGREMG5NU2NnYzNSdmNDMWpiMnh2Y2owbkl6Qm1NalF4T1NjdlBqd3ZiR2x1WldGeVIzSmhaR2xsYm5RK1BDOWtaV1p6UGdvOGNtVmpkQ0IzYVdSMGFEMG5OVEV5SnlCb1pXbG5hSFE5SnpVeE1pY2djbmc5SnpFeU1DY2dabWxzYkQwbmRYSnNLQ05uS1NjdlBnbzhjbVZqZENCNFBTYzVNaWNnZVQwbk1USTRKeUIzYVdSMGFEMG5Nekk0SnlCb1pXbG5hSFE5SnpJNU1pY2djbmc5SnpVeUp5Qm1hV3hzUFNkM2FHbDBaU2NnYjNCaFkybDBlVDBuTGprMkp5OCtDanh5WldOMElIZzlKemt5SnlCNVBTY3hNamduSUhkcFpIUm9QU2N6TWpnbklHaGxhV2RvZEQwbk9ESW5JSEo0UFNjMU1pY2dabWxzYkQwbkkyUXhabUZsTlNjdlBnbzhZMmx5WTJ4bElHTjRQU2N4TnpnbklHTjVQU2N4TmpRbklISTlKekU0SnlCbWFXeHNQU2NqTVRZMk5UTTBKeTgrUEdOcGNtTnNaU0JqZUQwbk16TTBKeUJqZVQwbk1UWTBKeUJ5UFNjeE9DY2dabWxzYkQwbkl6RTJOalV6TkNjdlBnbzhjbVZqZENCNFBTY3hNemduSUhrOUp6STBPQ2NnZDJsa2RHZzlKelkwSnlCb1pXbG5hSFE5SnpVd0p5QnllRDBuTVRZbklHWnBiR3c5SnlNeU1tTTFOV1VuTHo0S1BISmxZM1FnZUQwbk1qSTBKeUI1UFNjeU5EZ25JSGRwWkhSb1BTYzJOQ2NnYUdWcFoyaDBQU2MxTUNjZ2NuZzlKekUySnlCbWFXeHNQU2NqT0RabFptRmpKeTgrQ2p4eVpXTjBJSGc5SnpNeE1DY2dlVDBuTWpRNEp5QjNhV1IwYUQwbk5qUW5JR2hsYVdkb2REMG5OVEFuSUhKNFBTY3hOaWNnWm1sc2JEMG5Jekl5WXpVMVpTY3ZQZ284Y21WamRDQjRQU2N4TXpnbklIazlKek15TmljZ2QybGtkR2c5SnpZMEp5Qm9aV2xuYUhROUp6VXdKeUJ5ZUQwbk1UWW5JR1pwYkd3OUp5TTRObVZtWVdNbkx6NEtQSEpsWTNRZ2VEMG5NakkwSnlCNVBTY3pNalluSUhkcFpIUm9QU2N4TlRBbklHaGxhV2RvZEQwbk5UQW5JSEo0UFNjeE5pY2dabWxzYkQwbkl6RTJOalV6TkNjdlBnbzhMM04yWno0PSIsICJzaXplcyI6ICJhbnkiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIn1dfQ==">
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA1MTIgNTEyJz4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nODAnIHkxPSc2MCcgeDI9JzQ0MCcgeTI9JzQ2MCc+PHN0b3Agc3RvcC1jb2xvcj0nIzRhZGU4MCcvPjxzdG9wIG9mZnNldD0nMScgc3RvcC1jb2xvcj0nIzBmMjQxOScvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMicgcng9JzEyMCcgZmlsbD0ndXJsKCNnKScvPgo8cmVjdCB4PSc5MicgeT0nMTI4JyB3aWR0aD0nMzI4JyBoZWlnaHQ9JzI5Micgcng9JzUyJyBmaWxsPSd3aGl0ZScgb3BhY2l0eT0nLjk2Jy8+CjxyZWN0IHg9JzkyJyB5PScxMjgnIHdpZHRoPSczMjgnIGhlaWdodD0nODInIHJ4PSc1MicgZmlsbD0nI2QxZmFlNScvPgo8Y2lyY2xlIGN4PScxNzgnIGN5PScxNjQnIHI9JzE4JyBmaWxsPScjMTY2NTM0Jy8+PGNpcmNsZSBjeD0nMzM0JyBjeT0nMTY0JyByPScxOCcgZmlsbD0nIzE2NjUzNCcvPgo8cmVjdCB4PScxMzgnIHk9JzI0OCcgd2lkdGg9JzY0JyBoZWlnaHQ9JzUwJyByeD0nMTYnIGZpbGw9JyMyMmM1NWUnLz4KPHJlY3QgeD0nMjI0JyB5PScyNDgnIHdpZHRoPSc2NCcgaGVpZ2h0PSc1MCcgcng9JzE2JyBmaWxsPScjODZlZmFjJy8+CjxyZWN0IHg9JzMxMCcgeT0nMjQ4JyB3aWR0aD0nNjQnIGhlaWdodD0nNTAnIHJ4PScxNicgZmlsbD0nIzIyYzU1ZScvPgo8cmVjdCB4PScxMzgnIHk9JzMyNicgd2lkdGg9JzY0JyBoZWlnaHQ9JzUwJyByeD0nMTYnIGZpbGw9JyM4NmVmYWMnLz4KPHJlY3QgeD0nMjI0JyB5PSczMjYnIHdpZHRoPScxNTAnIGhlaWdodD0nNTAnIHJ4PScxNicgZmlsbD0nIzE2NjUzNCcvPgo8L3N2Zz4=" type="image/svg+xml">
+    <meta name="theme-color" content="#166534">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -1632,6 +1635,573 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
         }
+
+        /* =========================================================
+           MELHORIAS ADICIONADAS SEM SUPRIMIR FUNÇÕES EXISTENTES
+           ========================================================= */
+        html { scroll-behavior: smooth; }
+        button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+
+        .btn-small:focus-visible,
+        .btn-secondary:focus-visible,
+        .btn-primary:focus-visible,
+        .mobile-action-btn:focus-visible,
+        .mobile-dock button:focus-visible,
+        .form-input:focus-visible,
+        .form-select:focus-visible,
+        .form-textarea:focus-visible {
+            outline: 3px solid rgba(74, 222, 128, 0.55);
+            outline-offset: 3px;
+        }
+
+        .toast-container {
+            position: fixed;
+            left: 14px;
+            right: 14px;
+            bottom: 92px;
+            z-index: 3000;
+            display: grid;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .smart-toast {
+            width: min(100%, 560px);
+            margin: 0 auto;
+            padding: 13px 16px;
+            border-radius: 18px;
+            background: rgba(15, 36, 25, 0.96);
+            color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 18px 50px rgba(0,0,0,.28);
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all .24s ease;
+            backdrop-filter: blur(18px);
+        }
+
+        .smart-toast.show { opacity: 1; transform: translateY(0); }
+        .smart-toast.success { background: rgba(21, 128, 61, .96); }
+        .smart-toast.warning { background: rgba(180, 83, 9, .96); }
+        .smart-toast.danger { background: rgba(185, 28, 28, .96); }
+        .smart-toast.info { background: rgba(29, 78, 216, .96); }
+
+        .mobile-dock { display: none; }
+
+        .event-actions { align-items: center; }
+        .event-actions .btn-small { min-height: 36px; }
+
+        .event-item { position: relative; overflow: hidden; }
+        .event-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(120deg, transparent 0%, rgba(34,197,94,.07) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity .25s ease;
+        }
+        .event-item:hover::after { opacity: 1; }
+
+        .form-hint {
+            display: block;
+            margin-top: 6px;
+            font-size: 11px;
+            color: rgba(255,255,255,.68);
+            line-height: 1.35;
+        }
+
+        .calendar-header,
+        .calendar-grid { color: var(--text-white); }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .calendar-nav-btn {
+            background: var(--accent);
+            color: var(--text-white);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: 800;
+            transition: all .25s ease;
+            box-shadow: 0 6px 18px rgba(34,197,94,.28);
+        }
+
+        .calendar-nav-btn:hover { transform: scale(1.08); }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: rgba(255,255,255,.72);
+            padding: 8px 4px;
+        }
+
+        .calendar-day {
+            min-height: 118px;
+            border-radius: 16px;
+            padding: 9px;
+            background: rgba(255,255,255,.92);
+            color: var(--text-color);
+            border: 1px solid rgba(255,255,255,.2);
+            transition: all .25s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0,0,0,.18);
+        }
+
+        .calendar-day.empty { background: rgba(255,255,255,.08); cursor: default; }
+        .calendar-day.today { outline: 3px solid rgba(245, 158, 11, .65); }
+        .calendar-day.past { opacity: .72; }
+        .calendar-day.has-events { border-color: rgba(34, 197, 94, .55); }
+        .calendar-day-number { font-weight: 900; margin-bottom: 7px; }
+
+        .calendar-day-events { display: grid; gap: 4px; }
+        .calendar-event {
+            border-radius: 8px;
+            padding: 4px 6px;
+            color: #fff;
+            background: #15803d;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .calendar-more { color: #166534; font-size: 11px; font-weight: 900; }
+
+        @media (max-width: 700px) {
+            body { padding-bottom: 82px; }
+            .container { padding: 10px 10px 98px; }
+            .header { margin-bottom: 18px; padding-top: 8px; }
+            .filters-bar {
+                position: sticky;
+                top: 0;
+                z-index: 900;
+                border-radius: 0 0 22px 22px;
+                margin-left: -10px;
+                margin-right: -10px;
+                padding: 14px 12px;
+            }
+
+            .categories {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                scroll-snap-type: x proximity;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .category-tag {
+                scroll-snap-align: start;
+                padding: 10px 14px;
+            }
+
+            .main-content { gap: 14px; }
+            .sidebar { order: 1; }
+            .events-container { order: 2; padding: 14px; min-height: auto; }
+            .quick-form { position: static; }
+            .events-list { max-height: none; overflow: visible; padding-right: 0; }
+            .event-item { border-radius: 18px; padding: 16px; }
+
+            .event-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .event-actions .btn-small {
+                width: 100%;
+                padding: 10px 8px;
+                min-height: 42px;
+            }
+
+            .status-indicator {
+                bottom: 84px;
+                right: 12px;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .loading {
+                left: 12px;
+                right: 12px;
+                top: 12px;
+                text-align: center;
+                border-radius: 18px;
+            }
+
+            .mobile-actions { display: none !important; }
+
+            .mobile-dock {
+                position: fixed;
+                left: 10px;
+                right: 10px;
+                bottom: max(10px, env(safe-area-inset-bottom));
+                z-index: 2500;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+                padding: 8px;
+                background: rgba(255,255,255,.90);
+                border: 1px solid rgba(255,255,255,.22);
+                border-radius: 24px;
+                box-shadow: 0 -12px 36px rgba(0,0,0,.24);
+                backdrop-filter: blur(20px);
+            }
+
+            .mobile-dock button {
+                min-height: 52px;
+                border: none;
+                border-radius: 17px;
+                background: transparent;
+                color: #14532d;
+                font-size: 11px;
+                font-weight: 900;
+                display: grid;
+                place-items: center;
+                gap: 2px;
+                cursor: pointer;
+            }
+
+            .mobile-dock button strong {
+                font-size: 19px;
+                line-height: 1;
+            }
+
+            .mobile-dock button.primary-dock {
+                color: #ffffff;
+                background: linear-gradient(135deg, #16a34a, #22c55e);
+                box-shadow: 0 8px 18px rgba(22,163,74,.28);
+            }
+
+            .modal {
+                max-height: 86vh;
+                border-radius: 22px;
+                padding: 18px;
+            }
+
+            .calendar-grid { gap: 4px; }
+            .calendar-weekday { font-size: 10px; padding: 6px 2px; }
+            .calendar-day { min-height: 76px; border-radius: 12px; padding: 6px; }
+            .calendar-event { font-size: 9px; padding: 3px 4px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+
+        /* =========================================================
+           CAMADA PHD MOBILE: operação do dia, pendências e modelos
+           Sem remover nenhuma função original
+           ========================================================= */
+        .operation-center {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 22px;
+            backdrop-filter: blur(22px);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .operation-center::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(74, 222, 128, .18), transparent 36%),
+                radial-gradient(circle at 100% 0%, rgba(59, 130, 246, .10), transparent 30%);
+            pointer-events: none;
+        }
+
+        .operation-center > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .operation-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .operation-title {
+            color: var(--text-white);
+            font-size: clamp(1.15rem, 4vw, 1.65rem);
+            font-weight: 900;
+            letter-spacing: -.03em;
+            margin: 0;
+        }
+
+        .operation-subtitle {
+            margin-top: 6px;
+            color: rgba(255,255,255,.74);
+            font-size: 13px;
+            font-weight: 650;
+            line-height: 1.35;
+        }
+
+        .operation-refresh {
+            background: rgba(255,255,255,.16);
+            color: var(--text-white);
+            border: 1px solid rgba(255,255,255,.22);
+            min-height: 40px;
+            padding: 0 14px;
+            border-radius: 999px;
+            font-weight: 850;
+            cursor: pointer;
+        }
+
+        .operation-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .operation-stat {
+            background: rgba(255,255,255,.94);
+            border-radius: 18px;
+            padding: 13px 12px;
+            border-left: 4px solid #16a34a;
+            box-shadow: 0 6px 20px rgba(0,0,0,.10);
+        }
+
+        .operation-stat.warning { border-left-color: #f59e0b; }
+        .operation-stat.danger { border-left-color: #ef4444; }
+        .operation-stat.info { border-left-color: #3b82f6; }
+
+        .operation-stat strong {
+            display: block;
+            font-size: 1.55rem;
+            line-height: 1;
+            color: #166534;
+            font-weight: 950;
+            letter-spacing: -.05em;
+        }
+
+        .operation-stat span {
+            display: block;
+            margin-top: 7px;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 850;
+            line-height: 1.15;
+        }
+
+        .operation-cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .operation-card {
+            background: rgba(255,255,255,.95);
+            border-radius: 18px;
+            padding: 13px;
+            border: 1px solid rgba(255,255,255,.35);
+            box-shadow: 0 7px 22px rgba(0,0,0,.10);
+            min-height: 112px;
+        }
+
+        .operation-card-label {
+            color: #15803d;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 950;
+            margin-bottom: 8px;
+        }
+
+        .operation-card-title {
+            color: var(--text-color);
+            font-size: 15px;
+            font-weight: 900;
+            line-height: 1.18;
+            margin-bottom: 7px;
+        }
+
+        .operation-card-meta {
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.35;
+            font-weight: 650;
+        }
+
+        .operation-card-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .operation-mini-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 9px;
+            font-size: 11px;
+            font-weight: 850;
+            cursor: pointer;
+            color: #fff;
+            background: #16a34a;
+        }
+
+        .operation-mini-btn.secondary { background: #2563eb; }
+        .operation-mini-btn.warning { background: #d97706; }
+
+        .quality-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 850;
+            margin: 6px 0 8px;
+        }
+
+        .quality-badge.ok {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .quality-badge.warn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .quality-badge.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .quick-templates {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .template-btn {
+            min-height: 48px;
+            border: 1px solid rgba(255,255,255,.20);
+            border-radius: 15px;
+            background: rgba(255,255,255,.14);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 850;
+            cursor: pointer;
+            transition: all .22s ease;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .template-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(34,197,94,.28);
+        }
+
+        .smart-search-help {
+            margin-top: 8px;
+            color: rgba(255,255,255,.72);
+            font-size: 11px;
+            font-weight: 650;
+            line-height: 1.35;
+            text-align: center;
+        }
+
+        .smart-search-help code {
+            color: #bbf7d0;
+            background: rgba(0,0,0,.18);
+            padding: 2px 5px;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        @media (max-width: 900px) {
+            .operation-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .operation-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .operation-center {
+                margin-left: -2px;
+                margin-right: -2px;
+                padding: 15px;
+                border-radius: 22px;
+            }
+
+            .operation-header {
+                gap: 10px;
+            }
+
+            .operation-refresh {
+                width: 100%;
+            }
+
+            .operation-stats {
+                gap: 8px;
+            }
+
+            .operation-stat {
+                padding: 12px 10px;
+                border-radius: 16px;
+            }
+
+            .operation-stat strong {
+                font-size: 1.35rem;
+            }
+
+            .quick-templates {
+                grid-template-columns: 1fr 1fr;
+                gap: 7px;
+            }
+
+            .template-btn {
+                min-height: 46px;
+                font-size: 11px;
+            }
+
+            .smart-search-help {
+                text-align: left;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -1740,6 +2310,32 @@
             </div>
         </div>
 
+
+        <div class="operation-center" id="operationCenter">
+            <div class="operation-header">
+                <div>
+                    <h2 class="operation-title">🔥 Hoje na SEA</h2>
+                    <div class="operation-subtitle">Painel rápido para celular: próximos eventos, pendências e ações imediatas.</div>
+                </div>
+                <button class="operation-refresh" type="button" onclick="renderOperationDashboard()">Atualizar painel</button>
+            </div>
+
+            <div class="operation-stats">
+                <div class="operation-stat"><strong id="opTodayCount">0</strong><span>Eventos hoje</span></div>
+                <div class="operation-stat info"><strong id="opNextCount">0</strong><span>Próx. 7 dias</span></div>
+                <div class="operation-stat warning"><strong id="opPendingCount">0</strong><span>A confirmar</span></div>
+                <div class="operation-stat danger"><strong id="opIncompleteCount">0</strong><span>Com pendências</span></div>
+            </div>
+
+            <div class="operation-cards" id="operationCards">
+                <div class="operation-card">
+                    <div class="operation-card-label">Carregando</div>
+                    <div class="operation-card-title">Sincronizando dados...</div>
+                    <div class="operation-card-meta">O painel será atualizado automaticamente.</div>
+                </div>
+            </div>
+        </div>
+
         <div class="main-content">
             <div class="sidebar">
                 <div class="glass-card monthly-stats">
@@ -1775,6 +2371,12 @@
 
                 <div class="glass-card quick-form">
                     <h3 style="margin-bottom: 20px;">➕ Novo Evento</h3>
+                    <div class="quick-templates" id="quickTemplates">
+                        <button class="template-btn" type="button" onclick="applyQuickTemplate('escola-publica')">🏫 Escola Pública</button>
+                        <button class="template-btn" type="button" onclick="applyQuickTemplate('empresa')">🏢 Empresa</button>
+                        <button class="template-btn" type="button" onclick="applyQuickTemplate('visita-coppa')">🚗 Visita COPPA</button>
+                        <button class="template-btn" type="button" onclick="applyQuickTemplate('ong')">🤝 ONG</button>
+                    </div>
                     <form id="eventForm">
                         <div class="form-group">
                             <label class="form-label">📅 Data</label>
@@ -1801,7 +2403,7 @@
                         
                         <div class="form-group">
                             <label class="form-label">📞 Telefone <span style="color: red;">*</span></label>
-                            <input type="tel" class="form-input" id="eventPhone" placeholder="Ex: (71) 99999-9999" required>
+                            <input type="tel" class="form-input" id="eventPhone" placeholder="Ex: (71) 99999-9999" required inputmode="tel"><span class="form-hint">Obrigatório para contato rápido pelo celular.</span>
                         </div>
                         
                         <div class="form-group">
@@ -1860,7 +2462,7 @@
 
                         <div class="form-group">
                             <label class="form-label">📸 Link das Fotos</label>
-                            <input type="url" class="form-input" id="eventFotos" placeholder="Ex: https://drive.google.com/...">
+                            <input type="url" class="form-input" id="eventFotos" placeholder="Ex: https://drive.google.com/..." inputmode="url"><span class="form-hint">Cole aqui link do Drive, álbum ou pasta de fotos.</span>
                         </div>
                         
                         <div class="form-group">
@@ -1895,6 +2497,16 @@
     <div class="mobile-actions">
         <button class="mobile-action-btn" onclick="scrollToForm()" title="Novo Evento">+</button>
     </div>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <nav class="mobile-dock" aria-label="Ações rápidas no celular">
+        <button type="button" class="primary-dock" onclick="scrollToForm()"><strong>＋</strong><span>Novo</span></button>
+        <button type="button" onclick="setView('list')"><strong>📋</strong><span>Lista</span></button>
+        <button type="button" onclick="setView('calendar')"><strong>📅</strong><span>Agenda</span></button>
+        <button type="button" onclick="openReportModal()"><strong>📊</strong><span>Relatório</span></button>
+        <button type="button" onclick="syncData()"><strong>🔄</strong><span>Sync</span></button>
+    </nav>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script type="module">
@@ -1955,6 +2567,240 @@
             'visita-coppa': { emoji: '🚗', name: 'Visita à COPPA', color: '#ea580c' },
             'ong': { emoji: '🤝', name: 'ONG', color: '#10b981' }
         };
+
+
+        // =========================================================
+        // MELHORIAS ADICIONADAS SEM REMOVER FUNÇÕES ORIGINAIS
+        // =========================================================
+        function normalizeTextForSearch(value) {
+            return String(value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .trim();
+        }
+
+        function showSmartToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            if (!container) {
+                showLoading(message);
+                return;
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `smart-toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => toast.classList.add('show'));
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 250);
+            }, 2800);
+        }
+
+        function formatPhoneBR(value) {
+            const digits = String(value || '').replace(/\D/g, '').slice(0, 11);
+            if (digits.length <= 2) return digits;
+            if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+            if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+            return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+        }
+
+        function saveFormDraft() {
+            const draft = {
+                date: document.getElementById('eventDate')?.value || '',
+                title: document.getElementById('eventTitle')?.value || '',
+                status: document.getElementById('eventStatus')?.value || '',
+                requester: document.getElementById('eventRequester')?.value || '',
+                phone: document.getElementById('eventPhone')?.value || '',
+                email: document.getElementById('eventEmail')?.value || '',
+                category: getCurrentCategory(),
+                service: document.getElementById('eventService')?.value || '',
+                priority: document.getElementById('eventPriority')?.value || 'media',
+                time: document.getElementById('eventTime')?.value || '',
+                publico: document.getElementById('eventPublico')?.value || '',
+                fotos: document.getElementById('eventFotos')?.value || '',
+                description: document.getElementById('eventDescription')?.value || ''
+            };
+            localStorage.setItem('agendaEventDraft', JSON.stringify(draft));
+        }
+
+        function restoreFormDraft() {
+            if (editingIndex !== null) return;
+            const raw = localStorage.getItem('agendaEventDraft');
+            if (!raw) return;
+
+            try {
+                const draft = JSON.parse(raw);
+                const hasUsefulDraft = draft.title || draft.phone || draft.description || draft.requester;
+                if (!hasUsefulDraft) return;
+
+                if (!confirm('Há um rascunho de evento salvo neste aparelho. Deseja restaurar?')) return;
+
+                document.getElementById('eventDate').value = draft.date || formatDateString(new Date());
+                document.getElementById('eventTitle').value = draft.title || '';
+                document.getElementById('eventStatus').value = draft.status || 'confirmado';
+                document.getElementById('eventRequester').value = draft.requester || '';
+                document.getElementById('eventPhone').value = draft.phone || '';
+                document.getElementById('eventEmail').value = draft.email || '';
+                setFormCategory(draft.category || '');
+                document.getElementById('eventService').value = draft.service || '';
+                document.getElementById('eventPriority').value = draft.priority || 'media';
+                document.getElementById('eventTime').value = draft.time || '';
+                document.getElementById('eventPublico').value = draft.publico || '';
+                document.getElementById('eventFotos').value = draft.fotos || '';
+                document.getElementById('eventDescription').value = draft.description || '';
+            } catch (error) {
+                console.warn('Rascunho inválido:', error);
+            }
+        }
+
+        function clearFormDraft() {
+            localStorage.removeItem('agendaEventDraft');
+        }
+
+        function buildEventShareText(event) {
+            if (!event) return '';
+            const category = event.category ? `${getCategoryEmoji(event.category)} ${event.category}` : '';
+            return [
+                `📅 ${event.title || 'Evento'}`,
+                event.date ? `🗓️ ${createLocalDate(event.date).toLocaleDateString('pt-BR')}` : '',
+                event.time ? `⏰ ${event.time}` : '',
+                event.status ? `✔️ ${event.status === 'confirmado' ? 'Confirmado' : 'A confirmar'}` : '',
+                event.requester ? `👤 ${event.requester}` : '',
+                event.phone ? `📞 ${event.phone}` : '',
+                category ? `🏷️ ${category}` : '',
+                event.service ? `⚙️ ${serviceLabels[event.service] || event.service}` : '',
+                event.publico ? `👥 ${event.publico} pessoas` : '',
+                event.fotos ? `📸 ${event.fotos}` : '',
+                event.description ? `📝 ${event.description}` : ''
+            ].filter(Boolean).join('\n');
+        }
+
+        function getWhatsAppPhoneFromEvent(eventData) {
+            const raw = String(eventData?.phone || '').replace(/\D/g, '');
+
+            if (!raw) return '';
+
+            // Se já vier com DDI do Brasil: 55 + DDD + número
+            if (raw.startsWith('55') && (raw.length === 12 || raw.length === 13)) {
+                return raw;
+            }
+
+            // Padrão Brasil: DDD + número com 10 ou 11 dígitos
+            if (raw.length === 10 || raw.length === 11) {
+                return `55${raw}`;
+            }
+
+            return '';
+        }
+
+        function openWhatsAppURL(url) {
+            // Estratégia robusta para celular/GitHub Pages:
+            // 1) tenta abrir nova aba;
+            // 2) se o navegador bloquear, usa navegação direta.
+            const opened = window.open(url, '_blank', 'noopener,noreferrer');
+
+            if (!opened) {
+                window.location.href = url;
+                return;
+            }
+
+            try {
+                opened.opener = null;
+            } catch (error) {
+                // Ignorar: alguns navegadores bloqueiam acesso ao objeto retornado.
+            }
+        }
+
+        window.shareEvent = function(index) {
+            const eventData = events[index];
+            if (!eventData) return alert('Evento não encontrado.');
+
+            const text = buildEventShareText(eventData);
+            const phone = getWhatsAppPhoneFromEvent(eventData);
+
+            const url = phone
+                ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}`
+                : `https://wa.me/?text=${encodeURIComponent(text)}`;
+
+            showSmartToast(phone ? 'Abrindo WhatsApp do solicitante...' : 'Abrindo WhatsApp com mensagem pronta...', 'info');
+            openWhatsAppURL(url);
+        };
+
+
+        window.callEventPhone = function(index) {
+            const eventData = events[index];
+            if (!eventData) return alert('Evento não encontrado.');
+
+            const digits = String(eventData.phone || '').replace(/\D/g, '');
+            if (!digits) {
+                showSmartToast('Este evento não tem telefone cadastrado.', 'warning');
+                return;
+            }
+
+            window.location.href = `tel:${digits}`;
+        };
+
+
+        window.downloadEventICS = function(index) {
+            const eventData = events[index];
+            if (!eventData) return alert('Evento não encontrado.');
+
+            const title = String(eventData.title || 'Evento').replace(/\n/g, ' ');
+            const description = buildEventShareText(eventData).replace(/\n/g, '\\n');
+            const date = String(eventData.date || formatDateString(new Date())).replaceAll('-', '');
+            const uid = `${date}-${String(title).toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'evento'}@agenda-sea`;
+
+            const ics = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Agenda SEA//GitHub Pages//PT-BR',
+                'BEGIN:VEVENT',
+                `UID:${uid}`,
+                `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+                `DTSTART;VALUE=DATE:${date}`,
+                `SUMMARY:${title}`,
+                `DESCRIPTION:${description}`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+
+            const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title.slice(0, 42).replace(/[^\wÀ-ÿ-]+/g, '_') || 'evento'}.ics`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showSmartToast('Evento exportado para calendário.', 'info');
+        };
+
+        window.duplicateEvent = function(index) {
+            const eventData = events[index];
+            if (!eventData) return alert('Evento não encontrado.');
+
+            editingIndex = null;
+            document.getElementById('eventDate').value = eventData.date || formatDateString(new Date());
+            document.getElementById('eventTitle').value = eventData.title ? `${eventData.title} - cópia` : '';
+            document.getElementById('eventStatus').value = eventData.status || 'a-confirmar';
+            document.getElementById('eventRequester').value = eventData.requester || '';
+            document.getElementById('eventPhone').value = eventData.phone || '';
+            document.getElementById('eventEmail').value = eventData.email || '';
+            setFormCategory(eventData.category || '');
+            document.getElementById('eventService').value = eventData.service || '';
+            document.getElementById('eventPriority').value = eventData.priority || 'media';
+            document.getElementById('eventTime').value = eventData.time || '';
+            document.getElementById('eventPublico').value = eventData.publico || '';
+            document.getElementById('eventFotos').value = eventData.fotos || '';
+            document.getElementById('eventDescription').value = eventData.description || '';
+            document.querySelector('.btn-primary').textContent = '🚀 Criar Cópia';
+            document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth' });
+            showSmartToast('Evento copiado para o formulário. Revise e salve.', 'info');
+        };
+
 
         // Utility functions
         function createLocalDate(dateString) {
@@ -2528,7 +3374,45 @@
 
         window.exportReportExcel = function(monthKey) {
             const reportData = generateMonthlyReport(monthKey);
-            alert(`📊 Funcionalidade de Excel em desenvolvimento.\n\nDados do relatório de ${reportData.monthName}:\n• ${reportData.totalEvents} eventos\n• ${reportData.totalPeople} pessoas atendidas`);
+            showLoading('📊 Gerando Excel...');
+
+            const rows = [
+                ['Data', 'Título', 'Categoria', 'Serviço', 'Status', 'Prioridade', 'Público', 'Solicitante', 'Telefone', 'E-mail', 'Horário', 'Fotos', 'Descrição'],
+                ...reportData.events
+                    .sort((a, b) => createLocalDate(a.date) - createLocalDate(b.date))
+                    .map(event => {
+                        const info = categoryInfo[event.category] || { name: event.category || 'Outros' };
+                        return [
+                            event.date || '',
+                            event.title || '',
+                            info.name || event.category || '',
+                            serviceLabelsForPDF[event.service] || event.service || '',
+                            event.status || '',
+                            event.priority || '',
+                            event.publico || '',
+                            event.requester || '',
+                            event.phone || '',
+                            event.email || '',
+                            event.time || '',
+                            event.fotos || '',
+                            event.description || ''
+                        ];
+                    })
+            ];
+
+            const csv = rows
+                .map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(';'))
+                .join('\n');
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `relatorio_${monthKey}.xls`;
+            link.click();
+            URL.revokeObjectURL(url);
+
+            showSmartToast('📊 Excel gerado com sucesso!', 'success');
         };
 
         window.exportReportJSON = function(monthKey) {
@@ -2712,6 +3596,265 @@
             return categoryInfo[category]?.emoji || '📋';
         }
 
+
+        // =========================================================
+        // CAMADA PHD MOBILE - SEM REMOVER FUNÇÕES EXISTENTES
+        // =========================================================
+        function getEventCompletenessIssues(event) {
+            const issues = [];
+            if (!event.phone) issues.push('telefone');
+            if (!event.category) issues.push('categoria');
+            if (!event.status) issues.push('status');
+            if (!event.publico && createLocalDate(event.date) < getTodayDate()) issues.push('público');
+            if (!event.fotos && createLocalDate(event.date) < getTodayDate()) issues.push('fotos');
+            return issues;
+        }
+
+        function getQualityBadgeHTML(event) {
+            const issues = getEventCompletenessIssues(event);
+            if (issues.length === 0) {
+                return '<div class="quality-badge ok">🟢 Cadastro completo</div>';
+            }
+            if (issues.length <= 2) {
+                return `<div class="quality-badge warn">🟡 Falta: ${issues.join(', ')}</div>`;
+            }
+            return `<div class="quality-badge danger">🔴 Pendências: ${issues.join(', ')}</div>`;
+        }
+
+        function getUpcomingEvents(days = 7) {
+            const today = getTodayDate();
+            const limit = new Date(today);
+            limit.setDate(limit.getDate() + days);
+
+            return events
+                .filter(event => {
+                    if (!event.date) return false;
+                    const date = createLocalDate(event.date);
+                    return date >= today && date <= limit;
+                })
+                .sort((a, b) => createLocalDate(a.date) - createLocalDate(b.date));
+        }
+
+        function getTodayEvents() {
+            const todayStr = formatDateString(getTodayDate());
+            return events
+                .filter(event => event.date === todayStr)
+                .sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')));
+        }
+
+        function getPendingConfirmationEvents() {
+            return events
+                .filter(event => event.status === 'a-confirmar')
+                .sort((a, b) => createLocalDate(a.date) - createLocalDate(b.date));
+        }
+
+        function getIncompleteEvents() {
+            return events
+                .filter(event => getEventCompletenessIssues(event).length > 0)
+                .sort((a, b) => createLocalDate(a.date) - createLocalDate(b.date));
+        }
+
+        function findEventIndexByReference(referenceEvent) {
+            return events.findIndex(event => event === referenceEvent || (event.id && referenceEvent.id && event.id === referenceEvent.id));
+        }
+
+        function createOperationCard(label, eventData, emptyText) {
+            if (!eventData) {
+                return `
+                    <div class="operation-card">
+                        <div class="operation-card-label">${label}</div>
+                        <div class="operation-card-title">${emptyText}</div>
+                        <div class="operation-card-meta">Nenhuma ação imediata necessária.</div>
+                    </div>
+                `;
+            }
+
+            const index = findEventIndexByReference(eventData);
+            const date = createLocalDate(eventData.date);
+            const dateText = date ? date.toLocaleDateString('pt-BR') : 'Sem data';
+            const issues = getEventCompletenessIssues(eventData);
+            const meta = [
+                dateText,
+                eventData.time || '',
+                eventData.requester ? `Solicitante: ${eventData.requester}` : '',
+                issues.length ? `Pendências: ${issues.join(', ')}` : ''
+            ].filter(Boolean).join(' • ');
+
+            return `
+                <div class="operation-card">
+                    <div class="operation-card-label">${label}</div>
+                    <div class="operation-card-title">${eventData.title || 'Evento sem título'}</div>
+                    <div class="operation-card-meta">${meta}</div>
+                    <div class="operation-card-actions">
+                        <button class="operation-mini-btn" type="button" onclick="editarEvento(${index})">Editar</button>
+                        <button class="operation-mini-btn secondary" type="button" onclick="shareEvent(${index})">WhatsApp</button>
+                        <button class="operation-mini-btn warning" type="button" onclick="duplicateEvent(${index})">Copiar</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.renderOperationDashboard = function renderOperationDashboard() {
+            const todayEvents = getTodayEvents();
+            const upcoming = getUpcomingEvents(7);
+            const pending = getPendingConfirmationEvents();
+            const incomplete = getIncompleteEvents();
+
+            const setText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+
+            setText('opTodayCount', todayEvents.length);
+            setText('opNextCount', upcoming.length);
+            setText('opPendingCount', pending.length);
+            setText('opIncompleteCount', incomplete.length);
+
+            const cards = document.getElementById('operationCards');
+            if (!cards) return;
+
+            cards.innerHTML = [
+                createOperationCard('Próximo de hoje', todayEvents[0], 'Nenhum evento hoje'),
+                createOperationCard('Próximo compromisso', upcoming[0], 'Nenhum evento nos próximos 7 dias'),
+                createOperationCard('Pendência crítica', incomplete[0] || pending[0], 'Nenhuma pendência encontrada')
+            ].join('');
+        };
+
+        function getSmartSearchFlags(term) {
+            const q = normalizeTextForSearch(term);
+            return {
+                raw: q,
+                today: /\bhoje\b/.test(q),
+                tomorrow: /\bamanha\b/.test(q),
+                noPhotos: q.includes('sem fotos') || q.includes('sem foto'),
+                noPublico: q.includes('sem publico') || q.includes('sem pessoas'),
+                noPhone: q.includes('sem telefone') || q.includes('sem contato'),
+                pending: q.includes('a confirmar') || q.includes('pendente'),
+                confirmed: q.includes('confirmado'),
+                highPriority: q.includes('alta prioridade') || q === 'alta',
+                moreThanPeople: (() => {
+                    const match = q.match(/(?:mais de|acima de|maior que)\s*(\d+)/);
+                    return match ? Number(match[1]) : null;
+                })()
+            };
+        }
+
+        function matchesSmartSearch(event, flags) {
+            if (!flags.raw) return true;
+
+            const eventDate = event.date ? createLocalDate(event.date) : null;
+            const today = getTodayDate();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            if (flags.today && (!eventDate || eventDate.getTime() !== today.getTime())) return false;
+            if (flags.tomorrow && (!eventDate || eventDate.getTime() !== tomorrow.getTime())) return false;
+            if (flags.noPhotos && event.fotos) return false;
+            if (flags.noPublico && event.publico) return false;
+            if (flags.noPhone && event.phone) return false;
+            if (flags.pending && event.status !== 'a-confirmar') return false;
+            if (flags.confirmed && event.status !== 'confirmado') return false;
+            if (flags.highPriority && event.priority !== 'alta') return false;
+            if (flags.moreThanPeople !== null && Number(event.publico || 0) <= flags.moreThanPeople) return false;
+
+            return true;
+        }
+
+        window.applyQuickTemplate = function applyQuickTemplate(type) {
+            const templates = {
+                'escola-publica': {
+                    category: 'escola-publica',
+                    service: 'stand-palestra-coppa',
+                    priority: 'alta',
+                    status: 'a-confirmar',
+                    titlePrefix: 'Escola ',
+                    description: 'Ação educativa com atendimento ao público escolar. Confirmar público, responsável local e necessidade de material.'
+                },
+                'empresa': {
+                    category: 'empresa',
+                    service: 'palestra-coppa',
+                    priority: 'media',
+                    status: 'a-confirmar',
+                    titlePrefix: 'Empresa ',
+                    description: 'Atendimento institucional. Confirmar responsável, horário, público estimado e local da atividade.'
+                },
+                'visita-coppa': {
+                    category: 'visita-coppa',
+                    service: 'palestra-coppa',
+                    priority: 'alta',
+                    status: 'confirmado',
+                    titlePrefix: 'Visita à COPPA - ',
+                    description: 'Visita à COPPA. Confirmar lista de participantes, horário de chegada, responsável e registro fotográfico.'
+                },
+                'ong': {
+                    category: 'ong',
+                    service: 'stand-coppa',
+                    priority: 'media',
+                    status: 'a-confirmar',
+                    titlePrefix: 'Ação ONG ',
+                    description: 'Ação em parceria com organização social. Confirmar público, local, material e link das fotos após a realização.'
+                }
+            };
+
+            const template = templates[type];
+            if (!template) return;
+
+            setFormCategory(template.category);
+            document.getElementById('eventService').value = template.service;
+            document.getElementById('eventPriority').value = template.priority;
+            document.getElementById('eventStatus').value = template.status;
+
+            const title = document.getElementById('eventTitle');
+            if (!title.value) title.value = template.titlePrefix;
+
+            const description = document.getElementById('eventDescription');
+            if (!description.value) description.value = template.description;
+
+            const date = document.getElementById('eventDate');
+            if (!date.value) date.value = formatDateString(new Date());
+
+            saveFormDraft();
+            showSmartToast('Modelo aplicado. Complete os dados e salve.', 'info');
+        };
+
+        function findPossibleDuplicate(newEventData) {
+            const newTitle = normalizeTextForSearch(newEventData.title);
+            const newRequester = normalizeTextForSearch(newEventData.requester);
+            const newPhone = String(newEventData.phone || '').replace(/\D/g, '');
+
+            return events.find(existing => {
+                if (editingIndex !== null && events[editingIndex] === existing) return false;
+
+                const sameDate = existing.date && existing.date === newEventData.date;
+                const existingTitle = normalizeTextForSearch(existing.title);
+                const existingRequester = normalizeTextForSearch(existing.requester);
+                const existingPhone = String(existing.phone || '').replace(/\D/g, '');
+
+                const similarTitle = newTitle && existingTitle && (
+                    existingTitle.includes(newTitle) ||
+                    newTitle.includes(existingTitle)
+                );
+
+                const samePhone = newPhone && existingPhone && newPhone === existingPhone;
+                const sameRequester = newRequester && existingRequester && newRequester === existingRequester;
+
+                return sameDate && (similarTitle || samePhone || sameRequester);
+            });
+        }
+
+        function confirmPossibleDuplicate(eventData) {
+            const duplicate = findPossibleDuplicate(eventData);
+            if (!duplicate) return true;
+
+            return confirm(
+                `⚠️ Possível duplicidade encontrada:\\n\\n` +
+                `${duplicate.title || 'Evento sem título'}\\n` +
+                `${duplicate.date || 'Sem data'} ${duplicate.time || ''}\\n\\n` +
+                `Deseja salvar mesmo assim?`
+            );
+        }
+
+
         // Firebase functions
         async function loadEventsFromFirebase() {
             try {
@@ -2724,11 +3867,13 @@
                         ...doc.data()
                     });
                 });
+                saveToLocalStorage();
                 updateStatus(true);
                 updateCategoryFilter();
                 applyFilters();
                 renderMiniCalendar();
                 renderMonthlyStats();
+                renderOperationDashboard();
             } catch (error) {
                 console.error("Erro ao carregar eventos:", error);
                 updateStatus(false);
@@ -2749,6 +3894,7 @@
                 updateStatus(false);
                 events.push(eventData);
                 saveToLocalStorage();
+                error.localSaved = true;
                 throw error;
             }
         }
@@ -2793,10 +3939,12 @@
                             ...doc.data()
                         });
                     });
+                    saveToLocalStorage();
                     updateCategoryFilter();
                     applyFilters();
                     renderMiniCalendar();
                     renderMonthlyStats();
+                renderOperationDashboard();
                     
                     // Se estivermos na visualização de calendário, atualizar também
                     if (document.querySelector('.calendar-view')) {
@@ -2829,6 +3977,7 @@
             applyFilters();
             renderMiniCalendar();
             renderMonthlyStats();
+                renderOperationDashboard();
         }
 
         function saveToLocalStorage() {
@@ -2841,6 +3990,22 @@
             document.getElementById('categoryFilter').addEventListener('change', applyFilters);
             document.getElementById('priorityFilter').addEventListener('change', applyFilters);
             document.getElementById('eventForm').addEventListener('submit', handleAddEvent);
+
+            // Melhorias mobile sem alterar a lógica de gravação
+            const phoneInput = document.getElementById('eventPhone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', () => {
+                    phoneInput.value = formatPhoneBR(phoneInput.value);
+                    saveFormDraft();
+                });
+            }
+
+            document.querySelectorAll('#eventForm input, #eventForm select, #eventForm textarea').forEach(field => {
+                field.addEventListener('input', saveFormDraft);
+                field.addEventListener('change', saveFormDraft);
+            });
+
+            restoreFormDraft();
             
             // Fechar modal clicando fora
             document.getElementById('reportModal').addEventListener('click', function(e) {
@@ -2851,29 +4016,39 @@
         }
 
         function applyFilters() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const searchTerm = normalizeTextForSearch(document.getElementById('searchInput').value);
             const categoryFilter = document.getElementById('categoryFilter').value;
             const priorityFilter = document.getElementById('priorityFilter').value;
+            const smartFlags = getSmartSearchFlags(searchTerm);
 
             filteredEvents = events.filter(event => {
-                const matchesSearch = !searchTerm || 
-                    event.title.toLowerCase().includes(searchTerm) ||
-                    (event.description && event.description.toLowerCase().includes(searchTerm)) ||
-                    (event.category && event.category.toLowerCase().includes(searchTerm)) ||
-                    (event.requester && event.requester.toLowerCase().includes(searchTerm)) ||
-                    (event.phone && event.phone.includes(searchTerm)) ||
-                    (event.email && event.email.toLowerCase().includes(searchTerm));
+                const searchableText = normalizeTextForSearch([
+                    event.title,
+                    event.description,
+                    event.category,
+                    event.requester,
+                    event.phone,
+                    event.email,
+                    event.service,
+                    event.status,
+                    event.priority,
+                    event.publico
+                ].join(' '));
+
+                const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
                 
+                const matchesSmart = matchesSmartSearch(event, smartFlags);
                 const matchesCategory = !categoryFilter || event.category === categoryFilter;
                 const matchesPriority = !priorityFilter || event.priority === priorityFilter;
                 const matchesDate = !selectedDate || event.date === selectedDate;
 
-                return matchesSearch && matchesCategory && matchesPriority && matchesDate;
+                return matchesSearch && matchesSmart && matchesCategory && matchesPriority && matchesDate;
             });
 
             // Atualizar informação do filtro de data
             updateDateFilterInfo();
             renderEvents();
+            renderOperationDashboard();
         }
 
         function updateDateFilterInfo() {
@@ -2999,6 +4174,10 @@
                         
                         <div class="event-actions">
                             <button class="btn-small btn-edit" onclick="editarEvento(${originalIndex}); event.stopPropagation();">✏️ Editar</button>
+                            <button class="btn-small" style="background: var(--info); color: var(--text-white);" onclick="shareEvent(${originalIndex}); event.stopPropagation();">📲 WhatsApp</button>
+                            <button class="btn-small" style="background: #0f766e; color: var(--text-white);" onclick="callEventPhone(${originalIndex}); event.stopPropagation();">📞 Ligar</button>
+                            <button class="btn-small" style="background: var(--success); color: var(--text-white);" onclick="downloadEventICS(${originalIndex}); event.stopPropagation();">📅 Agenda</button>
+                            <button class="btn-small" style="background: var(--warning); color: var(--text-white);" onclick="duplicateEvent(${originalIndex}); event.stopPropagation();">📋 Copiar</button>
                             <button class="btn-small btn-delete" onclick="deleteEvent(${originalIndex}); event.stopPropagation();">🗑️ Excluir</button>
                         </div>
                     </div>
@@ -3095,6 +4274,8 @@
                 email
             };
 
+            const wasEditing = editingIndex !== null;
+
             try {
                 if (editingIndex !== null) {
                     // Editar evento existente
@@ -3109,12 +4290,14 @@
                     }
                     
                     editingIndex = null;
-                    alert("✅ Evento atualizado!");
+                    clearFormDraft();
+                    showSmartToast("✅ Evento atualizado!", 'success');
                     
                 } else {
                     // Cadastrar novo evento
                     await saveEventToFirebase(eventData);
-                    alert("🚀 Evento criado!");
+                    clearFormDraft();
+                    showSmartToast("🚀 Evento criado!", 'success');
                 }
 
                 // Limpar formulário
@@ -3131,6 +4314,7 @@
                 applyFilters();
                 renderMiniCalendar();
                 renderMonthlyStats();
+                renderOperationDashboard();
                 
                 // Se estivermos na visualização de calendário, atualizar também
                 if (document.querySelector('.calendar-view')) {
@@ -3140,7 +4324,7 @@
                 // Feedback visual no botão
                 const btn = document.querySelector('.btn-primary');
                 const orig = btn.textContent;
-                btn.textContent = editingIndex !== null ? '✅ Atualizado!' : '✅ Salvo!';
+                btn.textContent = wasEditing ? '✅ Atualizado!' : '✅ Salvo!';
                 setTimeout(() => btn.textContent = orig, 2000);
 
             } catch (error) {
@@ -3152,15 +4336,18 @@
                     saveToLocalStorage();
                     alert('Evento atualizado localmente. Sincronize quando estiver online.');
                 } else {
-                    events.push(eventData);
-                    saveToLocalStorage();
-                    alert('Erro ao salvar no servidor. Evento salvo localmente.');
+                    if (!error.localSaved) {
+                        events.push(eventData);
+                        saveToLocalStorage();
+                    }
+                    showSmartToast('Erro ao salvar no servidor. Evento salvo localmente.', 'warning');
                 }
                 
                 updateCategoryFilter();
                 applyFilters();
                 renderMiniCalendar();
                 renderMonthlyStats();
+                renderOperationDashboard();
             }
         }
 
@@ -3242,6 +4429,7 @@
                 applyFilters();
                 renderMiniCalendar();
                 renderMonthlyStats();
+                renderOperationDashboard();
                 
                 // Se estivermos na visualização de calendário, atualizar também
                 if (document.querySelector('.calendar-view')) {
