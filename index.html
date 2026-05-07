@@ -465,15 +465,34 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 400px;
-            overflow: hidden;
+            max-height: 380px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 6px;
+            scrollbar-gutter: stable;
             transition: all 0.4s ease;
+        }
+
+        .stats-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .stats-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+        }
+
+        .stats-grid::-webkit-scrollbar-thumb {
+            background: rgba(34, 197, 94, 0.75);
+            border-radius: 999px;
         }
 
         .stats-grid.collapsed {
             max-height: 0;
             opacity: 0;
             gap: 0;
+            overflow: hidden;
+            padding-right: 0;
         }
 
         .stats-summary {
@@ -2841,8 +2860,18 @@
         // NOVA FUNÇÃO: Calcular estatísticas mensais
         function calculateMonthlyStats() {
             const stats = {};
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            const currentMonthKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+            
+            // O mês atual sempre aparece como primeiro índice, mesmo sem eventos.
+            stats[currentMonthKey] = {
+                name: `${months[currentMonth]} ${currentYear}`,
+                events: 0,
+                people: 0,
+                isCurrentMonth: true
+            };
             
             events.forEach(event => {
                 if (!event.date) return;
@@ -2861,7 +2890,7 @@
                 }
                 
                 stats[monthKey].events++;
-                stats[monthKey].people += event.publico || 0;
+                stats[monthKey].people += Number(event.publico || 0);
             });
             
             return stats;
@@ -2917,10 +2946,15 @@
                 return;
             }
             
-            // Ordenar por data (mais recente primeiro)
+            // Ordenar com o mês atual sempre em primeiro e os demais por data mais recente.
+            const now = new Date();
+            const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             const sortedStats = Object.entries(stats)
-                .sort(([a], [b]) => b.localeCompare(a))
-                .slice(0, 6); // Mostrar apenas os últimos 6 meses
+                .sort(([a], [b]) => {
+                    if (a === currentMonthKey) return -1;
+                    if (b === currentMonthKey) return 1;
+                    return b.localeCompare(a);
+                });
             
             container.innerHTML = sortedStats.map(([key, stat]) => `
                 <div class="stat-item ${stat.isCurrentMonth ? 'current-month' : ''}" onclick="filterByMonth('${key}')">
@@ -2934,6 +2968,7 @@
                     </div>
                 </div>
             `).join('');
+            container.scrollTop = 0;
             
             // Restaurar estado colapsado
             const isCollapsed = localStorage.getItem('statsCollapsed') === 'true';
