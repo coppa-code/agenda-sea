@@ -2317,7 +2317,7 @@
                     <h2 class="operation-title">🔥 Hoje na SEA</h2>
                     <div class="operation-subtitle">Painel rápido para celular: próximos eventos, pendências e ações imediatas.</div>
                 </div>
-                <button class="operation-refresh" type="button" onclick="renderOperationDashboard()">Atualizar painel</button>
+                <button class="operation-refresh" id="operationRefreshBtn" type="button" onclick="refreshOperationDashboard()">Atualizar painel</button>
             </div>
 
             <div class="operation-stats">
@@ -3600,13 +3600,36 @@
         // =========================================================
         // CAMADA PHD MOBILE - SEM REMOVER FUNÇÕES EXISTENTES
         // =========================================================
+        function getEventDateOnly(event) {
+            if (!event || !event.date) return null;
+            return createLocalDate(event.date);
+        }
+
+        function isPastEvent(event) {
+            const eventDate = getEventDateOnly(event);
+            return !!eventDate && eventDate < getTodayDate();
+        }
+
+        function isFutureEvent(event) {
+            const eventDate = getEventDateOnly(event);
+            return !!eventDate && eventDate > getTodayDate();
+        }
+
         function getEventCompletenessIssues(event) {
             const issues = [];
+
+            // Regra solicitada: evento passado não entra como pendência.
+            if (isPastEvent(event)) return issues;
+
             if (!event.phone) issues.push('telefone');
             if (!event.category) issues.push('categoria');
             if (!event.status) issues.push('status');
-            if (!event.publico && createLocalDate(event.date) < getTodayDate()) issues.push('público');
-            if (!event.fotos && createLocalDate(event.date) < getTodayDate()) issues.push('fotos');
+
+            // Fotos não contam como pendência para eventos futuros.
+            // Como eventos passados também não contam como pendência, o campo fotos fica apenas informativo.
+            // Público continua sendo cobrado apenas no dia do evento, nunca em evento passado.
+            if (!event.publico && !isFutureEvent(event)) issues.push('público');
+
             return issues;
         }
 
@@ -3644,7 +3667,7 @@
 
         function getPendingConfirmationEvents() {
             return events
-                .filter(event => event.status === 'a-confirmar')
+                .filter(event => event.status === 'a-confirmar' && !isPastEvent(event))
                 .sort((a, b) => createLocalDate(a.date) - createLocalDate(b.date));
         }
 
@@ -3718,6 +3741,45 @@
                 createOperationCard('Próximo compromisso', upcoming[0], 'Nenhum evento nos próximos 7 dias'),
                 createOperationCard('Pendência crítica', incomplete[0] || pending[0], 'Nenhuma pendência encontrada')
             ].join('');
+        };
+
+        window.refreshOperationDashboard = async function refreshOperationDashboard() {
+            const button = document.getElementById('operationRefreshBtn');
+            const originalText = button ? button.textContent : '';
+
+            try {
+                if (button) {
+                    button.disabled = true;
+                    button.textContent = 'Atualizando...';
+                }
+
+                showLoading('🔄 Atualizando painel...');
+
+                // Recarrega do Firebase quando disponível. A própria função usa localStorage se ficar offline.
+                await loadEventsFromFirebase();
+
+                updateCategoryFilter();
+                applyFilters();
+                renderMiniCalendar();
+                renderMonthlyStats();
+                renderOperationDashboard();
+
+                if (document.querySelector('.calendar-view')) {
+                    renderFullCalendar();
+                }
+
+                showSmartToast('Painel atualizado com sucesso.', 'success');
+            } catch (error) {
+                console.error('Erro ao atualizar painel:', error);
+                loadFromLocalStorage();
+                renderOperationDashboard();
+                showSmartToast('Sem conexão. Painel atualizado com os dados salvos neste aparelho.', 'warning');
+            } finally {
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = originalText || 'Atualizar painel';
+                }
+            }
         };
 
         function getSmartSearchFlags(term) {
